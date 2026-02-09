@@ -9,21 +9,20 @@
 ## Revision History
 | Date       | Version | Description                | Author      |
 |------------|---------|----------------------------|-------------|
-| 04-02-2026 | 1.0     | Initial document creation  | Kiliann POMMEZ |
+| 04-02-2026 | 0.1     | Initial document creation  | Kiliann POMMEZ |
+|------------|---------|----------------------------|-------------|
+| 09-02-2026 | 0.2     | Architecture update        | Kiliann POMMEZ |
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
 2. [System Overview](#2-system-overview)
 3. [Requirements](#3-requirements)
 4. [System Architecture & Design](#4-system-architecture--design)
-5. [Detailed Module Design](#5-detailed-module-design)
-6. [Interface Design](#6-interface-design)
-7. [Performance and Optimization](#7-performance-and-optimization)
-8. [Testing Strategy (TDD Implementation)](#8-testing-strategy-tdd-implementation)
-9. [Tools, Environment, and Deployment](#9-tools-environment-and-deployment)
-10. [Security and Safety Considerations](#10-security-and-safety-considerations)
-11. [Project Timeline and Milestones](#11-project-timeline-and-milestones)
-12. [Appendices](#12-appendices)
+5. [Interface Design](#5-interface-design)
+6. [Performance and Optimization](#6-performance-and-optimization)
+7. [Tools, Environment, and Deployment](#7-tools-environment-and-deployment)
+8. [Project Timeline and Milestones](#8-project-timeline-and-milestones)
+9. [Appendices](#9-appendices)
 
 ---
 
@@ -105,6 +104,7 @@ graph TD;
 Le moteur utilise une architecture basée sur les composants. Chaque module possède des interfaces bien définies, assurant un couplage faible et un développement isolé.
 
 ### 4.2 Module Breakdown
+- **Engine Module:** sert à diriger le fonctionnement du moteur
 - **Rendering Module:** Gère les shaders, les textures et communique avec le GPU.
 - **Physics Module:** Implémente la détection de collision et la dynamique des corps rigides.
 - **Audio Module:** Focntionnement de la bibliothèques audio.
@@ -132,14 +132,59 @@ graph TD;
     C-->I[IScene]
     D-->I[IScene]
     I-->H
-    B-->H
+    B-->I
+```
+Class Diagramme
+```mermaid
+classDiagram
+    Engine <|-- Render
+    Engine <|-- Audio
+    Engine <|-- Physics
+    Engine <|-- Windows
+    Render <|-- Actor
+    Engine : +Render
+    Engine : +Audio
+    Engine : +Physics
+    Engine : +Windows
+    Engine: +PhysicsUpdate()
+    Engine: +RenderUpdate()
+    Engine: +AudioUpdate()
+    Engine: +WindowsUpdate()
+    class Render{
+      +Render Data
+      +rendering()
+    }
+    class Audio{
+      -Music
+      -Play()
+      -Stop()
+    }
+    class Physics{
+      +constanteGravitationnel
+      +gravité()
+      +Collision()
+    }
+    class Windows{
+      +Windows
+      +IMGui
+      +Input
+      +CatchInput()
+    }
+    class Actor{
+      +Actor
+      +Component
+      +Scene
+      +CreateActor()
+      +AddComponent()
+      +CreateScene()
+    }
 ```
 
 ### 4.4 Design Decisions and Rationale
 - **Language Choice:** C++ pour la haute performance.
 - **Modular Design:** Supporte les tests isolés et le développement indépendant des modules.
-- **DX11:** Car ...
-- **APIPhysics:** Pas trouvée
+- **APIGraphique:** DirectX11
+- **APIPhysics:** Jolt
 - **APIAUdio:** Mini Audio
 
 ### 4.5 Why DX11
@@ -170,81 +215,65 @@ On as écraté NVIDIA PhysX pour ces raisons :
 On as aussi écarté Bullet Physics pour ces raisons :
 -**Stabilité des contraintes:** Dans des scènes complexes (piles d'objets, ragdolls articulés), les solveurs de Bullet ont tendance à être moins stables ("jittering") que ceux de Jolt ou PhysX sans un réglage manuel fastidieux.
 -**Maintenance:** Le développement de Bullet 3 s'est ralenti au profit de PyBullet (robotique). Pour un moteur de jeu performant en 2026, Bullet est considéré comme un choix "legacy".
----
-
-## 5. Detailed Module Design
-
-### 5.1 Class Diagrams and Data Structures
-- **Rendering:** `Renderer`, `Shader`, `Texture`
-- **Physics:** `PhysicsEngine`, `Collider`, `RigidBody`
-- **Audio:** `AudioEngine`, `Sound`, `MusicPlayer`
-- **Input:** `InputManager`, `Controller`
-- **Actor:** `Component` , `Transform`
-- **Scene:**
-- **Windows:**
-- **Editor**
-
-### 5.2 Key Algorithms and Code Snippets
-
 
 ---
 
-## 6. Interface Design
+## 5. Interface Design
 
-### 6.1 Internal Interfaces
+### 5.1 Internal Interfaces
 
 - Définir des APIs claires entre les modules en utilisant des classes abstraites ou des interfaces.
 
-### 6.2 External APIs and File Formats
+### 5.2 External APIs and File Formats
 
 - Supporter les formats de fichiers standards : OBJ (modèles), PNG (textures), WAV (audio).
 - Fournir une documentation pour les interfaces de scripting externes.
 
 ---
 
-## 7. Performance and Optimization
+## 6. Performance and Optimization
 
-### 7.1 Performance Goals
+### 6.1 Performance Goals
 
 - Atteindre constamment 60 FPS.
 - Optimiser l'utilisation de la mémoire et la surcharge de traitement (overhead).
 
-### 7.2 Profiling and Benchmarking
+### 6.2 Profiling and Benchmarking
 
 - Intégrer des outils de profilage tels que Valgrind ou Visual Studio Profiler.
 
-### 7.3 Optimization Techniques
+### 6.3 Optimization Techniques
 
 - Use object pooling and memory management best practices.
 - Implement batching and frustum culling in the rendering process.
 
 ---
 
-## 9. Tools, Environment, and Deployment
+## 7. Tools, Environment, and Deployment
 
-### 9.1 Development Tools and IDEs
+### 7.1 Development Tools and IDEs
 
 - Recommended IDEs: Visual Studio
 - Éditeurs de code supportant les fonctionnalités C++17.
 
-### 9.2 Build System and Automation
+### 7.2 Build System and Automation
 
 - Utiliser CMake pour la configuration du projet.
 - Automatiser les builds en utilisant des pipelines CI/CD.
 
-### 9.3 Version Control
+### 7.3 Version Control
 
 - Utiliser Git pour le contrôle de version.
 - Adopter une stratégie de branches claire pour le développement des fonctionnalités.
 
-### 9.4 Deployment Environment
+### 7.4 Deployment Environment
 
 - Target platforms: Windows.
 - Fournir des instructions de déploiement et des guides de configuration de l'environnement.
 
 ---
 
-## 11. Project Timeline and Milestones
+## 8. Project Timeline and Milestones
 
 - **Phase 1:** Analyse des prérequis & Conception détaillée
 - **Phase 2:** Développement des modules
@@ -252,9 +281,9 @@ On as aussi écarté Bullet Physics pour ces raisons :
 
 ---
 
-## 12. Appendices
+## 9. Appendices
 
-### 12.1 Glossary
+### 9.1 Glossary
 
 - **Game Engine:** Le cadre central gérant tous les processus du jeu.
 - **Module:** Un composant autonome fournissant une fonctionnalité spécifique.
