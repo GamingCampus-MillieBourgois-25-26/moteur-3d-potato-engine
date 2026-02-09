@@ -56,7 +56,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-
+bool testImGui = true;
 
 // Prototype de la fonction de gestion des messages (WndProc)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -126,7 +126,18 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             ImGui::NewFrame();
 
             // --- TA GUI ---
-            ImGui::Begin("Debug Menu");
+            ImGui::Begin("Debug Menu", &testImGui, ImGuiWindowFlags_MenuBar);
+            if (ImGui::BeginMenuBar()) {
+
+                if (ImGui::BeginMenu("file"))
+                {
+                    if (ImGui::MenuItem("Open", "Ctrl+O")) { /* Do stuff */ }
+                    if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+                    if (ImGui::MenuItem("Close", "Ctrl+W")) { quick_exit(0); }
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
             ImGui::Text("Hello Team! Le moteur est en marche.");
             static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
             ImGui::ColorEdit3("Fond Ecran", clear_color);
