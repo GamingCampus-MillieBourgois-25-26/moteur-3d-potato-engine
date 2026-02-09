@@ -1,7 +1,3 @@
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-
 
 #ifndef UNICODE
 #define UNICODE
@@ -10,8 +6,11 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-
 #include <d3d11.h>
+
+#include "Core/ImGui/Config/imgui.h"
+#include "Core/ImGui/Config/backends/imgui_impl_win32.h"
+#include "Core/ImGui/Config/backends/imgui_impl_dx11.h"
 
 #pragma comment(lib, "d3d11.lib")
 
