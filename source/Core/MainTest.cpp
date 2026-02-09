@@ -1,12 +1,12 @@
 #ifndef UNICODE
 #define UNICODE
-#endif 
+#endif
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <cstdio>
-#include <io.h>
 #include <fcntl.h>
+#include <io.h>
+#include <windows.h>
 
 // tempPhysicsTests
 #include "Physics/physicsTests.h"
@@ -27,18 +27,14 @@ void CreateConsole()
     SetConsoleTitleA("Potato Engine Console");
 }
 
-int WINAPI wWinMain(
-    _In_ HINSTANCE hInstance,
-    _In_opt_ HINSTANCE hPrevInstance,
-    _In_ PWSTR pCmdLine,
-    _In_ int nCmdShow
-) {
-    //  Crée la console AVANT tout log
+int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow)
+{
+    //  Crï¿½e la console AVANT tout log
     CreateConsole();
 
     printf("Console initialisee\n");
 
-    // 1. Enregistrement de la classe de fenêtre
+    // 1. Enregistrement de la classe de fenï¿½tre
     const wchar_t CLASS_NAME[] = L"EngineWindowClass";
 
     WNDCLASS wc = {};
@@ -49,17 +45,11 @@ int WINAPI wWinMain(
 
     RegisterClass(&wc);
 
-    // 2. Création de la fenêtre
-    HWND hwnd = CreateWindowEx(
-        0,
-        CLASS_NAME,
-        L"C++ Game Engine - DX11",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
-        NULL, NULL, hInstance, NULL
-    );
+    // 2. Crï¿½ation de la fenï¿½tre
+    HWND hwnd = CreateWindowEx(0, CLASS_NAME, L"C++ Game Engine - DX11", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, NULL, NULL, hInstance, NULL);
 
-    if (hwnd == NULL) return 0;
+    if (hwnd == NULL)
+        return 0;
 
     ShowWindow(hwnd, nCmdShow);
 
@@ -68,15 +58,18 @@ int WINAPI wWinMain(
     //a supprimer tests
     Physics::mainTests();
 
-    while (true) {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+    while (true)
+    {
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
             if (msg.message == WM_QUIT)
                 break;
 
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        else {
+        else
+        {
             // Engine Update / Render
         }
     }
@@ -87,17 +80,20 @@ int WINAPI wWinMain(
 // Gestionnaire de messages
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch (uMsg) {
+    switch (uMsg)
+    {
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
 
-    case WM_PAINT: {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-        EndPaint(hwnd, &ps);
-    } return 0;
+    case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+            FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+            EndPaint(hwnd, &ps);
+        }
+        return 0;
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

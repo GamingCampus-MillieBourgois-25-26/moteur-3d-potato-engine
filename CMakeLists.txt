@@ -9,38 +9,40 @@ file(GLOB_RECURSE ENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/source/Physics/*.hpp"
 )
 
 # Jolt Physics
 add_library(Jolt STATIC IMPORTED)
 
+set(JOLT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(JOLT_LIB_DIR     "${CMAKE_CURRENT_SOURCE_DIR}/libs/Jolt")
+
 set_target_properties(Jolt PROPERTIES
-    IMPORTED_LOCATION_DEBUG   "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics/Build/VS2022_CL/Debug/Jolt.lib"
-    IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics/Build/VS2022_CL/Release/Jolt.lib"
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics"
+    IMPORTED_LOCATION_DEBUG   "${JOLT_LIB_DIR}/Debug/Jolt.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${JOLT_INCLUDE_DIR}"
 )
 
+target_compile_definitions(Jolt INTERFACE
+    JPH_DEBUG_RENDERER
+)
 
 # Création de l'exécutable
-add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} "source/Physics/physicsTests.h" "source/Physics/physicsTests.cpp")
+add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})
 
 # Inclusion du dossier 'source'
-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/source")
-
-# Liaison DirectX 11
-target_link_libraries(${PROJECT_NAME} PRIVATE d3d11.lib dxgi.lib d3dcompiler.lib)
-
-#Liaison de Jolt Physics
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-        Jolt
-)
-
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}/source"
-        "${JOLT_PHYSICS_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source"
+    "${JOLT_INCLUDE_DIR}"
+)
+
+# Liaison Bibliotheques (DirectX 11 ...)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        d3d11
+        dxgi
+        d3dcompiler
+        Jolt
 )
 
 if(MSVC)
