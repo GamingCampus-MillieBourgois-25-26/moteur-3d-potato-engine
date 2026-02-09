@@ -13,11 +13,12 @@ file(GLOB_RECURSE ENGINE_SOURCES
 )
 
 # Jolt Physics
-set(JOLT_PHYSICS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics")
+add_library(Jolt STATIC IMPORTED)
 
-add_subdirectory(
-    ${JOLT_PHYSICS_DIR}/Build
-    ${CMAKE_BINARY_DIR}/JoltPhysics
+set_target_properties(Jolt PROPERTIES
+    IMPORTED_LOCATION_DEBUG   "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics/Build/VS2022_CL/Debug/Jolt.lib"
+    IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics/Build/VS2022_CL/Release/Jolt.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics"
 )
 
 
@@ -35,14 +36,12 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         Jolt
 )
+
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/source"
         "${JOLT_PHYSICS_DIR}"
 )
-
-
-
 
 if(MSVC)
     add_compile_definitions(UNICODE _UNICODE)
