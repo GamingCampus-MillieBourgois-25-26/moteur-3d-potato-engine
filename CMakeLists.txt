@@ -12,7 +12,7 @@ file(GLOB_RECURSE ENGINE_SOURCES
 )
 
 # Création de l'exécutable
-add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})
+add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} "source/Logic/Actor.h" "source/Logic/Actor.cpp" "source/Logic/Component.h" "source/Logic/Scene.h" "source/Logic/Scene.cpp" "source/Logic/SceneManager.h" "source/Logic/SceneManager.cpp" "source/Logic/UUID.h")
 
 # Inclusion du dossier 'source'
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/source")
