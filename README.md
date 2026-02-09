@@ -4,7 +4,7 @@
 - **Project Title:** C++ Game Engine Project
 - **Version:** 1.0
 - **Date:** 04-02-2026
-- **Authors:** [MOREAU Adrien],[GONÇALVES Téo],[DOUBLET Théo],[POMMEZ Kiliann] et [HANSON Liam]
+- **Authors:** MOREAU Adrien,GONÇALVES Téo,DOUBLET Théo,POMMEZ Kiliann et HANSON Liam
 
 ## Revision History
 | Date       | Version | Description                | Author      |
