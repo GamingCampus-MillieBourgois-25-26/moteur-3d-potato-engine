@@ -129,11 +129,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             ImGui::Begin("Debug Menu", &testImGui, ImGuiWindowFlags_MenuBar);
             if (ImGui::BeginMenuBar()) {
 
-                if (ImGui::BeginMenu("file"))
+                if (ImGui::BeginMenu("File"))
                 {
                     if (ImGui::MenuItem("Open", "Ctrl+O")) { /* Do stuff */ }
                     if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
                     if (ImGui::MenuItem("Close", "Ctrl+W")) { quick_exit(0); }
+                    ImGui::EndMenu();
+                }
+
+                if (ImGui::BeginMenu("Edit"))
+                {
+                    if (ImGui::MenuItem("Open", "Ctrl+O")) { /* Do stuff */ }
+                    if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+                    if (ImGui::MenuItem("Close", "Ctrl+W")) { /* Do stuff */ }
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();

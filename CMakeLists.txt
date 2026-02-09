@@ -12,7 +12,7 @@ file(GLOB_RECURSE ENGINE_SOURCES
 )
 
 # ---------------- IMGUI ----------------
-set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/source/Core/ImGui)
+set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/source/Core/ImGui/Config)
 
 set(IMGUI_SOURCES
     ${IMGUI_PATH}/imgui.cpp
