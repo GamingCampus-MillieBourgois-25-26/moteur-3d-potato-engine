@@ -1,0 +1,49 @@
+# --- Dossier de Build CMake (LE PLUS IMPORTANT) ---
+# Tout ce que CMake génère doit rester local à chaque PC
+build/
+out/
+bin/
+CMakeCache.txt
+CMakeFiles/
+CMakeSettings.json
+*.cmake
+
+# --- Visual Studio & IDEs ---
+.vs/
+.vscode/
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.suo
+*.db
+*.opendb
+
+# --- Compilation & Binaires ---
+# On ignore les fichiers objets et exécutables générés
+x64/
+x86/
+[Dd]ebug/
+[Rr]elease/
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.exp
+
+# --- Dépendances (Jolt, Audio, etc.) ---
+# On ignore les bibliothèques compilées par défaut pour ne pas alourdir Git
+*.lib
+*.dll
+*.pdb
+
+# --- EXCEPTION POUR LES DÉPENDANCES ---
+# Si vous mettez vos .lib et .dll externes dans un dossier spécifique pour l'équipe,
+# vous pouvez forcer Git à les suivre en décommentant les lignes suivantes :
+# !/external/**/*.lib
+# !/external/**/*.dll
+
+# --- Divers ---
+*.log
+*.tlog
+*.lastbuildstate
