@@ -4,12 +4,14 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "../Include/Graphics/FileParser.h"
 
 // Prototype de la fonction de gestion des messages (WndProc)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow){
-
+    FileParser parser;
+    parser.StartPars();
     // 1. Enregistrement de la classe de fenêtre
     const wchar_t CLASS_NAME[] = L"EngineWindowClass";
 
