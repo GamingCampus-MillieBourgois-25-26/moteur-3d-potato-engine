@@ -10,7 +10,6 @@
 | Date       | Version | Description                | Author      |
 |------------|---------|----------------------------|-------------|
 | 04-02-2026 | 0.1     | Initial document creation  | Kiliann POMMEZ |
-|------------|---------|----------------------------|-------------|
 | 09-02-2026 | 0.2     | Architecture update        | Kiliann POMMEZ |
 
 ## Table of Contents
