@@ -8,6 +8,13 @@
 class Menu {
 public:
 
-	void barMenuImGui();
+	void barMenu();
+
+};
+
+class Details {
+public: 
+
+	void menuDetails();
 
 };

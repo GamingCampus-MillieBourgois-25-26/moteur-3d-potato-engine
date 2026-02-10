@@ -58,8 +58,10 @@ bool CreateDeviceD3D(HWND hWnd) {
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+// ---- IMGUI WindoW ----
 bool testImGui = true;
 Menu menu;
+Details details;
 
 
 // Prototype de la fonction de gestion des messages (WndProc)
@@ -83,7 +85,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         CLASS_NAME,                     // Nom de la classe
         L"C++ Game Engine - DX11",      // Titre
         WS_OVERLAPPEDWINDOW,            // Style de fenêtre
-        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, // Position et Taille
+        CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080, // Position et Taille
         NULL, NULL, hInstance, NULL
     );
 
@@ -132,7 +134,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             // --- TA GUI ---
             ImGui::Begin("Debug Menu", &testImGui, ImGuiWindowFlags_MenuBar);
            
-            menu.barMenuImGui();
+            menu.barMenu();
 
             /*ImGui::Text("Hello Team! Le moteur est en marche.");*/
             static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
@@ -141,6 +143,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
                 MessageBox(hwnd, L"Ça marche !", L"Succès", MB_OK);
             }
             ImGui::End();
+
+            details.menuDetails();
 
             // --- RENDU ---
             ImGui::Render();
