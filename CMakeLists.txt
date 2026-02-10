@@ -14,6 +14,8 @@ file(GLOB_RECURSE ENGINE_SOURCES
 # Création de l'exécutable
 add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})    
 
+
+
 # Inclusion du dossier 'source'
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/source"
                                                   "${CMAKE_CURRENT_SOURCE_DIR}/Include"
@@ -21,6 +23,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/s
 
 # Liaison DirectX 11
 target_link_libraries(${PROJECT_NAME} PRIVATE d3d11.lib dxgi.lib d3dcompiler.lib)
+
+
 
 if(MSVC)
     add_compile_definitions(UNICODE _UNICODE)
