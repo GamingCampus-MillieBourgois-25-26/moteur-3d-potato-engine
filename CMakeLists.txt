@@ -14,11 +14,16 @@ file(GLOB_RECURSE ENGINE_SOURCES
 # Jolt Physics
 add_library(Jolt STATIC IMPORTED)
 
-set(JOLT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(JOLT_LIB_DIR     "${CMAKE_CURRENT_SOURCE_DIR}/libs/Jolt")
+set(EXTERNAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external")
+set(EXTERNAL_LIBS_DIR "${EXTERNAL_DIR}/libs")
+set(EXTERNAL_INCLUDE_DIR "${EXTERNAL_DIR}/include")
+
+set(JOLT_INCLUDE_DIR "${EXTERNAL_INCLUDE_DIR}/Jolt")
+set(JOLT_LIB_DIR     "${EXTERNAL_LIBS_DIR}/Jolt")
 
 set_target_properties(Jolt PROPERTIES
     IMPORTED_LOCATION_DEBUG   "${JOLT_LIB_DIR}/Debug/Jolt.lib"
+    IMPORTED_LOCATION_RELEASE   "${JOLT_LIB_DIR}/Release/Jolt.lib"
     INTERFACE_INCLUDE_DIRECTORIES "${JOLT_INCLUDE_DIR}"
 )
 
@@ -33,7 +38,7 @@ add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/source"
-    "${JOLT_INCLUDE_DIR}"
+    "${EXTERNAL_INCLUDE_DIR}"
 )
 
 # Liaison Bibliotheques (DirectX 11 ...)
