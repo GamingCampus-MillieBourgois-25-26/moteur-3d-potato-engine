@@ -8,9 +8,12 @@
 
 #include <d3d11.h>
 
-#include "Core/ImGui/Config/imgui.h"
-#include "Core/ImGui/Config/backends/imgui_impl_win32.h"
-#include "Core/ImGui/Config/backends/imgui_impl_dx11.h"
+
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+#include "Core/ImGui/imgui_function.h"
+
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -56,6 +59,8 @@ bool CreateDeviceD3D(HWND hWnd) {
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool testImGui = true;
+Menu menu;
+
 
 // Prototype de la fonction de gestion des messages (WndProc)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -126,26 +131,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
             // --- TA GUI ---
             ImGui::Begin("Debug Menu", &testImGui, ImGuiWindowFlags_MenuBar);
-            if (ImGui::BeginMenuBar()) {
+           
+            menu.barMenuImGui();
 
-                if (ImGui::BeginMenu("File"))
-                {
-                    if (ImGui::MenuItem("Open", "Ctrl+O")) { /* Do stuff */ }
-                    if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-                    if (ImGui::MenuItem("Close", "Ctrl+W")) { quick_exit(0); }
-                    ImGui::EndMenu();
-                }
-
-                if (ImGui::BeginMenu("Edit"))
-                {
-                    if (ImGui::MenuItem("Open", "Ctrl+O")) { /* Do stuff */ }
-                    if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-                    if (ImGui::MenuItem("Close", "Ctrl+W")) { /* Do stuff */ }
-                    ImGui::EndMenu();
-                }
-                ImGui::EndMenuBar();
-            }
-            ImGui::Text("Hello Team! Le moteur est en marche.");
+            /*ImGui::Text("Hello Team! Le moteur est en marche.");*/
             static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
             ImGui::ColorEdit3("Fond Ecran", clear_color);
             if (ImGui::Button("Test Alerte")) {
