@@ -29,6 +29,10 @@ set_target_properties(Jolt PROPERTIES
 
 target_compile_definitions(Jolt INTERFACE
     JPH_DEBUG_RENDERER
+    JPH_FLOATING_POINT_EXCEPTIONS_ENABLED
+    JPH_PROFILE_ENABLED
+    JPH_OBJECT_STREAM
+
 )
 
 # Création de l'exécutable
@@ -49,6 +53,7 @@ target_link_libraries(${PROJECT_NAME}
         d3dcompiler
         Jolt
 )
+
 
 if(MSVC)
     add_compile_definitions(UNICODE _UNICODE)
