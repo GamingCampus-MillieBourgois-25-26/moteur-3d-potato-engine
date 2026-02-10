@@ -5,6 +5,6 @@
 class Buffers
 {
 public:
-	std::shared_ptr<std::unordered_map<int,Vertex>> meshBuffer;
+	std::unordered_map<std::string,std::shared_ptr<Mesh>> meshBuffer;
 
 };

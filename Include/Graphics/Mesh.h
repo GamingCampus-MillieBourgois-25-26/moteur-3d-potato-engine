@@ -3,10 +3,12 @@
 #include "Vertex.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 class Mesh 
 {
 public:
-	std::shared_ptr<std::vector<Vertex>> vertices;
-	std::shared_ptr<uint32_t> indices;
+	std::string name;
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
 };
