@@ -18,35 +18,8 @@ HRESULT Renderer::Initialize(HWND hwnd, int width, int height) {
     m_context->RSSetState(m_rasterizerState.Get());
 
     // Setup du test
-    return SetupTestTriangle();
-}
-
-HRESULT Renderer::SetupTestTriangle() {
-    // 1. Définition du triangle (on utilise Vertex de Types.h)
-    // On détourne "normal" pour stocker du RGB
-    std::vector<Vertex> vertices = {
-        { {  0.0f,  0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.5f, 0.0f } }, // Sommet haut (Rouge)
-        { {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 1.0f } }, // Sommet bas-droit (Vert)
-        { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f } }  // Sommet bas-gauche (Bleu)
-    };
-
-    std::vector<uint32_t> indices = { 0, 1, 2 };
-
-    // 2. Compilation des shaders de test
-    Microsoft::WRL::ComPtr<ID3DBlob> vsBlob;
-    HRESULT hr = ShaderManager::CreateVertexShader(m_device, L"TestShader.hlsl", m_testVS, vsBlob);
-    if (FAILED(hr)) return hr;
-
-    hr = ShaderManager::CreatePixelShader(m_device, L"TestShader.hlsl", m_testPS);
-    if (FAILED(hr)) return hr;
-
-    // 3. Initialisation du Mesh et de son InputLayout (ta méthode corrigée)
-    hr = m_testMesh.Initialize(m_device, vertices, indices);
-    if (FAILED(hr)) return hr;
-
-    hr = m_testMesh.CreateInputLayout(m_device, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize());
-
-    return hr;
+    //return SetupTestTriangle();
+    return S_OK;
 }
 
 void Renderer::RenderFrame() {
