@@ -59,9 +59,10 @@ bool CreateDeviceD3D(HWND hWnd) {
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // ---- IMGUI WindoW ----
-bool testImGui = true;
+bool OpenImGui = true;
 Menu menu;
 Details details;
+Render render;
 
 
 // Prototype de la fonction de gestion des messages (WndProc)
@@ -132,19 +133,23 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             ImGui::NewFrame();
 
             // --- TA GUI ---
-            ImGui::Begin("Debug Menu", &testImGui, ImGuiWindowFlags_MenuBar);
-           
+
             menu.barMenu();
 
-            /*ImGui::Text("Hello Team! Le moteur est en marche.");*/
+            ImGui::Begin("Debug Menu", &OpenImGui, ImGuiWindowFlags_MenuBar);
+           
+            
             static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
             ImGui::ColorEdit3("Fond Ecran", clear_color);
             if (ImGui::Button("Test Alerte")) {
                 MessageBox(hwnd, L"Ça marche !", L"Succès", MB_OK);
             }
+
             ImGui::End();
 
-            details.menuDetails();
+            details.showDetails();
+
+            render.showRender();
 
             // --- RENDU ---
             ImGui::Render();
