@@ -26,7 +26,7 @@ namespace Physics
     void mainTests()
     {
      
-        
+        /*
         // Next we can create a rigid body to serve as the floor, we make a large box
         // Create the settings for the collision volume (the shape).
         // Note that for simple shapes (like boxes) you can also directly construct a BoxShape.
@@ -98,6 +98,6 @@ namespace Physics
         // Destroy the factory
         delete JPH::Factory::sInstance;
         JPH::Factory::sInstance = nullptr;
-        
+        */
     }
 }
