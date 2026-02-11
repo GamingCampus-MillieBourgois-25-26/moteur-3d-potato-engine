@@ -52,7 +52,7 @@ static bool AssertFailedImpl(const char* inExpression, const char* inMessage, co
 // Typically you at least want to have 1 layer for moving bodies and 1 layer for static bodies, but you can have more
 // layers if you want. E.g. you could have a layer for high detail collision (which is not used by the physics simulation
 // but only if you do collision testing).
-namespace Layers
+namespace PhysicsLayers
 {
     static constexpr JPH::ObjectLayer NON_MOVING = 0;
     static constexpr JPH::ObjectLayer MOVING = 1;
@@ -67,9 +67,9 @@ public:
     {
         switch (inObject1)
         {
-        case Layers::NON_MOVING:
-            return inObject2 == Layers::MOVING; // Non moving only collides with moving
-        case Layers::MOVING:
+        case PhysicsLayers::NON_MOVING:
+            return inObject2 == PhysicsLayers::MOVING; // Non moving only collides with moving
+        case PhysicsLayers::MOVING:
             return true; // Moving collides with everything
         default: JPH_ASSERT(false);
             return false;
@@ -97,8 +97,8 @@ public:
     BPLayerInterfaceImpl()
     {
         // Create a mapping table from object to broad phase layer
-        mObjectToBroadPhase[Layers::NON_MOVING] = BroadPhaseLayers::NON_MOVING;
-        mObjectToBroadPhase[Layers::MOVING] = BroadPhaseLayers::MOVING;
+        mObjectToBroadPhase[PhysicsLayers::NON_MOVING] = BroadPhaseLayers::NON_MOVING;
+        mObjectToBroadPhase[PhysicsLayers::MOVING] = BroadPhaseLayers::MOVING;
     }
 
     JPH::uint GetNumBroadPhaseLayers() const override
@@ -108,7 +108,7 @@ public:
 
     JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override
     {
-        JPH_ASSERT(inLayer < Layers::NUM_LAYERS);
+        JPH_ASSERT(inLayer < PhysicsLayers::NUM_LAYERS);
         return mObjectToBroadPhase[inLayer];
     }
 
@@ -126,7 +126,7 @@ public:
 #endif // JPH_EXTERNAL_PROFILE || JPH_PROFILE_ENABLED
 
 private:
-    JPH::BroadPhaseLayer mObjectToBroadPhase[Layers::NUM_LAYERS];
+    JPH::BroadPhaseLayer mObjectToBroadPhase[PhysicsLayers::NUM_LAYERS];
 };
 
 /// Class that determines if an object layer can collide with a broadphase layer
@@ -137,9 +137,9 @@ public:
     {
         switch (inLayer1)
         {
-        case Layers::NON_MOVING:
+        case PhysicsLayers::NON_MOVING:
             return inLayer2 == BroadPhaseLayers::MOVING;
-        case Layers::MOVING:
+        case PhysicsLayers::MOVING:
             return true;
         default: JPH_ASSERT(false);
             return false;
@@ -208,10 +208,7 @@ PhysicsEngine::PhysicsEngine()
 
     JPH::JobSystemThreadPool job_system(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, JPH::thread::hardware_concurrency() - 1);
 
-    const JPH::uint cMaxBodies = 65536;
-    const JPH::uint cNumBodyMutexes = 0;
-    const JPH::uint cMaxBodyPairs = 65536;
-    const JPH::uint cMaxContactConstraints = 10240;
+    
     BPLayerInterfaceImpl broad_phase_layer_interface;
     ObjectVsBroadPhaseLayerFilterImpl object_vs_broadphase_layer_filter;
     ObjectLayerPairFilterImpl object_vs_object_layer_filter;

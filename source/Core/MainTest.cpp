@@ -56,7 +56,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     // 3. Boucle de messages
     MSG msg = {};
     //a supprimer tests
-    Physics::mainTests();
+    //Physics::mainTests();
 
     while (true)
     {

@@ -1,7 +1,9 @@
 #pragma once
 
+#include "physicsLayers.h"
+
 class PhysicsLayerManager
 {
 public:
-	bool ShouldCollide(PhysicsLayer layerA, PhysicsLayer layerB) const;
+	bool ShouldCollide(JPH::ObjectLayer layerA, JPH::ObjectLayer layerB) const;
 };

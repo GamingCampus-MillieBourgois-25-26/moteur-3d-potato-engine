@@ -1,4 +1,3 @@
-#include "physicsTests.h"
 #include <windows.h>
 #include <Jolt/Jolt.h>
 
