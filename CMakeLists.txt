@@ -11,6 +11,7 @@ file(GLOB_RECURSE ENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Include/*.hpp"
 )
 
+
 # Création de l'exécutable
 add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})    
 
@@ -19,6 +20,13 @@ add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})
 # Inclusion du dossier 'source'
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/source"
                                                   "${CMAKE_CURRENT_SOURCE_DIR}/Include"
+)
+
+# Commande pour copier le dossier des shaders vers le dossier de l'exécutable
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Graphics/RenderPipeline/Shaders"
+    "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders"
 )
 
 # Liaison DirectX 11

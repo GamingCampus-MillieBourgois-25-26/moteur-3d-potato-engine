@@ -52,6 +52,7 @@ HRESULT MeshBuffer::CreateInputLayout(Microsoft::WRL::ComPtr<ID3D11Device> devic
         { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
+
     return device->CreateInputLayout(
         layoutDesc,
         ARRAYSIZE(layoutDesc),

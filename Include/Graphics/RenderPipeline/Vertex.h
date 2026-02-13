@@ -27,3 +27,4 @@ struct alignas(16) PerObjectCB {
     // Ajout d'un padding explicite si tu ajoutes d'autres variables plus tard
     // pour toujours atteindre un multiple de 16 octets au total.
 };
+

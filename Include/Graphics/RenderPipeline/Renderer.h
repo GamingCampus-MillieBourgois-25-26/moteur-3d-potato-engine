@@ -7,6 +7,15 @@
 #include "ConstantBuffer.h"
 #include "ShaderManager.h"
 
+
+struct RenderItem {
+    MeshBuffer* mesh;
+    ID3D11VertexShader* vs;
+    ID3D11PixelShader* ps;
+    DirectX::XMMATRIX worldMatrix;
+    DirectX::XMFLOAT4 color;
+};
+
 class Renderer {
 public:
     Renderer() = default;
@@ -16,16 +25,15 @@ public:
     HRESULT Initialize(HWND hwnd, int width, int height);
 
     // Boucle de rendu
-    void RenderFrame();
+    void RenderFrame(const PerFrameCB& frameData, const std::vector<RenderItem>& items);
 
-    // Nettoyage (facultatif avec ComPtr, mais propre pour le groupe)
-    //void Shutdown();
+    
+    Microsoft::WRL::ComPtr<ID3D11Device> GetDevice() const { return m_device; }
 
 private:
     // Méthodes d'initialisation internes
     HRESULT CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
     HRESULT CreateMainViews(int width, int height);
-    HRESULT SetupTestTriangle(); // Ta méthode de test
 
     // Core DX11
     Microsoft::WRL::ComPtr<ID3D11Device>           m_device;
@@ -35,11 +43,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthStencilView;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>  m_rasterizerState;
 
-    // Ressources pour le test du triangle
-    MeshBuffer                         m_testMesh;
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> m_testVS;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader>  m_testPS;
-
     // Pour plus tard (déjà prêt)
     ConstantBuffer<PerFrameCB>         m_perFrameCB;
+    ConstantBuffer<PerObjectCB>        m_perObjectCB;
 };

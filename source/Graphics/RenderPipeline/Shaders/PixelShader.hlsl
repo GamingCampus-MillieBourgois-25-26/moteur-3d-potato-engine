@@ -7,7 +7,7 @@ struct PixelInput
 };
 
 // Constant Buffer pour les réglages de rendu (optionnel mais recommandé)
-cbuffer PerObject : register(b1)
+cbuffer PerObject : register(b1) 
 {
     float4 meshColor;
 };
