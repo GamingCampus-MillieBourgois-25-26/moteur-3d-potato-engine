@@ -18,6 +18,8 @@ public:
 
 	void showDetails();
 
+	char searchBuffer[64] = "";
+
 };
 
 
@@ -28,6 +30,8 @@ public:
 	bool Tcheckbox = false;
 	bool Rcheckbox = false;
 	bool Scheckbox = false;
+
+	int jsp = 3;
 
 	void showRender();
 

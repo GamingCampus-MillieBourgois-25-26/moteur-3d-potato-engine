@@ -20,12 +20,12 @@ void Menu::barMenu() {
 
         if (ImGui::BeginMenu("Edit"))
         {
-            ImGui::SetCursorPosX(50);
-            ImGui::Text("HISTORY");  ImGui::Separator();
+            
+            ImGui::SeparatorText("HISTORY");  
             if (ImGui::MenuItem("Undo", "Ctrl+Z")) { /* Do stuff */ }
             if (ImGui::MenuItem("Rendo", "Ctrl+Y")) { /* Do stuff */ }
 
-            ImGui::NewLine();   ImGui::SetCursorPosX(60);   ImGui::Text("EDIT");   ImGui::Separator();
+            ImGui::NewLine();   ImGui::SeparatorText("EDIT");
             if (ImGui::MenuItem("Cut", "Ctrl+X")) { /* Do stuff */ }
             if (ImGui::MenuItem("Copy", "Ctrl+C")) { /* Do stuff */ }
             if (ImGui::MenuItem("Paste", "Ctrl+V")) { /* Do stuff */ }
@@ -60,9 +60,112 @@ void Menu::barMenu() {
 void Details::showDetails() {
 
     ImGui::Begin("Details");
-    ImGui::Text("hummm");
-    ImGui::End();
 
+    if (ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer))) /* Do stuff0 */;
+
+    // Transform 
+    {
+
+        if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+            ImGui::Columns(4, "transform_columns", false);
+            ImGui::SetColumnWidth(0, 125);
+
+            ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 3.0f); // Arrondi léger style Unreal
+
+            // first line
+            {
+
+                // --- Ligne Translation ---
+                ImGui::AlignTextToFramePadding();
+                ImGui::LabelText("", "Translation");
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##1trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+                ImGui::EndChild();
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##2trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+                ImGui::EndChild();
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##3trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+
+                ImGui::EndChild();
+                ImGui::Separator();
+                ImGui::NextColumn();
+            }
+
+            // second line
+            {
+
+                // --- Ligne Rotation ---
+                ImGui::AlignTextToFramePadding();
+                ImGui::LabelText("", "Rotation");
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##1rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+                ImGui::EndChild();
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##2rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+                ImGui::EndChild();
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##3rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+
+                ImGui::EndChild();
+                ImGui::Separator();
+                ImGui::NextColumn();
+            }
+
+            // third line
+            {
+
+                // --- Ligne Scale ---
+                ImGui::AlignTextToFramePadding();
+                ImGui::LabelText("", "Scale");
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##1scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+                ImGui::EndChild();
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##2scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+                ImGui::EndChild();
+
+                ImGui::NextColumn();
+                if (ImGui::BeginChild("##3scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+                    ImGui::Text("0000.0");
+                }
+
+                ImGui::EndChild();
+                ImGui::Separator();
+            }
+
+            ImGui::PopStyleVar();
+            ImGui::Columns(1);
+        }
+
+    }
+    
+    ImGui::End();
 }
 
 
@@ -70,44 +173,58 @@ void Render::showRender() {
 
     ImGui::Begin("Render");
 
-    ImGui::BeginGroup();
-    // 1. Le Header raccourci (on utilise TreeNodeEx pour plus de contrôle)
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-    bool open = ImGui::TreeNodeEx("Selection Mode", ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth == false);
-    ImGui::PopStyleVar();
+    // Selected Transform
+    {
 
-    
-    ImGui::SameLine(0);
+        ImGui::BeginGroup();
+        // 1. Le Header raccourci (on utilise TreeNodeEx pour plus de contrôle)
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+        bool open = ImGui::TreeNodeEx("Selection Mode", ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth == false);
+        ImGui::PopStyleVar();
 
-    if (ImGui::Button("TRANSF")) { /* Do stuff0 */ }
-    ImGui::SameLine();
-    if (ImGui::Button("T")) { /* Do stuff1 */ }
-    ImGui::SameLine();
-    if (ImGui::Button("R")) { /* Do stuff2 */ }
-    ImGui::SameLine();
-    if (ImGui::Button("S")) { /* Do stuff3 */ }
-    static int jsp = 3;
-    
-    if (open) {
-        ImGui::Text("TANSFRORM TOOLS");    ImGui::Separator();
-        ImGui::NewLine();
+        ImGui::SameLine(0);
 
-        if (ImGui::RadioButton("Selecte Mode", &jsp, 0)) /* Do stuff0 */;
+        //Transform button
+        {
 
-        if (ImGui::RadioButton("Translate Mode", &jsp, 1)) /* Do stuff1 */;
+            if (ImGui::Button("TRANSF")) { jsp = 0; /* Do stuff0 */ }
+            ImGui::SameLine();
+            if (ImGui::Button("T")) { jsp = 1; /* Do stuff1 */ }
+            ImGui::SameLine();
+            if (ImGui::Button("R")) { jsp = 2; /* Do stuff2 */ }
+            ImGui::SameLine();
+            if (ImGui::Button("S")) { jsp = 3; /* Do stuff3 */ }
 
-        if (ImGui::RadioButton("Rotate Mode", &jsp, 2)) /* Do stuff2 */;
+        }
 
-        if (ImGui::RadioButton("Scale Mode", &jsp, 3)) /* Do stuff3 */;
-        ImGui::TreePop();
+        //Radio Transform button
+        {
+            if (open) {
+                ImGui::SeparatorText("TANSFRORM TOOLS");
+
+                if (ImGui::RadioButton("Selecte Mode", &jsp, 0)) /* Do stuff0 */;
+
+                if (ImGui::RadioButton("Translate Mode", &jsp, 1)) /* Do stuff1 */;
+
+                if (ImGui::RadioButton("Rotate Mode", &jsp, 2)) /* Do stuff2 */;
+
+                if (ImGui::RadioButton("Scale Mode", &jsp, 3)) /* Do stuff3 */;
+                ImGui::TreePop();
+            }
+        }
+
+        ImGui::EndGroup();
+
     }
+    
+    //Render
+    {
 
-    ImGui::EndGroup();
-
-
-    ImGui::BeginChild(",", ImVec2(0, 0), true);
+        ImGui::BeginChild(",", ImVec2(0, 0), true);
         ImGui::Text("LA OU ON VA RENDEEEEEEEEEEER");
         ImGui::EndChild();
-    ImGui::End();
 
+    }
+    
+    ImGui::End();
 }
