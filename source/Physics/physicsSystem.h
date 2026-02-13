@@ -1,9 +1,12 @@
 #pragma once
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/PhysicsSystem.h>
+#include <Jolt/Core/TempAllocator.h>
+#include <Jolt/Core/JobSystemThreadPool.h>
 
 #include "physicsLayerManager.h"
 #include "physicsContactListener.h"
+#include "physicsBroadPhaseLayerManager.h"
 
 class PhysicsSystem
 {
@@ -17,9 +20,11 @@ private:
 	JPH::PhysicsSystem m_system;
 
 	JPH::TempAllocatorImpl temp_allocator = JPH::TempAllocatorImpl(10 * 1024 * 1024);
-	// Managers / listeners stockés ici pour garantir leur durée de vie
-	PhysicsLayerManager m_layerManager;
+	JPH::JobSystemThreadPool job_system;
+	PhysicsObjectVSBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
 	PhysicsContactListener m_contactListener;
+	PhysicsBroadPhaseLayerInterface broad_phase_layer_interface;
+	PhysicsObjectLayerPairFilter object_vs_object_layer_filter;
 
 	const JPH::uint cMaxBodies = 65536;
 	const JPH::uint cNumBodyMutexes = 0;

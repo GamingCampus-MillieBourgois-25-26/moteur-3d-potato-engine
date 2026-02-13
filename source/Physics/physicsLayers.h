@@ -7,4 +7,5 @@ namespace PhysicsLayers
 {
 	static const JPH::ObjectLayer NON_MOVING = 0;
 	static const JPH::ObjectLayer MOVING = 1;
+	static const JPH::uint NUM_LAYERS = 2;
 }

@@ -8,9 +8,6 @@
 #include <io.h>
 #include <windows.h>
 
-// tempPhysicsTests
-#include "Physics/physicsTests.h"
-
 // Prototype de la fonction de gestion des messages (WndProc)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

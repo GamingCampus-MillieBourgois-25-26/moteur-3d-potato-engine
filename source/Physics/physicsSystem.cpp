@@ -11,7 +11,9 @@ void PhysicsSystem::Init()
 
 	JPH::RegisterTypes();
 
-	m_system.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, nullptr, &m_layerManager, nullptr);
+	m_system.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, broad_phase_layer_interface, object_vs_broadphase_layer_filter, object_vs_object_layer_filter);
+
+	job_system.Init(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 
 	m_system.SetGravity(JPH::Vec3(0.0f, -9.81f, 0.0f));
 
@@ -22,8 +24,7 @@ void PhysicsSystem::Init()
 
 void PhysicsSystem::Update(float deltaTime)
 {
-	// TODO
-	//m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, ???);
+	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()
