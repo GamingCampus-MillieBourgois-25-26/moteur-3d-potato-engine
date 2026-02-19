@@ -19,6 +19,7 @@ public:
 	void showDetails();
 
 	char searchBuffer[64] = "";
+	bool isPhysicsActiv;
 
 };
 

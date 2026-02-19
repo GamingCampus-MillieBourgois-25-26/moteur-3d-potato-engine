@@ -68,7 +68,7 @@ void Details::showDetails() {
 
         if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
 
-            ImGui::Columns(4, "transform_columns", false);
+            ImGui::Columns(4, "transform_columns", true);
             ImGui::SetColumnWidth(0, 125);
 
             ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 3.0f); // Arrondi léger style Unreal
@@ -164,7 +164,25 @@ void Details::showDetails() {
         }
 
     }
-    
+
+    //Physics
+    {
+
+        if (ImGui::CollapsingHeader("Physics"))
+        {
+            ImGui::Columns(2, "physics_columns", true);
+
+            ImGui::AlignTextToFramePadding();
+            ImGui::LabelText("", "Simulated Physics");
+
+            ImGui::NextColumn();
+
+            if (ImGui::Checkbox(" ", &isPhysicsActiv)) /* Do stuff0 */;
+
+			ImGui::Columns(1);
+        }
+
+    }
     ImGui::End();
 }
 
