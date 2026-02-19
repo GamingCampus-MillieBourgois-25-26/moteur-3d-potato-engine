@@ -61,7 +61,7 @@ void Details::showDetails() {
 
     ImGui::Begin("Details");
 
-    if (ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer))) /* Do stuff0 */;
+    if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
 
     // Transform 
     {
@@ -166,23 +166,22 @@ void Details::showDetails() {
     }
 
     //Physics
+    
+    if (ImGui::CollapsingHeader("Physics"))
     {
+        ImGui::Columns(2, "physics_columns", true);
 
-        if (ImGui::CollapsingHeader("Physics"))
-        {
-            ImGui::Columns(2, "physics_columns", true);
+        ImGui::AlignTextToFramePadding();
+        ImGui::LabelText("", "Simulate Physics");
 
-            ImGui::AlignTextToFramePadding();
-            ImGui::LabelText("", "Simulated Physics");
+        ImGui::NextColumn();
 
-            ImGui::NextColumn();
+        if (ImGui::Checkbox(" ", &isPhysicsActiv)) /* Do stuff0 */;
 
-            if (ImGui::Checkbox(" ", &isPhysicsActiv)) /* Do stuff0 */;
-
-			ImGui::Columns(1);
-        }
-
+        ImGui::Columns(1);
     }
+
+
     ImGui::End();
 }
 
@@ -245,4 +244,32 @@ void Render::showRender() {
     }
     
     ImGui::End();
+}
+
+void Outliner::showOutliner() {
+
+    ImGui::Begin("Outliner");
+    
+    if (ImGui::InputText("Search", searchItem, sizeof(searchItem))) /* Do stuff0 */;
+
+	ImGui::Columns(2, "outliner_columns", true);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::LabelText("", "Show Items");
+
+	if (ImGui::Checkbox(" ", &showActor)) /* Do stuff0 */;
+    if (ImGui::Checkbox("  ", &showActor)) /* Do stuff1 */;
+
+	ImGui::NextColumn();
+    ImGui::LabelText("", "Items");
+
+    if (ImGui::Button("Item 1")) /* Do stuff0 */;
+    if (ImGui::Button("Item 2")) /* Do stuff1 */;
+    
+
+
+    ImGui::Columns(1);
+
+    ImGui::End();
+
 }

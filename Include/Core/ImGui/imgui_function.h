@@ -18,8 +18,8 @@ public:
 
 	void showDetails();
 
-	char searchBuffer[64] = "";
-	bool isPhysicsActiv;
+	char searchRubric[64] = "";
+	bool isPhysicsActiv = false;
 
 };
 
@@ -36,4 +36,14 @@ public:
 
 	void showRender();
 
+};
+
+
+class Outliner {
+public:
+
+	void showOutliner();
+
+	char searchItem[64] = "";
+	bool showActor = true;
 };

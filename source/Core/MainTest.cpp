@@ -63,6 +63,7 @@ bool OpenImGui = true;
 Menu menu;
 Details details;
 Render render;
+Outliner outliner;
 
 
 // Prototype de la fonction de gestion des messages (WndProc)
@@ -150,6 +151,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             details.showDetails();
 
             render.showRender();
+
+			outliner.showOutliner();
 
             // --- RENDU ---
             ImGui::Render();
