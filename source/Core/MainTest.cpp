@@ -64,6 +64,7 @@ Menu menu;
 Details details;
 Render render;
 Outliner outliner;
+findFile findfile;
 
 
 // Prototype de la fonction de gestion des messages (WndProc)
@@ -149,10 +150,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             ImGui::End();
 
             details.showDetails();
+            
 
             render.showRender();
 
 			outliner.showOutliner();
+
+			findfile.showFindFile();
 
             // --- RENDU ---
             ImGui::Render();

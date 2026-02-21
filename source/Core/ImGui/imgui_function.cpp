@@ -273,3 +273,47 @@ void Outliner::showOutliner() {
     ImGui::End();
 
 }
+
+void findFile::showFindFile() {
+
+    ImGui::Begin("Find File");
+
+    static char selectedPath[512] = "Aucun fichier sélectionné";
+
+    if (ImGui::Button("find")) {
+
+        std::string filePath = OpenFileDialog();
+        if (!filePath.empty()) {
+            // Ici tu as ton chemin de fichier !
+            strncpy(selectedPath, filePath.c_str(), sizeof(selectedPath));
+        }
+    }
+
+    // 3. L'afficher juste en dessous dans ton interface
+    ImGui::Text("Chemin actuel :");
+    ImGui::SameLine(); // Pour mettre le texte sur la même ligne
+    ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), selectedPath); // En bleu clair
+
+    ImGui::End();
+
+}
+
+
+std::string findFile::OpenFileDialog() {
+    OPENFILENAMEA ofn;       // Structure de dialogue standard
+    char szFile[260] = { 0 };
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = sizeof(szFile);
+    ofn.lpstrFilter = "Tous les fichiers\0*.*\0Textes\0*.TXT\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+    if (GetOpenFileNameA(&ofn)) {
+        return std::string(ofn.lpstrFile);
+    }
+    return "";
+}
+

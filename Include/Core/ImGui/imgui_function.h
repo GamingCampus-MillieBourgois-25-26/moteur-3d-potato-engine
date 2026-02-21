@@ -3,7 +3,7 @@
 #include "imgui.h"
 
 #include <windows.h>
-
+#include <string>
 
 class Menu {
 public:
@@ -46,4 +46,12 @@ public:
 
 	char searchItem[64] = "";
 	bool showActor = true;
+};
+
+
+class findFile {
+public:
+
+	void showFindFile();
+	std::string OpenFileDialog();
 };
