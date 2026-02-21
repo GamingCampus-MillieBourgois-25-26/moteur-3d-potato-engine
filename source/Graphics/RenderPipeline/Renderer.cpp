@@ -4,7 +4,12 @@ HRESULT Renderer::Initialize(HWND hwnd, int width, int height) {
     HRESULT hr;
 
     hr = CreateDeviceAndSwapChain(hwnd, width, height);
-    if (FAILED(hr)) return hr;
+    if (FAILED(hr)) {
+        MessageBox(nullptr, L"Echec de CreateDeviceAndSwapChain.", L"Erreur DirectX", MB_ICONERROR);
+        return -1;   
+    }
+    //return hr;
+
 
     hr = CreateMainViews(width, height);
     if (FAILED(hr)) return hr;
@@ -71,24 +76,24 @@ HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {
 
     // 1. Description de la SwapChain (Le double buffering)
     DXGI_SWAP_CHAIN_DESC scd = {};
-    scd.BufferCount = 1;                                    // 1 Back Buffer
-    scd.BufferDesc.Width = width;
-    scd.BufferDesc.Height = height;
-    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;     // Couleur 32 bits standard
-    scd.BufferDesc.RefreshRate.Numerator = 60;              // Cible 60Hz
-    scd.BufferDesc.RefreshRate.Denominator = 1;
-    scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // On dessine dessus
-    scd.OutputWindow = hwnd;                                // Fenêtre Windows
-    scd.SampleDesc.Count = 1;                               // Pas d'anti-aliasing (MSAA)
-    scd.SampleDesc.Quality = 0;
-    scd.Windowed = TRUE;                                    // Mode fenêtré
-    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;              // Standard et compatible
 
-    // 2. Flags de création (Debug Layer indispensable pour le dev)
-    UINT createDeviceFlags = 0;
-/*#ifdef _DEBUG
-    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif*/
+    scd.BufferDesc.Width = width; // Largeur du buffer
+    scd.BufferDesc.Height = height; // Hauteur du buffer
+    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Format du buffer
+    scd.BufferDesc.RefreshRate.Numerator = 60; // Taux de rafraîchissement (numérateur)
+    scd.BufferDesc.RefreshRate.Denominator = 1; // Taux de rafraîchissement (dénominateur)
+    scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // Type de scaling
+    scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED; // Ordre de balayage
+    scd.SampleDesc.Count = 1; // Nombre d'échantillons pour l'anti-aliasing
+    scd.SampleDesc.Quality = 0; // Qualité de l'anti-aliasing
+    scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Usage du buffer
+    scd.BufferCount = 1; // Nombre de buffers
+    scd.OutputWindow = hwnd; // Fenêtre de sortie
+    scd.Windowed = TRUE; // Mode fenêtré
+    scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // Effet de swap
+    scd.Flags = 0; // Flags supplémentaires
+
+
 
     // 3. Niveaux de fonctionnalités (On vise DX11 pur)
     D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
@@ -96,24 +101,35 @@ HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {
 
     // 4. Création proprement dite
     hr = D3D11CreateDeviceAndSwapChain(
-        nullptr,                    // Adapter par défaut
-        D3D_DRIVER_TYPE_HARDWARE,   // Carte graphique réelle
+        searchForAdapters(), // Adapter
+        D3D_DRIVER_TYPE_UNKNOWN,// Driver Type
         nullptr,
-        createDeviceFlags,
-        featureLevels,
-        1,
+        0,
+        nullptr,//featureLevels,
+        0,
         D3D11_SDK_VERSION,
         &scd,
         m_swapChain.GetAddressOf(),
         m_device.GetAddressOf(),
-        &featureLevel,
+        nullptr,//&featureLevel,
         m_context.GetAddressOf()
     );
+
+    ID3D11Resource* pBackBuffer = nullptr;
+    m_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), (void**)&pBackBuffer); // Récupère le buffer de rendu arrière du swap chain
+    if (m_device != nullptr) {
+        m_device->CreateRenderTargetView(pBackBuffer, nullptr, &m_renderTargetView); // Crée une vue de rendu à partir du buffer de rendu arrière
+    }
+    pBackBuffer->Release(); // Libère le buffer de rendu arrière, car il n'est plus nécessaire après la création de la vue de rendu
+
+    
 
     if (FAILED(hr)) {
         // Astuce pro : Si ça échoue, c'est souvent parce que l'ordi n'a pas DX11 complet
         // ou que le SDK Debug n'est pas installé.
-        return hr;
+        MessageBox(nullptr, L"Echec de l'init.", L"Erreur DirectX", MB_ICONERROR);
+        return -1;
+        //return hr;
     }
 
     return S_OK;
@@ -175,4 +191,25 @@ HRESULT Renderer::CreateMainViews(int width, int height) {
     m_context->RSSetViewports(1, &vp);
 
     return S_OK;
+}
+
+IDXGIAdapter1* Renderer::searchForAdapters() {
+    IDXGIFactory1* pFactory = nullptr; // Pointeur pour la factory DXGI
+    CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&pFactory); // On créé une instance de la factory DXGI pour pouvoir énumérer les adaptateurs disponibles
+
+    IDXGIAdapter1* pAdapter = nullptr;
+    IDXGIAdapter1* bestAdapter = nullptr;
+    SIZE_T maxVRam = 0;
+
+    for (UINT i = 0; pFactory->EnumAdapters1(i, &pAdapter) != DXGI_ERROR_NOT_FOUND; ++i) {
+        DXGI_ADAPTER_DESC1 desc;
+        pAdapter->GetDesc1(&desc);
+        if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+            continue; // Ignore les adaptateurs logiciels
+        if (desc.DedicatedVideoMemory > maxVRam) {
+            maxVRam = desc.DedicatedVideoMemory;
+            bestAdapter = pAdapter; // Met à jour le meilleur adaptateur trouvé jusqu'à présent
+        }
+    }
+    return bestAdapter;
 }

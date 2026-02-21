@@ -1,5 +1,7 @@
 #pragma once
 #include <d3d11.h>
+#include <d3d11_1.h>
+#include <dxgi.h>
 #include <wrl/client.h>
 #include <vector>
 #include "Vertex.h"
@@ -34,6 +36,8 @@ private:
     // Méthodes d'initialisation internes
     HRESULT CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
     HRESULT CreateMainViews(int width, int height);
+
+    IDXGIAdapter1* searchForAdapters();
 
     // Core DX11
     Microsoft::WRL::ComPtr<ID3D11Device>           m_device;
