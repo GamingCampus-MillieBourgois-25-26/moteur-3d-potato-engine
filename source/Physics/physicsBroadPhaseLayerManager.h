@@ -17,5 +17,5 @@ public:
 	const char* GetBroadPhaseLayerName(JPH::BroadPhaseLayer inLayer) const override;
 
 private:
-	JPH::BroadPhaseLayer m_ObjectToBroadPhase[PhysicsLayers::NUM_LAYERS];
+	JPH::BroadPhaseLayer m_ObjectToBroadPhase[PhysicsLayers::NUM_PHYSICS_LAYERS];
 };

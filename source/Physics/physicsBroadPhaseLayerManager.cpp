@@ -18,10 +18,11 @@ JPH::BroadPhaseLayer PhysicsBroadPhaseLayerInterface::GetBroadPhaseLayer(JPH::Ob
 
 const char* PhysicsBroadPhaseLayerInterface::GetBroadPhaseLayerName(JPH::BroadPhaseLayer inLayer) const
 {
-	switch ((JPH::BroadPhaseLayer::Type)inLayer)
+	switch (inLayer.GetValue())
 	{
-	case ((JPH::BroadPhaseLayer::Type)BroadPhaseLayers::NON_MOVING): return "NON_MOVING";
-	case ((JPH::BroadPhaseLayer::Type)BroadPhaseLayers::MOVING): return "MOVING";
-	default: return "INVALID";
+	case 0:	return "NON_MOVING";
+	case 1:		return "MOVING";
+	default:
+		return "INVALID";
 	}
 }
