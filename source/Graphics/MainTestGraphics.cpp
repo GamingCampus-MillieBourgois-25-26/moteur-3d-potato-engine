@@ -15,6 +15,16 @@ using Microsoft::WRL::ComPtr;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
+//test triangle 
+static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
+vertices = {
+    { { 0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.5f, 0.0f } },
+    { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f } },
+    { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f } }
+};
+indices = { 0, 1, 2 };
+}
+
 // 1. Procédure de fenêtre (Gestion des événements)
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
@@ -71,6 +81,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // --- C. Chargement des Ressources (Simulation d'un gestionnaire de ressources) ---
 
+
     // 1. Compilation et création des Shaders
     ComPtr<ID3D11VertexShader> vertexShader;
     ComPtr<ID3D11PixelShader> pixelShader;
@@ -79,7 +90,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // 1. Chargement du Vertex Shader
 // Note : vsBlob est nécessaire pour créer l'InputLayout juste après.
-   /* if (FAILED(ShaderManager::CreateVertexShader(
+   if (FAILED(ShaderManager::CreateVertexShader(
         renderer->GetDevice(),
         L"Shaders/VertexShader.hlsl", // Chemin relatif à l'EXE
         vertexShader,
@@ -97,24 +108,36 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         return -1;
     }
 
-    // 2. Création du Mesh (Un triangle de test)
-    MeshBuffer triangleMesh;
-    std::vector<Vertex> vertices = {
-        { { 0.0f, 0.5f, 0.0f },  { 0.0f, 0.0f, -1.0f }, { 0.5f, 0.0f } }, // Haut
-        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f } }, // Bas Droite
-        { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f } }  // Bas Gauche
-    };
-    std::vector<uint32_t> indices = { 0, 1, 2 };
+    // 2. Préparation des données géométriques
+    std::vector<Vertex> triVertices;
+    std::vector<uint32_t> triIndices;
+    CreateTriangle(triVertices, triIndices);
 
-    if (FAILED(triangleMesh.Initialize(renderer->GetDevice(), vertices, indices))) {
-        MessageBox(nullptr, L"Erreur Initialize Mesh", L"Erreur", MB_OK);
+    // 3. Création et initialisation du Mesh
+    auto triangleMesh = std::make_unique<MeshBuffer>();
+    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), triVertices, triIndices))) {
         return -1;
     }
-    if (FAILED(triangleMesh.CreateInputLayout(renderer->GetDevice(), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()))) {
-        MessageBox(nullptr, L"Erreur CreateInputLayout", L"Erreur", MB_OK);
+
+    // 4. Création de l'Input Layout (Liaison entre Vertex.h et le Shader)
+    if (FAILED(triangleMesh->CreateInputLayout(renderer->GetDevice(), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()))) {
         return -1;
-    }*/
-    // --- D. Boucle de Jeu ---
+    }
+
+    // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
+
+    std::vector<RenderItem> sceneItems;
+
+    RenderItem triItem;
+    triItem.mesh = triangleMesh.get(); // Utilisation du pointeur brut pour le rendu
+    triItem.vs = vertexShader.Get();
+    triItem.ps = pixelShader.Get();
+    triItem.worldMatrix = DirectX::XMMatrixIdentity();
+    triItem.color = { 0.2f, 0.7f, 0.9f, 1.0f };
+
+    sceneItems.push_back(triItem);
+
+    // --- E. Boucle de Jeu ---
     MSG msg = { 0 };
     while (msg.message != WM_QUIT) {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -128,26 +151,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
             XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-            // On ne transpose pas ici, le Renderer s'en chargera dans RenderFrame
             frameData.viewMatrix = XMMatrixLookAtLH(eye, at, up);
             frameData.projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-            // 2. Préparation de la liste d'objets (RenderItem)
-            // Goulot d'étranglement potentiel : Ne pas réallouer ce vecteur à chaque frame en prod.
-            /*RenderItem tri;
-            tri.mesh = &triangleMesh;
-            tri.vs = vertexShader.Get();
-            tri.ps = pixelShader.Get();
-            tri.worldMatrix = XMMatrixIdentity();
-            tri.color = XMFLOAT4(0.2f, 0.7f, 0.9f, 1.0f);*/ // Bleu clair
-
-            std::vector<RenderItem> sceneItems;
-            //sceneItems.push_back(tri);
-
-            // 3. Rendu
+            // 2. Appel au Renderer
             renderer->RenderFrame(frameData, sceneItems);
         }
     }
-
-    return (int)msg.wParam;
+    //return (int)msg.wParam;
 }
+
