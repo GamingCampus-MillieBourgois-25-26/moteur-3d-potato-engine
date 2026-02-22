@@ -17,12 +17,13 @@ const int SCREEN_HEIGHT = 600;
 
 //test triangle 
 static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
-vertices = {
-    { { 0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.5f, 0.0f } },
-    { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f } },
-    { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f } }
-};
-indices = { 0, 1, 2 };
+    vertices = {
+        // Position            // Normale            // UV            // Couleur (RGBA)
+        { { 0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Haut (Rouge)
+        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // Bas Droite (Vert)
+        { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }  // Bas Gauche (Bleu)
+    };
+    indices = { 0, 1, 2 };
 }
 
 // 1. Procédure de fenêtre (Gestion des événements)

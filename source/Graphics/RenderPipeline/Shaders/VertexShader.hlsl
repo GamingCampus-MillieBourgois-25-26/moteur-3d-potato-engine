@@ -1,16 +1,18 @@
 // 1. Structures de données
-struct VertexInput
+struct VertexInput //récupère les données d'entrée du vertex buffer
 {
     float3 position : POSITION;
     float3 normal : NORMAL;
     float2 texCoord : TEXCOORD;
+    float4 color : COLOR;
 };
 
-struct PixelInput
+struct PixelInput //transmet les données transformées du vertex shader au pixel shader
 {
     float4 position : SV_POSITION;
     float3 normal : NORMAL;
     float2 texCoord : TEXCOORD0;
+    float4 color : COLOR;
 };
 
 // 2. Constant Buffers
@@ -42,6 +44,6 @@ PixelInput main(VertexInput input)
 
     // Transmission des UVs sans modification
     output.texCoord = input.texCoord;
-
+    output.color = input.color;
     return output;
 }

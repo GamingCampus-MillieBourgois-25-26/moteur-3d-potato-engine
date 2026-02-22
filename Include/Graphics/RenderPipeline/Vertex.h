@@ -11,6 +11,7 @@ struct Vertex {
     DirectX::XMFLOAT3 position; // 12 octets
     DirectX::XMFLOAT3 normal;   // 12 octets
     DirectX::XMFLOAT2 texCoord; // 8 octets
+	DirectX::XMFLOAT4 color;    // 16 octets (RGBA)
     // Total : 32 octets (Bien aligné, multiple de 4 et 8)
 };
 

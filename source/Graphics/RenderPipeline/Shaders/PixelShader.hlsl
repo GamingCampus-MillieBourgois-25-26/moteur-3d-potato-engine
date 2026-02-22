@@ -4,6 +4,7 @@ struct PixelInput
     float4 position : SV_POSITION; // Coordonnées écran (système)
     float3 normal : NORMAL; // Normale interpolée
     float2 texCoord : TEXCOORD0; // Coordonnées de texture
+    float4 color : COLOR;
 };
 
 // Constant Buffer pour les réglages de rendu (optionnel mais recommandé)
@@ -23,5 +24,5 @@ float4 main(PixelInput input) : SV_TARGET
     float intensity = max(dot(N, lightDir), 0.2f); // 0.2f de lumière ambiante minimum
 
     // 3. Retourne la couleur finale (RGBA)
-    return meshColor * intensity;
+    return input.color * intensity;
 }
