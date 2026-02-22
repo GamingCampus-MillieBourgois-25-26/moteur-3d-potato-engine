@@ -214,6 +214,12 @@ void Render::showRender() {
 
         }
 
+        // add actor button
+        {
+            ImGui::SameLine(0);
+            if (ImGui::Button("Add Actor")) { /* Do stuff4 */ }
+        }
+
         //Radio Transform button
         {
             if (open) {
@@ -229,6 +235,8 @@ void Render::showRender() {
                 ImGui::TreePop();
             }
         }
+
+        
 
         ImGui::EndGroup();
 
@@ -274,6 +282,7 @@ void Outliner::showOutliner() {
 
 }
 
+
 void findFile::showFindFile() {
 
     ImGui::Begin("Find File");
@@ -297,7 +306,6 @@ void findFile::showFindFile() {
     ImGui::End();
 
 }
-
 
 std::string findFile::OpenFileDialog() {
     OPENFILENAMEA ofn;       // Structure de dialogue standard
