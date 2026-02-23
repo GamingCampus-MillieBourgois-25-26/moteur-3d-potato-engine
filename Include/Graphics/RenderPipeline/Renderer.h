@@ -32,6 +32,12 @@ public:
     
     Microsoft::WRL::ComPtr<ID3D11Device> GetDevice() const { return m_device; }
 
+
+    // Ajout pour merge ImGui  Dans render.h, sous GetDevice()
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetContext() const { return m_context; }
+
+    void Present() { m_swapChain->Present(1, 0); }
+
 private:
     // Méthodes d'initialisation internes
     HRESULT CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
@@ -51,3 +57,5 @@ private:
     ConstantBuffer<PerFrameCB>         m_perFrameCB;
     ConstantBuffer<PerObjectCB>        m_perObjectCB;
 };
+
+

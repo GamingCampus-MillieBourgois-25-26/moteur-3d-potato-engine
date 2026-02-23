@@ -68,7 +68,7 @@ void Renderer::RenderFrame(const PerFrameCB& frameData, const std::vector<Render
     }
 
     // 4. Présentation (V-Sync activé avec le 1)
-    m_swapChain->Present(1, 0);
+    //m_swapChain->Present(1, 0);
 }
 
 HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {

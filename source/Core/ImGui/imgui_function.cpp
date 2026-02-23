@@ -329,3 +329,12 @@ std::string findFile::OpenFileDialog() {
     return "";
 }
 
+
+void TestRender::showtest() {
+
+    ImGui::Begin("vber");
+
+    ImGui::Text("ahhhhh");
+
+    ImGui::End();
+}
