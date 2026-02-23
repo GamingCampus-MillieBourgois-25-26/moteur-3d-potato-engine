@@ -3,6 +3,8 @@
 #include <Jolt/Physics/Body/BodyID.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
 
+class Transform;
+
 class PhysicsBody
 {
 public:
@@ -11,6 +13,9 @@ public:
 	void SetPosition(JPH::Vec3 position);
 	void SetRotation(JPH::Quat rotation);
 	
+	void SyncFromPhysics(Transform& transform);
+	void SyncToPhysics(Transform& transform);
+
 	void AddForce(JPH::Vec3 force);
 	void AddImpulse(JPH::Vec3 impulse);
 

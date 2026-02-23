@@ -28,5 +28,13 @@ JPH::BodyID PhysicsBody::GetID()
 	return m_id;
 }
 
+void PhysicsBody::SyncFromPhysics(Transform& transform)
+{
+	return;
+}
+void PhysicsBody::SyncToPhysics(Transform& transform)
+{
+	return;
+}
 
 

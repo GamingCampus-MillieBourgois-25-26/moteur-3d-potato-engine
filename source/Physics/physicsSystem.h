@@ -11,6 +11,9 @@
 class PhysicsSystem
 {
 public:
+
+	PhysicsSystem();
+
 	void Init();
 	void Update(float deltaTime);
 	
@@ -19,7 +22,7 @@ public:
 private:
 	JPH::PhysicsSystem m_system;
 
-	JPH::TempAllocatorImpl temp_allocator = JPH::TempAllocatorImpl(10 * 1024 * 1024);
+	JPH::TempAllocatorImpl temp_allocator;
 	JPH::JobSystemThreadPool job_system;
 	PhysicsObjectVSBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
 	PhysicsContactListener m_contactListener;

@@ -8,6 +8,8 @@
 #include <io.h>
 #include <windows.h>
 
+#include "Physics/physicsSystem.h"
+
 // Prototype de la fonction de gestion des messages (WndProc)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -54,6 +56,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     MSG msg = {};
     //a supprimer tests
     //Physics::mainTests();
+    PhysicsSystem system;
 
     while (true)
     {

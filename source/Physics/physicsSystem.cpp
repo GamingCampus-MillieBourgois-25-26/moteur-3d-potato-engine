@@ -4,6 +4,9 @@
 #include <Jolt/RegisterTypes.h>
 #include <Jolt/Core/TempAllocator.h>
 
+PhysicsSystem::PhysicsSystem() : temp_allocator((10 * 1024 * 1024))
+{
+}
 
 void PhysicsSystem::Init()
 {
@@ -25,6 +28,7 @@ void PhysicsSystem::Init()
 void PhysicsSystem::Update(float deltaTime)
 {
 	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
+	printf("hello");
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()
