@@ -5,8 +5,7 @@
 
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
-#include "Graphics/RenderPipeline/ShaderManager.h"
-#include "Graphics/RenderPipeline/MeshBuffer.h"
+
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -27,7 +26,7 @@ static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>&
 }
 
 // 1. Procédure de fenêtre (Gestion des événements)
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+/*LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_KEYDOWN:
         if (wParam == VK_ESCAPE) DestroyWindow(hwnd);
@@ -112,6 +111,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // 2. Préparation des données géométriques
     std::vector<Vertex> triVertices;
     std::vector<uint32_t> triIndices;
+   
     CreateTriangle(triVertices, triIndices);
 
     // 3. Création et initialisation du Mesh
@@ -161,4 +161,4 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     }
     //return (int)msg.wParam;
 }
-
+*/
