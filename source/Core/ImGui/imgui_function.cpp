@@ -193,7 +193,7 @@ void Render::showRender() {
     // Selected Transform
     {
 
-        ImGui::BeginGroup();
+        //ImGui::BeginGroup();
         // 1. Le Header raccourci (on utilise TreeNodeEx pour plus de contrôle)
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
         bool open = ImGui::TreeNodeEx("Selection Mode", ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth == false);
@@ -204,20 +204,24 @@ void Render::showRender() {
         //Transform button
         {
 
-            if (ImGui::Button("TRANSF")) { jsp = 0; /* Do stuff0 */ }
+            if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
             ImGui::SameLine();
-            if (ImGui::Button("T")) { jsp = 1; /* Do stuff1 */ }
+            if (ImGui::Button("T")) { intTransf = 1; /* Do stuff1 */ }
             ImGui::SameLine();
-            if (ImGui::Button("R")) { jsp = 2; /* Do stuff2 */ }
+            if (ImGui::Button("R")) { intTransf = 2; /* Do stuff2 */ }
             ImGui::SameLine();
-            if (ImGui::Button("S")) { jsp = 3; /* Do stuff3 */ }
+            if (ImGui::Button("S")) { intTransf = 3; /* Do stuff3 */ }
 
         }
 
         // add actor button
         {
             ImGui::SameLine(0);
-            if (ImGui::Button("Add Actor")) { /* Do stuff4 */ }
+            if (ImGui::CollapsingHeader("Add Actor")) {
+            
+                if (ImGui::Button("Cube")) /* Do stuff0 */;
+
+            }
         }
 
         //Radio Transform button
@@ -225,20 +229,20 @@ void Render::showRender() {
             if (open) {
                 ImGui::SeparatorText("TANSFRORM TOOLS");
 
-                if (ImGui::RadioButton("Selecte Mode", &jsp, 0)) /* Do stuff0 */;
+                if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) /* Do stuff0 */;
 
-                if (ImGui::RadioButton("Translate Mode", &jsp, 1)) /* Do stuff1 */;
+                if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) /* Do stuff1 */;
 
-                if (ImGui::RadioButton("Rotate Mode", &jsp, 2)) /* Do stuff2 */;
+                if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) /* Do stuff2 */;
 
-                if (ImGui::RadioButton("Scale Mode", &jsp, 3)) /* Do stuff3 */;
+                if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) /* Do stuff3 */;
                 ImGui::TreePop();
             }
         }
 
         
 
-        ImGui::EndGroup();
+        //ImGui::EndGroup();
 
     }
     

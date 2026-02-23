@@ -32,7 +32,7 @@ public:
 	bool Rcheckbox = false;
 	bool Scheckbox = false;
 
-	int jsp = 3;
+	int intTransf = 0;
 
 	void showRender();
 
