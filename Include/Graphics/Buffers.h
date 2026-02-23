@@ -10,7 +10,7 @@ private:
 public:
 	std::unordered_map<std::string,std::shared_ptr<Mesh>> meshBuffer;
 
-	void AddMeshBuffers(std::shared_ptr<Mesh>);
+	void AddMeshBuffers(std::shared_ptr<Mesh>,std::string);
 	static Buffers* getInstance();
 };
 

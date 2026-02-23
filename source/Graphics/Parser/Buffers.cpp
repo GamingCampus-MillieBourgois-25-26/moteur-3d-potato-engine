@@ -1,8 +1,8 @@
 #include "../include/Graphics/Buffers.h"
 
-void Buffers::AddMeshBuffers(std::shared_ptr<Mesh> mesh)
+void Buffers::AddMeshBuffers(std::shared_ptr<Mesh> mesh, std::string meshname)
 {
-	meshBuffer.insert();
+	meshBuffer.emplace(meshname,mesh);
 }
 
 Buffers* Buffers::getInstance()

@@ -16,8 +16,7 @@ const void FileParser::StartPars()
 			throw std::runtime_error("Impossible d'ouvrir le fichier");
 
 		auto mesh = std::make_shared<Mesh>();
-		mesh->name = allFile[0].filename().string();
-		std::cout << mesh->name << '\n';
+		//mesh->name = 
 		std::string line;
 		while (std::getline(fs,line))
 		{
@@ -86,6 +85,8 @@ const void FileParser::StartPars()
 		tempPosition.clear();
 		tempNormales.clear();
 		tempTextures.clear();
+
+		buffer->AddMeshBuffers(mesh,allFile[0].filename().string());
 		allFile.erase(allFile.begin());
 		fs.close();
 	}
