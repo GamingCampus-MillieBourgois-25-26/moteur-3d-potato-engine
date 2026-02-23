@@ -47,7 +47,7 @@ bool CreateDeviceD3D(HWND hWnd) {
     HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
     if (FAILED(hr)) return false;
 
-    // Création de la Render Target
+    // CrÃ©ation de la Render Target
     ID3D11Texture2D* pBackBuffer;
     g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
     g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
@@ -71,7 +71,7 @@ findFile findfile;
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow){
-    // 1. Enregistrement de la classe de fenêtre
+    // 1. Enregistrement de la classe de fenÃªtre
     const wchar_t CLASS_NAME[] = L"EngineWindowClass";
 
     WNDCLASS wc = { };
@@ -82,12 +82,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     RegisterClass(&wc);
 
-    // 2. Création de la fenêtre
+    // 2. CrÃ©ation de la fenÃªtre
     HWND hwnd = CreateWindowEx(
         0,                              // Style optionnel
         CLASS_NAME,                     // Nom de la classe
         L"C++ Game Engine - DX11",      // Titre
-        WS_OVERLAPPEDWINDOW,            // Style de fenêtre
+        WS_OVERLAPPEDWINDOW,            // Style de fenÃªtre
         CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080, // Position et Taille
         NULL, NULL, hInstance, NULL
     );
@@ -116,7 +116,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     // 3. Boucle de messages (The "Heart" of the Engine)
     MSG msg = { };
     while (true) {
-        // Traitement des messages Windows (clavier, souris, système)
+        // Traitement des messages Windows (clavier, souris, systÃ¨me)
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             if (msg.message == WM_QUIT) break;
             TranslateMessage(&msg);
@@ -144,7 +144,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
             ImGui::ColorEdit3("Fond Ecran", clear_color);
             if (ImGui::Button("Test Alerte")) {
-                MessageBox(hwnd, L"Ça marche !", L"Succès", MB_OK);
+                MessageBox(hwnd, L"Ã‡a marche !", L"SuccÃ¨s", MB_OK);
             }
 
             ImGui::End();
@@ -161,14 +161,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             // --- RENDU ---
             ImGui::Render();
 
-            // On nettoie l'écran avec la couleur choisie
+            // On nettoie l'Ã©cran avec la couleur choisie
             g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
             g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color);
 
             // On dessine ImGui
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-            // On affiche le résultat
+            // On affiche le rÃ©sultat
             g_pSwapChain->Present(1, 0);
         }
 
