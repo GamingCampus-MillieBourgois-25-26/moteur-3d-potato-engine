@@ -188,7 +188,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                 
                 menu.barMenu();
 
-                ImGui::Begin("Debug Menu", &OpenImGui, ImGuiWindowFlags_MenuBar);
+                /*ImGui::Begin("Debug Menu", &OpenImGui, ImGuiWindowFlags_MenuBar);
 
 
                 static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
@@ -197,6 +197,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                     MessageBox(hwnd, L"Ça marche !", L"Succès", MB_OK);
                 }
 
+                ImGui::End();*/
+
+                ImGui::Begin("Game Viewport");
+                {
+                    // On récupère la taille de la fenêtre ImGui actuelle
+                    ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+
+                    // On affiche la texture du renderer
+                    // Note : On passe le pointeur SRV qu'on a créé
+                    ImGui::Image((void*)renderer->GetSceneSRV(), viewportSize);
+                }
                 ImGui::End();
 
                 details.showDetails();
@@ -223,9 +234,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             renderer->RenderFrame(frameData, sceneItems);
 
             // 5. RENDU IMGUI PAR-DESSUS
-            // On s'assure que le Z-buffer ne bloque pas ImGui
-            renderer->GetContext()->OMSetDepthStencilState(nullptr, 0);
+            // A. On cible la vraie fenêtre
+            renderer->GetContext()->OMSetRenderTargets(1, renderer->GetMainRTVAddress(), nullptr);
 
+            // B. INDISPENSABLE : On nettoie le buffer de la fenêtre (le fond noir derrière les fenêtres ImGui)
+            float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f }; // Noir ou toute autre couleur
+            renderer->GetContext()->ClearRenderTargetView(*renderer->GetMainRTVAddress(), clearColor);
+
+            // C. On dessine ImGui
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 

@@ -14,6 +14,9 @@ HRESULT Renderer::Initialize(HWND hwnd, int width, int height) {
     hr = CreateMainViews(width, height);
     if (FAILED(hr)) return hr;
 
+    hr = CreateSceneResources(width, height);
+    if (FAILED(hr)) return hr;
+
     // Configuration du Rasterizer (Cull None pour être sûr de voir le triangle)
     D3D11_RASTERIZER_DESC rd = {};
     rd.FillMode = D3D11_FILL_SOLID;
@@ -32,8 +35,10 @@ HRESULT Renderer::Initialize(HWND hwnd, int width, int height) {
 void Renderer::RenderFrame(const PerFrameCB& frameData, const std::vector<RenderItem>& items) {
     // 1. Nettoyage des buffers (BackBuffer et Z-Buffer)
     float clearColor[] = { 0.1f, 0.1f, 0.1f, 1.0f };
-    m_context->ClearRenderTargetView(m_renderTargetView.Get(), clearColor);
+    m_context->ClearRenderTargetView(m_sceneRTV.Get(), clearColor);
     m_context->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+    m_context->OMSetRenderTargets(1, m_sceneRTV.GetAddressOf(), m_depthStencilView.Get());
 
     // 2. Mise à jour du Constant Buffer Global (Caméra - Slot b0)
     // On transpose pour HLSL
@@ -116,7 +121,7 @@ HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {
     );
 
     ID3D11Resource* pBackBuffer = nullptr;
-    m_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), (void**)&pBackBuffer); // Récupère le buffer de rendu arrière du swap chain
+    hr = m_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), (void**)&pBackBuffer); // Récupère le buffer de rendu arrière du swap chain
     if (m_device != nullptr) {
         m_device->CreateRenderTargetView(pBackBuffer, nullptr, &m_renderTargetView); // Crée une vue de rendu à partir du buffer de rendu arrière
     }
@@ -132,7 +137,13 @@ HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {
         //return hr;
     }
 
-    return S_OK;
+    // Correction de l'erreur d'analyse statique sur pBackBuffer
+        if (SUCCEEDED(hr) && pBackBuffer != nullptr) {
+            m_device->CreateRenderTargetView(pBackBuffer, nullptr, &m_renderTargetView);
+            pBackBuffer->Release();
+        }
+
+    return hr;
 }
 
 HRESULT Renderer::CreateMainViews(int width, int height) {
@@ -212,4 +223,29 @@ IDXGIAdapter1* Renderer::searchForAdapters() {
         }
     }
     return bestAdapter;
+}
+
+
+HRESULT Renderer::CreateSceneResources(int width, int height) {
+    // 1. Description de la texture
+    D3D11_TEXTURE2D_DESC td = {};
+    td.Width = width;
+    td.Height = height;
+    td.MipLevels = 1;
+    td.ArraySize = 1;
+    td.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    td.SampleDesc.Count = 1;
+    td.Usage = D3D11_USAGE_DEFAULT;
+    td.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
+    m_device->CreateTexture2D(&td, nullptr, &texture);
+
+    // 2. Création de la RTV (pour que le Renderer puisse dessiner dedans)
+    m_device->CreateRenderTargetView(texture.Get(), nullptr, &m_sceneRTV);
+
+    // 3. Création de la SRV (pour que ImGui puisse l'afficher)
+    m_device->CreateShaderResourceView(texture.Get(), nullptr, &m_sceneSRV);
+
+    return S_OK;
 }

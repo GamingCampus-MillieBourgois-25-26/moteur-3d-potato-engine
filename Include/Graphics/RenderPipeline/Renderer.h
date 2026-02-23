@@ -38,6 +38,17 @@ public:
 
     void Present() { m_swapChain->Present(1, 0); }
 
+    //la scene dans ImGui
+    // Pour que ImGui puisse récupérer la texture de la scène
+    ID3D11ShaderResourceView* GetSceneSRV() const { return m_sceneSRV.Get(); }
+
+    // À appeler lors du redimensionnement de la fenêtre ImGui si nécessaire
+    HRESULT CreateSceneResources(int width, int height);
+
+    
+    ID3D11RenderTargetView* const* GetMainRTVAddress() const { return m_renderTargetView.GetAddressOf(); }
+    
+
 private:
     // Méthodes d'initialisation internes
     HRESULT CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
@@ -52,6 +63,10 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthStencilView;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>  m_rasterizerState;
+
+    //la scene dans ImGui
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_sceneRTV;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_sceneSRV; // La vue pour ImGui
 
     // Pour plus tard (déjà prêt)
     ConstantBuffer<PerFrameCB>         m_perFrameCB;
