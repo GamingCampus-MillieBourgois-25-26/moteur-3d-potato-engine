@@ -11,16 +11,32 @@ file(GLOB_RECURSE ENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Include/*.hpp"
 )
 
+# ---------------- IMGUI ----------------
+set(IMGUI_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/Core/ImGui/Config")
+set(IMGUI_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Include/Core/ImGui/Config")
+
+set(IMGUI_SOURCES
+    "${IMGUI_SRC_DIR}/imgui.cpp"
+    "${IMGUI_SRC_DIR}/imgui_draw.cpp"
+    "${IMGUI_SRC_DIR}/imgui_tables.cpp"
+    "${IMGUI_SRC_DIR}/imgui_widgets.cpp"
+    "${IMGUI_SRC_DIR}/imgui_demo.cpp"
+    "${IMGUI_SRC_DIR}/backends/imgui_impl_dx11.cpp"
+    "${IMGUI_SRC_DIR}/backends/imgui_impl_win32.cpp"
+)
+
 
 # Création de l'exécutable
-add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES})    
-
-
+add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} ${IMGUI_SOURCES})
 
 # Inclusion du dossier 'source'
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/source"
+                                                  "${IMGUI_INC_DIR}"
+                                                  "${IMGUI_INC_DIR}/backends"
                                                   "${CMAKE_CURRENT_SOURCE_DIR}/Include"
+                                                  
 )
+
 
 # Commande pour copier le dossier des shaders vers le dossier de l'exécutable
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -28,6 +44,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     "${CMAKE_CURRENT_SOURCE_DIR}/source/Graphics/RenderPipeline/Shaders"
     "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders"
 )
+
 
 # Liaison DirectX 11
 target_link_libraries(${PROJECT_NAME} PRIVATE d3d11.lib dxgi.lib d3dcompiler.lib)
