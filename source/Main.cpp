@@ -30,6 +30,14 @@ static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>&
     indices = { 0, 1, 2 };
 }
 
+// ---- IMGUI WindoW ----
+bool OpenImGui = true;
+Menu menu;
+Details details;
+Render render;
+Outliner outliner;
+findFile findfile;
+
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -177,13 +185,28 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
             // 2. TA FENÊTRE IMGUI ICI
             {
-                ImGui::Begin("Contrôles du Potato Engine");
-                ImGui::Text("Bonjour ! Voici tes contrôles :");
-                if (ImGui::Button("Changer couleur (exemple)")) {
-                    // Action du bouton
-                    sceneItems[0].color = { 1.0f, 1.0f, 0.0f, 1.0f };
+                
+                menu.barMenu();
+
+                ImGui::Begin("Debug Menu", &OpenImGui, ImGuiWindowFlags_MenuBar);
+
+
+                static float clear_color[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
+                ImGui::ColorEdit3("Fond Ecran", clear_color);
+                if (ImGui::Button("Test Alerte")) {
+                    MessageBox(hwnd, L"Ça marche !", L"Succès", MB_OK);
                 }
+
                 ImGui::End();
+
+                details.showDetails();
+
+
+                render.showRender();
+
+                outliner.showOutliner();
+
+                findfile.showFindFile();
             }
 
             // 3. Mise à jour de la Caméra (PerFrame)
@@ -219,6 +242,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     ImGui::DestroyContext();
 
 
-    return (int)msg.wParam;
+    //return (int)msg.wParam;
 }
 

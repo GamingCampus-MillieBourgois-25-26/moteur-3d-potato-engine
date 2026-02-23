@@ -1,20 +1,20 @@
-
-#ifndef UNICODE
-#define UNICODE
-#endif 
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-#include <d3d11.h>
-
-
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-#include "Core/ImGui/imgui_function.h"
-
-
+//
+//#ifndef UNICODE
+//#define UNICODE
+//#endif 
+//
+//#define WIN32_LEAN_AND_MEAN
+//#include <windows.h>
+//
+//#include <d3d11.h>
+//
+//
+//#include "imgui.h"
+//#include "imgui_impl_win32.h"
+//#include "imgui_impl_dx11.h"
+//#include "Core/ImGui/imgui_function.h"
+//
+//
 //#pragma comment(lib, "d3d11.lib")
 //
 //// --- VARIABLES GLOBALES DX11 (Pour le test) ---
