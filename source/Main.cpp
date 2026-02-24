@@ -201,6 +201,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
                 ImGui::Begin("Game Viewport");
                 {
+                    render.showRender();
                     // On récupère la taille de la fenêtre ImGui actuelle
                     ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
@@ -213,7 +214,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                 details.showDetails();
 
 
-                render.showRender();
+                
 
                 outliner.showOutliner();
 

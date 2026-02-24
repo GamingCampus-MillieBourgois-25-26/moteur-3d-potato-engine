@@ -188,7 +188,9 @@ void Details::showDetails() {
 
 void Render::showRender() {
 
-    ImGui::Begin("Render");
+    
+    ImGui::Columns(3, "Render_columns", false);
+    ImGui::SetColumnWidth(0, 170);
 
     // Selected Transform
     {
@@ -198,31 +200,6 @@ void Render::showRender() {
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
         bool open = ImGui::TreeNodeEx("Selection Mode", ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth == false);
         ImGui::PopStyleVar();
-
-        ImGui::SameLine(0);
-
-        //Transform button
-        {
-
-            if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
-            ImGui::SameLine();
-            if (ImGui::Button("T")) { intTransf = 1; /* Do stuff1 */ }
-            ImGui::SameLine();
-            if (ImGui::Button("R")) { intTransf = 2; /* Do stuff2 */ }
-            ImGui::SameLine();
-            if (ImGui::Button("S")) { intTransf = 3; /* Do stuff3 */ }
-
-        }
-
-        // add actor button
-        {
-            ImGui::SameLine(0);
-            if (ImGui::CollapsingHeader("Add Actor")) {
-            
-                if (ImGui::Button("Cube")) /* Do stuff0 */;
-
-            }
-        }
 
         //Radio Transform button
         {
@@ -240,22 +217,39 @@ void Render::showRender() {
             }
         }
 
-        
+        ImGui::NextColumn();
+        ImGui::SetColumnWidth(1, 130);
+
+        //Transform button
+        {
+
+            if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
+            ImGui::SameLine();
+            if (ImGui::Button("T")) { intTransf = 1; /* Do stuff1 */ }
+            ImGui::SameLine();
+            if (ImGui::Button("R")) { intTransf = 2; /* Do stuff2 */ }
+            ImGui::SameLine();
+            if (ImGui::Button("S")) { intTransf = 3; /* Do stuff3 */ }
+
+        }
+
+        ImGui::NextColumn();
+        ImGui::SetColumnWidth(2, 105);
+        // add actor button
+        {
+            
+            if (ImGui::CollapsingHeader("Add Actor")) {
+            
+                if (ImGui::Button("Cube")) /* Do stuff0 */;
+
+            }
+        }
 
         //ImGui::EndGroup();
 
     }
+    ImGui::Columns(1);
     
-    //Render
-    {
-
-        ImGui::BeginChild(",", ImVec2(0, 0), true);
-        ImGui::Text("LA OU ON VA RENDEEEEEEEEEEER");
-        ImGui::EndChild();
-
-    }
-    
-    ImGui::End();
 }
 
 void Outliner::showOutliner() {
@@ -330,11 +324,3 @@ std::string findFile::OpenFileDialog() {
 }
 
 
-void TestRender::showtest() {
-
-    ImGui::Begin("vber");
-
-    ImGui::Text("ahhhhh");
-
-    ImGui::End();
-}

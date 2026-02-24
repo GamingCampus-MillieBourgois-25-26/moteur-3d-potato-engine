@@ -55,10 +55,3 @@ public:
 	void showFindFile();
 	std::string OpenFileDialog();
 };
-
-
-class TestRender {
-public:
-
-	void showtest();
-};
