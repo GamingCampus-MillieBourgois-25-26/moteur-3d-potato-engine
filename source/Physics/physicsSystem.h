@@ -20,9 +20,8 @@ public:
 	JPH::PhysicsSystem& GetJoltSystem();
 
 private:
-	JPH::PhysicsSystem m_system;
-
 	JPH::TempAllocatorImpl temp_allocator;
+	JPH::PhysicsSystem m_system;
 	JPH::JobSystemThreadPool job_system;
 	PhysicsObjectVSBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
 	PhysicsContactListener m_contactListener;

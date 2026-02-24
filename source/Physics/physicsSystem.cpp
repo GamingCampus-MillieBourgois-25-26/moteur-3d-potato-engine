@@ -3,14 +3,15 @@
 #include <Jolt/Jolt.h>
 #include <Jolt/RegisterTypes.h>
 #include <Jolt/Core/TempAllocator.h>
+#include <Jolt/Core/Factory.h>
 
-PhysicsSystem::PhysicsSystem() : temp_allocator((10 * 1024 * 1024))
+PhysicsSystem::PhysicsSystem() : temp_allocator(10 * 1024 * 1024)
 {
 }
 
 void PhysicsSystem::Init()
-{
-	JPH::RegisterDefaultAllocator();
+{	
+	JPH::Factory::sInstance = new JPH::Factory();
 
 	JPH::RegisterTypes();
 
@@ -21,14 +22,12 @@ void PhysicsSystem::Init()
 	m_system.SetGravity(JPH::Vec3(0.0f, -9.81f, 0.0f));
 
 	m_system.SetContactListener(&m_contactListener);
-
-	
 }
 
 void PhysicsSystem::Update(float deltaTime)
 {
 	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
-	printf("hello");
+	printf("hello\n");
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()

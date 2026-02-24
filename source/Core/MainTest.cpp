@@ -56,10 +56,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     MSG msg = {};
     //a supprimer tests
     //Physics::mainTests();
+    JPH::RegisterDefaultAllocator();
     PhysicsSystem system;
+    system.Init();
 
     while (true)
     {
+        system.Update(1/60);
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             if (msg.message == WM_QUIT)
