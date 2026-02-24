@@ -32,11 +32,11 @@ static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>&
 
 // ---- IMGUI WindoW ----
 bool OpenImGui = true;
-Menu menu;
-Details details;
-Render render;
-Outliner outliner;
-findFile findfile;
+MyGui::Menu menu;
+MyGui::Details details;
+MyGui::Render render;
+MyGui::Outliner outliner;
+MyGui::findFile findfile;
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

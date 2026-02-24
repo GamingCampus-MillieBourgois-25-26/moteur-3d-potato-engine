@@ -1,6 +1,6 @@
 #include "Core/ImGui/imgui_function.h"
 
-void Menu::barMenu() {
+void MyGui::Menu::barMenu() {
 
     if (ImGui::BeginMainMenuBar()) {
 
@@ -57,7 +57,7 @@ void Menu::barMenu() {
 }
 
 
-void Details::showDetails() {
+void MyGui::Details::showDetails() {
 
     ImGui::Begin("Details");
 
@@ -186,7 +186,7 @@ void Details::showDetails() {
 }
 
 
-void Render::showRender() {
+void MyGui::Render::showRender() {
 
     
     ImGui::Columns(3, "Render_columns", false);
@@ -252,7 +252,7 @@ void Render::showRender() {
     
 }
 
-void Outliner::showOutliner() {
+void MyGui::Outliner::showOutliner() {
 
     ImGui::Begin("Outliner");
     
@@ -281,7 +281,7 @@ void Outliner::showOutliner() {
 }
 
 
-void findFile::showFindFile() {
+void MyGui::findFile::showFindFile() {
 
     ImGui::Begin("Find File");
 
@@ -305,7 +305,7 @@ void findFile::showFindFile() {
 
 }
 
-std::string findFile::OpenFileDialog() {
+std::string MyGui::findFile::OpenFileDialog() {
     OPENFILENAMEA ofn;       // Structure de dialogue standard
     char szFile[260] = { 0 };
     ZeroMemory(&ofn, sizeof(ofn));
@@ -322,5 +322,3 @@ std::string findFile::OpenFileDialog() {
     }
     return "";
 }
-
-

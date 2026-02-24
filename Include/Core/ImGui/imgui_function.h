@@ -5,53 +5,58 @@
 #include <windows.h>
 #include <string>
 
-class Menu {
-public:
 
-	void barMenu();
+namespace MyGui {
 
-};
+	class Menu {
+	public:
 
+		void barMenu();
 
-class Details {
-public: 
-
-	void showDetails();
-
-	char searchRubric[64] = "";
-	bool isPhysicsActiv = false;
-
-};
+	};
 
 
-class Render {
-public:
+	class Details {
+	public:
 
-	bool TRANSFcheckbox = false;
-	bool Tcheckbox = false;
-	bool Rcheckbox = false;
-	bool Scheckbox = false;
+		void showDetails();
 
-	int intTransf = 0;
+		char searchRubric[64] = "";
+		bool isPhysicsActiv = false;
 
-	void showRender();
-
-};
+	};
 
 
-class Outliner {
-public:
+	class Render {
+	public:
 
-	void showOutliner();
+		bool TRANSFcheckbox = false;
+		bool Tcheckbox = false;
+		bool Rcheckbox = false;
+		bool Scheckbox = false;
 
-	char searchItem[64] = "";
-	bool showActor = true;
-};
+		int intTransf = 0;
+
+		void showRender();
+
+	};
 
 
-class findFile {
-public:
+	class Outliner {
+	public:
 
-	void showFindFile();
-	std::string OpenFileDialog();
-};
+		void showOutliner();
+
+		char searchItem[64] = "";
+		bool showActor = true;
+	};
+
+
+	class findFile {
+	public:
+
+		void showFindFile();
+		std::string OpenFileDialog();
+	};
+
+}
