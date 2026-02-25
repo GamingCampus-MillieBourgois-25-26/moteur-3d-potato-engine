@@ -1,4 +1,4 @@
-#ifndef UNICODE
+/*#ifndef UNICODE
 #define UNICODE
 #endif
 
@@ -100,3 +100,4 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
+*/
