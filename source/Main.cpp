@@ -199,6 +199,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
                 ImGui::End();*/
 
+                ImGui::SetNextWindowPos(ImVec2(5, 25), ImGuiCond_Once);
+                ImGui::SetNextWindowSize(ImVec2(1200, 700));
                 ImGui::Begin("Game Viewport");
                 {
                     render.showRender();

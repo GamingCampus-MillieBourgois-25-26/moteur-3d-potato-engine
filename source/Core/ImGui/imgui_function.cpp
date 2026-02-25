@@ -59,6 +59,8 @@ void MyGui::Menu::barMenu() {
 
 void MyGui::Details::showDetails() {
 
+    ImGui::SetNextWindowPos(ImVec2(1460, 710), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 300));
     ImGui::Begin("Details");
 
     if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
@@ -188,7 +190,6 @@ void MyGui::Details::showDetails() {
 
 void MyGui::Render::showRender() {
 
-    
     ImGui::Columns(3, "Render_columns", false);
     ImGui::SetColumnWidth(0, 170);
 
@@ -254,6 +255,8 @@ void MyGui::Render::showRender() {
 
 void MyGui::Outliner::showOutliner() {
 
+    ImGui::SetNextWindowPos(ImVec2(1460, 25), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 300));
     ImGui::Begin("Outliner");
     
     if (ImGui::InputText("Search", searchItem, sizeof(searchItem))) /* Do stuff0 */;
