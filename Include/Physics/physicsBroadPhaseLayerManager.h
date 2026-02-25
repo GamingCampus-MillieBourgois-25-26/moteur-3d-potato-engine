@@ -1,3 +1,4 @@
+#pragma once
 #include "physicsBroadPhaseLayers.h"
 
 #include "physicsLayers.h"

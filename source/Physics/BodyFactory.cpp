@@ -1,6 +1,6 @@
-#include "physicsBodyFactory.h"
+#include "Physics/physicsBodyFactory.h"
 
-#include "physicsLayers.h"
+#include "Physics/physicsLayers.h"
 
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Collision/ObjectLayer.h>
