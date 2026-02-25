@@ -40,8 +40,8 @@ x86/
 # --- EXCEPTION POUR LES DÉPENDANCES ---
 # Si vous mettez vos .lib et .dll externes dans un dossier spécifique pour l'équipe,
 # vous pouvez forcer Git à les suivre en décommentant les lignes suivantes :
-# !/external/**/*.lib
-# !/external/**/*.dll
+!/external/**/*.lib
+!/external/**/*.dll
 
 # --- Divers ---
 *.log

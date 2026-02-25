@@ -11,6 +11,30 @@ file(GLOB_RECURSE ENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Include/*.hpp"
 )
 
+# Jolt Physics
+add_library(Jolt STATIC IMPORTED)
+
+set(EXTERNAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external")
+set(EXTERNAL_LIBS_DIR "${EXTERNAL_DIR}/libs")
+set(EXTERNAL_INCLUDE_DIR "${EXTERNAL_DIR}/include")
+
+set(JOLT_INCLUDE_DIR "${EXTERNAL_INCLUDE_DIR}/Jolt")
+set(JOLT_LIB_DIR     "${EXTERNAL_LIBS_DIR}/Jolt")
+
+set_target_properties(Jolt PROPERTIES
+    IMPORTED_LOCATION_DEBUG   "${JOLT_LIB_DIR}/Debug/Jolt.lib"
+    IMPORTED_LOCATION_RELEASE   "${JOLT_LIB_DIR}/Release/Jolt.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${JOLT_INCLUDE_DIR}"
+)
+
+target_compile_definitions(Jolt INTERFACE
+    JPH_DEBUG_RENDERER
+    JPH_FLOATING_POINT_EXCEPTIONS_ENABLED
+    JPH_PROFILE_ENABLED
+    JPH_OBJECT_STREAM
+
+)
+
 # ---------------- IMGUI ----------------
 set(IMGUI_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/Core/ImGui/Config")
 set(IMGUI_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Include/Core/ImGui/Config")
@@ -26,10 +50,22 @@ set(IMGUI_SOURCES
 )
 
 
+
 # Création de l'exécutable
 add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} ${IMGUI_SOURCES})
 
 # Inclusion du dossier 'source'
+
+
+# Liaison Bibliotheques (DirectX 11 ...)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        d3d11
+        dxgi
+        d3dcompiler
+        Jolt
+)
+
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/source"
                                                   "${IMGUI_INC_DIR}"
                                                   "${IMGUI_INC_DIR}/backends"
@@ -45,9 +81,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders"
 )
 
-
-# Liaison DirectX 11
-target_link_libraries(${PROJECT_NAME} PRIVATE d3d11.lib dxgi.lib d3dcompiler.lib)
 
 
 
