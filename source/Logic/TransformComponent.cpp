@@ -23,7 +23,7 @@ void TransformComponent::MarkDirty()
         child->MarkDirty();
 }
 
-const Matrix4& TransformComponent::GetWorldMatrix()
+const DirectX::XMMATRIX& TransformComponent::GetWorldMatrix()
 {
     if (dirty)
         UpdateMatrices();
@@ -33,10 +33,14 @@ const Matrix4& TransformComponent::GetWorldMatrix()
 
 void TransformComponent::UpdateMatrices()
 {
-    localMatrix = Matrix4::TRS(localPosition, localRotation, localScale);
+    DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z);
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(XMLoadFloat3(&localRotation));
+    DirectX::XMMATRIX S = DirectX::XMMatrixScaling(localScale.x, localScale.y, localScale.z);
+
+    localMatrix = S * R * T;
 
     if (parent)
-        worldMatrix = parent->GetWorldMatrix() * localMatrix;
+        worldMatrix = localMatrix * parent->GetWorldMatrix();
     else
         worldMatrix = localMatrix;
 

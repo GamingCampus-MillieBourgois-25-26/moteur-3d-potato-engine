@@ -1,17 +1,17 @@
 #pragma once
 #include <vector>
 #include "Component.h"
-#include "Math/Vector3.h"
-#include "Math/Matrix4.h"
+#include <DirectXMath.h>
 
 struct TransformComponent : public Component
 {
-    Vector3 localPosition{ 0,0,0 };
-    Vector3 localRotation{ 0,0,0 };  // Euler (rad)
-    Vector3 localScale{ 1,1,1 };
+    DirectX::XMFLOAT3 localPosition{ 0,0,0 };
+    DirectX::XMFLOAT3 localRotation{ 0,0,0 };  // Euler (rad)
+    DirectX::XMFLOAT3 localScale{ 1,1,1 };
 
-    Matrix4 localMatrix;
-    Matrix4 worldMatrix;
+    
+    DirectX::XMMATRIX localMatrix;
+    DirectX::XMMATRIX worldMatrix;
 
     TransformComponent* parent = nullptr;
     std::vector<TransformComponent*> children;
@@ -22,5 +22,5 @@ struct TransformComponent : public Component
     void MarkDirty();
     void UpdateMatrices();
 
-    const Matrix4& GetWorldMatrix();
+    const DirectX::XMMATRIX& GetWorldMatrix();
 };
