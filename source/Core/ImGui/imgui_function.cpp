@@ -191,30 +191,30 @@ void MyGui::Details::showDetails() {
 void MyGui::Render::showRender() {
 
     ImGui::Columns(3, "Render_columns", false);
-    ImGui::SetColumnWidth(0, 170);
+    ImGui::SetColumnWidth(0, 110);
 
     // Selected Transform
     {
 
-        //ImGui::BeginGroup();
-        // 1. Le Header raccourci (on utilise TreeNodeEx pour plus de contrôle)
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-        bool open = ImGui::TreeNodeEx("Selection Mode", ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth == false);
-        ImGui::PopStyleVar();
-
+        
         //Radio Transform button
         {
-            if (open) {
+            
+            if (ImGui::Button("Selection Mode")) ImGui::OpenPopup("Selection Mode popup");
+
+            if (ImGui::BeginPopup("Selection Mode popup")) {
+
                 ImGui::SeparatorText("TANSFRORM TOOLS");
 
-                if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) /* Do stuff0 */;
+                if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) {/* Do stuff0 */ }
 
-                if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) /* Do stuff1 */;
+                if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) {/* Do stuff1 */ }
 
-                if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) /* Do stuff2 */;
+                if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) {/* Do stuff2 */ }
 
-                if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) /* Do stuff3 */;
-                ImGui::TreePop();
+                if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) {/* Do stuff3 */ }
+
+                ImGui::EndPopup();
             }
         }
 
@@ -239,14 +239,14 @@ void MyGui::Render::showRender() {
         // add actor button
         {
             
-            if (ImGui::CollapsingHeader("Add Actor")) {
+            if (ImGui::Button("Add Actor")) ImGui::OpenPopup("add actor popup");
             
-                if (ImGui::Button("Cube")) /* Do stuff0 */;
+            if (ImGui::BeginPopup("add actor popup")) {
 
+                if (ImGui::Button("Cube")) {}
+                ImGui::EndPopup();
             }
         }
-
-        //ImGui::EndGroup();
 
     }
     ImGui::Columns(1);
