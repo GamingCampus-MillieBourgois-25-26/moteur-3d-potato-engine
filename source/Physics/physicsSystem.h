@@ -15,7 +15,7 @@ public:
 	PhysicsSystem();
 
 	void Init();
-	void Update(float deltaTime);
+	void Update();
 	
 	JPH::PhysicsSystem& GetJoltSystem();
 

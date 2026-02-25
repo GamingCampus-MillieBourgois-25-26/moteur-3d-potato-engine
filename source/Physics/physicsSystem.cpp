@@ -24,10 +24,10 @@ void PhysicsSystem::Init()
 	m_system.SetContactListener(&m_contactListener);
 }
 
-void PhysicsSystem::Update(float deltaTime)
+void PhysicsSystem::Update()
 {
 	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
-	printf("hello\n");
+	printf("PhysicsSystem::Update()\n");
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()
