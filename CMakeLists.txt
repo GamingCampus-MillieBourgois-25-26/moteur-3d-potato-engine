@@ -70,6 +70,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/s
                                                   "${IMGUI_INC_DIR}"
                                                   "${IMGUI_INC_DIR}/backends"
                                                   "${CMAKE_CURRENT_SOURCE_DIR}/Include"
+                                                  "${CMAKE_CURRENT_SOURCE_DIR}/external/include"
                                                   
 )
 
