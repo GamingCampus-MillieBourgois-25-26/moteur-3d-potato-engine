@@ -30,6 +30,30 @@ static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>&
     indices = { 0, 1, 2 };
 }
 
+
+static void CreatePyramid(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
+    // 1. Définition des 4 sommets (Position, Normale, UV, Couleur)
+    vertices = {
+        // Sommet 0 : Sommet (Haut) - Jaune
+        { { 0.0f,  0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.5f, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+        // Sommet 1 : Base Avant Gauche - Rouge
+        { { -0.5f, -0.5f, -0.5f }, { -1.0f, -1.0f, -1.0f }, { 0.0f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+        // Sommet 2 : Base Avant Droite - Vert
+        { { 0.5f, -0.5f, -0.5f }, { 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+        // Sommet 3 : Base Arrière - Bleu
+        { { 0.0f, -0.5f, 0.5f }, { 0.0f, -1.0f, 1.0f }, { 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+    };
+
+    // 2. Définition des faces (3 indices par triangle)
+    // On doit définir chaque face dans le sens des aiguilles d'une montre
+    indices = {
+        0, 2, 1, // Face Avant
+        0, 3, 2, // Face Droite
+        0, 1, 3, // Face Gauche
+        1, 2, 3  // Face Inférieure (Base)
+    };
+}
+
 // ---- IMGUI WindoW ----
 bool OpenImGui = true;
 MyGui::Menu menu;
@@ -132,7 +156,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     std::vector<Vertex> triVertices;
     std::vector<uint32_t> triIndices;
 
-    CreateTriangle(triVertices, triIndices);
+    CreatePyramid(triVertices, triIndices);
 
     // 3. Création et initialisation du Mesh
     auto triangleMesh = std::make_unique<MeshBuffer>();
@@ -225,7 +249,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
             // 3. Mise à jour de la Caméra (PerFrame)
             PerFrameCB frameData;
-            XMVECTOR eye = XMVectorSet(0.0f, 0.0f, -2.0f, 0.0f);
+            XMVECTOR eye = XMVectorSet(1.5f, 1.0f, 5.0f, 0.0f);
             XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
             XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
