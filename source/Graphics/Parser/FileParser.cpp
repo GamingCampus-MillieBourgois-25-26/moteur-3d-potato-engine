@@ -1,6 +1,6 @@
 #include "Graphics/FileParser.h"
 
-const void FileParser::StartPars()
+const void FileParser::OpenAllOBJ()
 {
 	std::vector<std::filesystem::path> allFile;
 	allFile = GetExtensionsFile(".obj");

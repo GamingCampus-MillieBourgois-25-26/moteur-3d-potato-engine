@@ -11,7 +11,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow){
     FileParser parser;
-    parser.StartPars();
+    parser.OpenAllOBJ();
     // 1. Enregistrement de la classe de fenêtre
     const wchar_t CLASS_NAME[] = L"EngineWindowClass";
 

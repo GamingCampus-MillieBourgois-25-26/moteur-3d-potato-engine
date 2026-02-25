@@ -16,7 +16,7 @@ public:
 		AllocConsole();
 		freopen("CONOUT$", "w", stdout);
 	}
-	const void StartPars();
+	const void OpenAllOBJ();
 
 	std::vector<std::filesystem::path> GetExtensionsFile(std::string extension);
 private:
