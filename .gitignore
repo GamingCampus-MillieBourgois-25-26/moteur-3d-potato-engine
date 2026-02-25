@@ -31,6 +31,9 @@ x86/
 *.exe
 *.exp
 
+# --- Exception pour les meshes 3D ---
+!/assets/**/*.obj
+
 # --- Dépendances (Jolt, Audio, etc.) ---
 # On ignore les bibliothèques compilées par défaut pour ne pas alourdir Git
 *.lib
