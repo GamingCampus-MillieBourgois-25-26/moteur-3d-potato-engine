@@ -31,18 +31,27 @@ const DirectX::XMMATRIX& TransformComponent::GetWorldMatrix()
     return worldMatrix;
 }
 
-void TransformComponent::UpdateMatrices()
-{
+void TransformComponent::UpdateMatrices() {
     DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z);
-    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(XMLoadFloat3(&localRotation));
+
+    // Correction ici : RollPitchYaw pour XMFLOAT3 (Angles d'Euler)
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(
+        DirectX::XMConvertToRadians(localRotation.x),
+        DirectX::XMConvertToRadians(localRotation.y),
+        DirectX::XMConvertToRadians(localRotation.z)
+    );
+
     DirectX::XMMATRIX S = DirectX::XMMatrixScaling(localScale.x, localScale.y, localScale.z);
 
     localMatrix = S * R * T;
 
-    if (parent)
+    if (parent) {
+        // Attention : récursion ici. Si la hiérarchie est de 1000 objets, risque de Stack Overflow.
         worldMatrix = localMatrix * parent->GetWorldMatrix();
-    else
+    }
+    else {
         worldMatrix = localMatrix;
+    }
 
     dirty = false;
 }

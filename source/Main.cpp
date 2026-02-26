@@ -5,8 +5,7 @@
 
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
-
-
+#include "Logic/actor.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
@@ -182,6 +181,23 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     sceneItems.push_back(triItem);
 
+    // 1. On prépare la liste pour le Renderer
+    std::vector<RenderItem> itemsToRender;
+
+    // 1. Le conteneur (la "boîte")
+    std::vector<std::shared_ptr<Actor>> sceneActors;
+
+    // 2. Ajout d'un premier acteur de test
+    auto actor1 = std::make_shared<Actor>();
+    actor1->name = "Pyramide_Centrale";
+    actor1->mesh = pyramidMesh.get();
+    actor1->vs = vertexShader.Get();
+    actor1->ps = pixelShader.Get();
+    actor1->position = { 0.0f, 0.0f, 0.0f };
+
+    sceneActors.push_back(actor1);
+    
+    
 
     // --- IMGUI INIT ---
     IMGUI_CHECKVERSION();
@@ -256,6 +272,32 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
             frameData.viewMatrix = XMMatrixLookAtLH(eye, at, up);
             frameData.projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            for (const auto& actorPtr : sceneActors) {
+                if (!actorPtr) continue; // Sécurité : évite un crash si le pointeur est nul
+
+                // Récupération via unordered_map (Goulot d'étranglement, voir analyse ci-dessous)
+                auto* transform = actorPtr->GetComponent<TransformComponent>();
+                auto* meshComp = actorPtr->GetComponent<MeshComponent>();
+
+                if (transform && meshComp) {
+                    RenderItem item;
+
+                    // On suppose ici que MeshComponent possède ces getters
+                    item.mesh = meshComp->GetMesh();
+                    item.vs = meshComp->GetVertexShader();
+                    item.ps = meshComp->GetPixelShader();
+                    item.color = meshComp->GetColor();
+
+                    // C'est ici que l'évaluation paresseuse (lazy evaluation) de ton TransformComponent opère.
+                    // Si dirty == true, UpdateMatrices() sera appelé.
+                    item.worldMatrix = transform->GetWorldMatrix();
+
+                    itemsToRender.push_back(item);
+                }
+            }
+
 
             // 4. Appel au Renderer
             renderer->RenderFrame(frameData, sceneItems);
