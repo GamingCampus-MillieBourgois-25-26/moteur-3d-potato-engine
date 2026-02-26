@@ -1,4 +1,6 @@
 #include <windows.h>
+#include <iostream>
+#include <thread>
 #include <memory>
 #include <vector>
 #include <DirectXMath.h>
@@ -6,6 +8,7 @@
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
 
+#include "Audio/AudioManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -192,7 +195,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(renderer->GetDevice().Get(), renderer->GetContext().Get());
-
 
     // --- E. Boucle de Jeu ---
     MSG msg = { 0 };
