@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Component.h"
+#include "Logic/Component.h"
 #include "Audio/AudioManager.h"
 #include <memory>
 #include <string>

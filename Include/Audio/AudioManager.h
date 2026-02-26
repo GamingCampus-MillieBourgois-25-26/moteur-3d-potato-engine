@@ -29,6 +29,5 @@ private:
 	void LoadAllSound();
 	std::unordered_map<std::string,std::shared_ptr<SoundAsset>> loadedSound;
 	std::vector<std::unique_ptr<ma_sound>> m_ActiveInstances;
-	AudioManager() = default;
 	~AudioManager() = default;
 };
