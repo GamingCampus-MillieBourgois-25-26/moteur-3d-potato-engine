@@ -19,6 +19,13 @@ namespace MyGui {
 	class Details {
 	public:
 
+		/*Details(int PosX, int PosY, int SizeX, int SizeY);
+
+		int winPosX;
+		int winPosY;
+		int winSizeX;
+		int winSizeY;*/
+
 		void showDetails();
 
 		char searchRubric[64] = "";

@@ -56,11 +56,15 @@ void MyGui::Menu::barMenu() {
 
 }
 
+//MyGui::Details::Details(int PosX, int PosY, int SizeX, int SizeY) :  winPosX(PosX), winPosY(PosY), winSizeX(SizeX) , winSizeY(SizeY) {
+//
+//    ImGui::SetNextWindowPos(ImVec2(winPosX, winPosY), ImGuiCond_Once);
+//    ImGui::SetNextWindowSize(ImVec2(winSizeX, winSizeY));
+//}
 
 void MyGui::Details::showDetails() {
 
-    ImGui::SetNextWindowPos(ImVec2(1460, 710), ImGuiCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(450, 300));
+    
     ImGui::Begin("Details");
 
     if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
