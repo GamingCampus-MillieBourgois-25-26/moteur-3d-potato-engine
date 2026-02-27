@@ -14,13 +14,3 @@ std::shared_ptr<Mesh> Buffers::GetMesh(const std::string& meshname)
 	}
 	return nullptr;
 }
-
-Buffers* Buffers::getInstance()
-{
-	if (instance == nullptr)
-		instance = new Buffers();
-	return instance;
-}
-
-Buffers* Buffers::instance = nullptr;
-Buffers* buffer = Buffers::getInstance();

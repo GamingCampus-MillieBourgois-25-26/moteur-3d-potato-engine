@@ -16,7 +16,6 @@ const void FileParser::OpenAllOBJ()
 			throw std::runtime_error("Impossible d'ouvrir le fichier");
 
 		auto mesh = std::make_shared<Mesh>();
-		//mesh->name = 
 		std::string line;
 		while (std::getline(fs,line))
 		{
@@ -65,8 +64,9 @@ const void FileParser::OpenAllOBJ()
 
 					Vertex v;
 					v.position = tempPosition[posIndex - 1];
-					v.textures = tempTextures[texIndex - 1];
-					v.normales = tempNormales[normIndex - 1];
+					v.texCoord = tempTextures[texIndex - 1];
+					v.normal = tempNormales[normIndex - 1];
+					v.color = { 255.0f,0.0f,0.0f,1.0f };
 
 					mesh->vertices.push_back(v);
 
@@ -86,7 +86,7 @@ const void FileParser::OpenAllOBJ()
 		tempNormales.clear();
 		tempTextures.clear();
 
-		buffer->AddMeshBuffers(mesh,allFile[0].filename().string());
+		Buffers::Get().AddMeshBuffers(mesh,allFile[0].filename().string());
 		allFile.erase(allFile.begin());
 		fs.close();
 	}
