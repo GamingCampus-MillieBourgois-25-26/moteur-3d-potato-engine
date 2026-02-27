@@ -59,7 +59,7 @@ static void CreatePyramid(std::vector<Vertex>& vertices, std::vector<uint32_t>& 
 // ---- IMGUI WindoW ----
 bool OpenImGui = true;
 MyGui::Menu menu;
-MyGui::Details details;
+MyGui::Details details/*(1460, 710, 450, 300)*/;
 MyGui::Render render;
 MyGui::Outliner outliner;
 MyGui::findFile findfile;
@@ -227,7 +227,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                 ImGui::End();*/
 
                 ImGui::SetNextWindowPos(ImVec2(5, 25), ImGuiCond_Once);
-                ImGui::SetNextWindowSize(ImVec2(1200, 700));
+                ImGui::SetNextWindowSize(ImVec2(1200, 700), ImGuiCond_Once);
                 ImGui::Begin("Game Viewport");
                 {
                     render.showRender();
@@ -241,9 +241,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                 ImGui::End();
 
                 details.showDetails();
-
-
-                
 
                 outliner.showOutliner();
 

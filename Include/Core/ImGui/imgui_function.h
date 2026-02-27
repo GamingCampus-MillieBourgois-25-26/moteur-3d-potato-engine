@@ -19,12 +19,10 @@ namespace MyGui {
 	class Details {
 	public:
 
-		/*Details(int PosX, int PosY, int SizeX, int SizeY);
-
-		int winPosX;
-		int winPosY;
-		int winSizeX;
-		int winSizeY;*/
+		int winPosX = 1460;
+		int winPosY = 710;
+		int winSizeX = 450;
+		int winSizeY = 300;
 
 		void showDetails();
 
@@ -51,6 +49,11 @@ namespace MyGui {
 
 	class Outliner {
 	public:
+
+		int winPosX = 1460;
+		int winPosY = 25;
+		int winSizeX = 450;
+		int winSizeY = 300;
 
 		void showOutliner();
 
