@@ -1,22 +1,11 @@
-#include <Jolt/Jolt.h>
-#include <DirectXMath.h>
+#include "Maths/Vector3.h"
 
-namespace Maths
+
+Maths::Vec3::operator JPH::Vec3() const
 {
-	struct Vec3
-	{
-		float x, y, z;
-
-		Vec3(const JPH::Vec3& v) : x(v.GetX()), y(v.GetY()), z(v.GetZ()) {};
-		Vec3(const DirectX::XMFLOAT3& v) : x(v.x), y(v.y), z(v.z) {};
-
-		operator JPH::Vec3() const
-		{
-			return JPH::Vec3(x, y, z);
-		}
-		operator DirectX::XMFLOAT3() const
-		{
-			return DirectX::XMFLOAT3(x, y, z);
-		}
-	};
+	return JPH::Vec3(x, y, z);
+}
+Maths::Vec3::operator DirectX::XMFLOAT3() const
+{
+	return DirectX::XMFLOAT3(x, y, z);
 }

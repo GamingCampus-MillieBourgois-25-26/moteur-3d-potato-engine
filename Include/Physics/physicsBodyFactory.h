@@ -1,5 +1,5 @@
 #pragma once
-#include "Maths/vector3.cpp"
+#include "Maths/Vector3.h"
 #include "physicsBody.h"
 #include "physicsSystem.h"
 #include "physicsTypes.h"

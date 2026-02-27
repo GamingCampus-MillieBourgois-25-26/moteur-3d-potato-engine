@@ -1,6 +1,6 @@
 #include "Physics/physicsBodyFactory.h"
 
-#include "Maths/vector3.cpp"
+#include "Maths/Vector3.h"
 #include "Physics/physicsLayers.h"
 
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
