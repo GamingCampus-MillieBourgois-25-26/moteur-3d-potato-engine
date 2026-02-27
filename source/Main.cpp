@@ -1,11 +1,13 @@
 #include <windows.h>
+#include <iostream>
+#include <thread>
 #include <memory>
 #include <vector>
 #include <DirectXMath.h>
 
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
-
+#include "Graphics/FileParser.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -85,6 +87,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 // 2. Point d'entrée principal
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
+    FileParser fp;
+    std::shared_ptr<Mesh> caca = Buffers::Get().GetMesh("Cube.obj");
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -160,7 +164,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // 3. Création et initialisation du Mesh
     auto triangleMesh = std::make_unique<MeshBuffer>();
-    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), triVertices, triIndices))) {
+    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), caca->vertices, caca->indices))) {
         return -1;
     }
 
@@ -192,7 +196,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(renderer->GetDevice().Get(), renderer->GetContext().Get());
-
 
     // --- E. Boucle de Jeu ---
     MSG msg = { 0 };
