@@ -45,6 +45,7 @@ set(IMGUI_SOURCES
     "${IMGUI_SRC_DIR}/imgui_tables.cpp"
     "${IMGUI_SRC_DIR}/imgui_widgets.cpp"
     "${IMGUI_SRC_DIR}/imgui_demo.cpp"
+    "${IMGUI_SRC_DIR}/ImGuizmo.cpp"
     "${IMGUI_SRC_DIR}/backends/imgui_impl_dx11.cpp"
     "${IMGUI_SRC_DIR}/backends/imgui_impl_win32.cpp"
 )

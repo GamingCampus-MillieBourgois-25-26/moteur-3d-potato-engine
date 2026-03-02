@@ -4,6 +4,8 @@
 
 #include <windows.h>
 #include <string>
+#include "ImGuizmo.h"
+#include <DirectXMath.h>
 
 
 namespace MyGui {
@@ -68,5 +70,22 @@ namespace MyGui {
 		void showFindFile();
 		std::string OpenFileDialog();
 	};
+
+	//class Gizmo {
+	//public:
+
+	//	// Stocker les données du gizmo comme membres de la classe
+	//	XMMATRIX objectMatrix;
+	//	ImGuizmo::OPERATION currentOperation;
+	//	ImGuizmo::MODE currentMode;
+
+	//	Gizmo() : objectMatrix(XMMatrixIdentity()),
+	//		currentOperation(ImGuizmo::TRANSLATE),
+	//		currentMode(ImGuizmo::LOCAL) {
+	//	}
+
+	//	void showTransformGizmo();
+
+	//};
 
 }

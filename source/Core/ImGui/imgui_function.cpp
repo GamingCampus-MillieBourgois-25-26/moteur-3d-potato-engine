@@ -325,3 +325,59 @@ std::string MyGui::findFile::OpenFileDialog() {
     }
     return "";
 }
+
+
+//void MyGui::Gizmo::showTransformGizmo() {
+//
+//    ImGui::Begin("Transform Gizmo");
+//
+//    // Selection des opérations
+//    if (ImGui::RadioButton("Translate", (int*)&currentOperation, ImGuizmo::TRANSLATE))
+//        currentOperation = ImGuizmo::TRANSLATE;
+//    ImGui::SameLine();
+//    if (ImGui::RadioButton("Rotate", (int*)&currentOperation, ImGuizmo::ROTATE))
+//        currentOperation = ImGuizmo::ROTATE;
+//    ImGui::SameLine();
+//    if (ImGui::RadioButton("Scale", (int*)&currentOperation, ImGuizmo::SCALE))
+//        currentOperation = ImGuizmo::SCALE;
+//
+//    // Mode Local/World
+//    if (ImGui::RadioButton("Local", (int*)&currentMode, ImGuizmo::LOCAL))
+//        currentMode = ImGuizmo::LOCAL;
+//    ImGui::SameLine();
+//    if (ImGui::RadioButton("World", (int*)&currentMode, ImGuizmo::WORLD))
+//        currentMode = ImGuizmo::WORLD;
+//
+//    ImGui::Separator();
+//
+//    // Configuration ImGuizmo
+//    ImGuizmo::SetOrthographic(false);
+//    ImGuizmo::SetDrawlist();
+//    ImGuizmo::SetRect(0, 0, ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
+//
+//    // Convertir XMMATRIX en float* pour ImGuizmo
+//    float view_f[16];
+//    float proj_f[16];
+//    float matrix_f[16];
+//
+//    XMStoreFloat4x4((XMFLOAT4X4*)view_f, viewMatrix);
+//    XMStoreFloat4x4((XMFLOAT4X4*)proj_f, projectionMatrix);
+//    XMStoreFloat4x4((XMFLOAT4X4*)matrix_f, objectMatrix);
+//
+//    // Appeler Manipulate avec les pointeurs float
+//    ImGuizmo::Manipulate(
+//        view_f,              // Matrice view (float*)
+//        proj_f,              // Matrice projection (float*)
+//        currentOperation,
+//        currentMode,
+//        matrix_f,            // Cette matrice sera modifiée par le gizmo
+//        nullptr,
+//        nullptr
+//    );
+//
+//    // Reconvertir le résultat en XMMATRIX
+//    objectMatrix = XMLoadFloat4x4((XMFLOAT4X4*)matrix_f);
+//
+//    ImGui::End();
+//
+//}
