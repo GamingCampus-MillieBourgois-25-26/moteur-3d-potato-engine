@@ -8,6 +8,8 @@
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
 #include "Graphics/FileParser.h"
+#include "Logic/SceneManager.h"
+#include "Logic/MeshComponent.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -86,9 +88,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 // 2. Point d'entrée principal
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
-
     FileParser fp;
-    std::shared_ptr<Mesh> caca = Buffers::Get().GetMesh("Cube.obj");
+
+    SceneManager* sceneManager;
+    sceneManager->Get();
+
+    sceneManager->NewScene();
+    Actor& actor = sceneManager->GetCurrent().CreateActor("Actor1");
+    actor.AddComponent<MeshComponent>();
+    actor.GetComponent<MeshComponent>()->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+
+
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -164,9 +174,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // 3. Création et initialisation du Mesh
     auto triangleMesh = std::make_unique<MeshBuffer>();
-    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), caca->vertices, caca->indices))) {
-        return -1;
-    }
+    //if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), caca->vertices, caca->indices))) {
+    //    return -1;
+    //}
 
     // 4. Création de l'Input Layout (Liaison entre Vertex.h et le Shader)
     if (FAILED(triangleMesh->CreateInputLayout(renderer->GetDevice(), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()))) {
@@ -175,16 +185,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
 
-    std::vector<RenderItem> sceneItems;
+    std::vector<MeshComponent> sceneItems;
 
-    RenderItem triItem;
-    triItem.mesh = triangleMesh.get(); // Utilisation du pointeur brut pour le rendu
-    triItem.vs = vertexShader.Get();
-    triItem.ps = pixelShader.Get();
-    triItem.worldMatrix = DirectX::XMMatrixIdentity();
-    triItem.color = { 0.2f, 0.7f, 0.9f, 1.0f };
-
-    sceneItems.push_back(triItem);
+    for (auto& actor : sceneManager->GetCurrent().GetActors())
+    {
+        if (actor.second.HasComponent<MeshComponent>()) {
+            sceneItems.push_back(actor.second.GetComponent<MeshComponent>()[0]);
+        }
+    }
+    
 
 
     // --- IMGUI INIT ---

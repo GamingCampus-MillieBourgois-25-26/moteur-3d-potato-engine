@@ -13,7 +13,15 @@ public:
 	void SetMesh(std::shared_ptr<Mesh>);
 
 	std::shared_ptr<Mesh> GetMesh();
+	ID3D11VertexShader* GetVertexShader();
+	ID3D11PixelShader* GetPixelShader();
+	DirectX::XMMATRIX GetWorldMatrix();
+	DirectX::XMFLOAT4 GetColor();
 
 private:
 	std::shared_ptr<Mesh> mesh;
+	ID3D11VertexShader* vs;
+	ID3D11PixelShader* ps;
+	DirectX::XMMATRIX worldMatrix;
+	DirectX::XMFLOAT4 color;
 };

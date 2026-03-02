@@ -8,15 +8,7 @@
 #include "MeshBuffer.h"
 #include "ConstantBuffer.h"
 #include "ShaderManager.h"
-
-
-struct RenderItem {
-    MeshBuffer* mesh;
-    ID3D11VertexShader* vs;
-    ID3D11PixelShader* ps;
-    DirectX::XMMATRIX worldMatrix;
-    DirectX::XMFLOAT4 color;
-};
+#include "Logic/MeshComponent.h"
 
 class Renderer {
 public:
@@ -27,7 +19,7 @@ public:
     HRESULT Initialize(HWND hwnd, int width, int height);
 
     // Boucle de rendu
-    void RenderFrame(const PerFrameCB& frameData, const std::vector<RenderItem>& items);
+    void RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponent>& items);
 
     
     Microsoft::WRL::ComPtr<ID3D11Device> GetDevice() const { return m_device; }
