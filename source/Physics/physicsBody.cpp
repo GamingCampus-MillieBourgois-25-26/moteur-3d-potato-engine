@@ -8,7 +8,7 @@ void PhysicsBody::SetPosition(Maths::Vec3 position)
 	m_bodyInterface->SetPosition(m_id, position, JPH::EActivation::Activate);
 }
 
-void PhysicsBody::SetRotation(JPH::Quat rotation)
+void PhysicsBody::SetRotation(Maths::Quat rotation)
 {
 	m_bodyInterface->SetRotation(m_id, rotation, JPH::EActivation::Activate);
 }

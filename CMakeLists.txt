@@ -52,7 +52,7 @@ set(IMGUI_SOURCES
 
 
 # Création de l'exécutable
-add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} ${IMGUI_SOURCES})
+add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} ${IMGUI_SOURCES} "Include/Maths/Quaternion.h" "source/Maths/Quaternion.cpp")
 
 
 

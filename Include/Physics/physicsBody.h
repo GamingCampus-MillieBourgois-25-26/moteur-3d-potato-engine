@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Maths/Vector3.cpp"
+#include "Maths/Vector3.h"
+#include "Maths/Quaternion.h"
 
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/Body/BodyID.h>
@@ -14,7 +15,7 @@ public:
 	PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interface) : m_id(bodyID), m_bodyInterface(interface) {};
 
 	void SetPosition(Maths::Vec3 position);
-	void SetRotation(JPH::Quat rotation);
+	void SetRotation(Maths::Quat rotation);
 	
 	void SyncFromPhysics(Transform& transform);
 	void SyncToPhysics(Transform& transform);

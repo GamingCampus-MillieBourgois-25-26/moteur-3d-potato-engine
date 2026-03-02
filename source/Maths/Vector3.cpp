@@ -1,6 +1,5 @@
 #include "Maths/Vector3.h"
 
-
 Maths::Vec3::operator JPH::Vec3() const
 {
 	return JPH::Vec3(x, y, z);

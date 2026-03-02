@@ -10,5 +10,5 @@
 class PhysicsBodyFactory
 {
 public:
-	PhysicsBody CreateBody(PhysicsSystem system, PhysicsBodyType type, const PhysicsShape& shape, float mass, Maths::Vec3 position, JPH::Quat rotation);
+	PhysicsBody CreateBody(PhysicsSystem system, PhysicsBodyType type, const PhysicsShape& shape, float mass, Maths::Vec3 position, Maths::Quat rotation);
 };
