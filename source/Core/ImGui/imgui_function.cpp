@@ -84,19 +84,19 @@ void MyGui::Details::showDetails() {
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##1trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText(" ", Xpos, sizeof(Xpos));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##2trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("  ", Ypos, sizeof(Ypos));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##3trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("   ", Zpos, sizeof(Zpos));
                 }
 
                 ImGui::EndChild();
@@ -113,19 +113,19 @@ void MyGui::Details::showDetails() {
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##1rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText(" ", Xaxe, sizeof(Xaxe));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##2rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("  ", Yaxe, sizeof(Yaxe));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##3rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("   ", Zaxe, sizeof(Zaxe));
                 }
 
                 ImGui::EndChild();
@@ -142,19 +142,19 @@ void MyGui::Details::showDetails() {
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##1scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText(" ", Xscale, sizeof(Xscale));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##2scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("  ", Yscale, sizeof(Yscale));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##3scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("   ", Zscale, sizeof(Zscale));
                 }
 
                 ImGui::EndChild();

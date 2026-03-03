@@ -28,6 +28,23 @@ namespace MyGui {
 
 		void showDetails();
 
+		//---inputText x,y,z
+
+		//translate
+		char Xpos[64] = "0000.0";
+		char Ypos[64] = "0000.0";
+		char Zpos[64] = "0000.0";
+
+		//rotate
+		char Xaxe[64] = "0000.0";
+		char Yaxe[64] = "0000.0";
+		char Zaxe[64] = "0000.0";
+
+		//scale
+		char Xscale[64] = "0000.0";
+		char Yscale[64] = "0000.0";
+		char Zscale[64] = "0000.0";
+
 		char searchRubric[64] = "";
 		bool isPhysicsActiv = false;
 
