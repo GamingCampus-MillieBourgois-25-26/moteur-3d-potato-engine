@@ -88,7 +88,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
     FileParser fp;
-    std::shared_ptr<Mesh> caca = Buffers::Get().GetMesh("Cube.obj");
+    std::shared_ptr<Mesh> cube = Buffers::Get().GetMesh("Cube.obj");
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -164,7 +164,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // 3. Création et initialisation du Mesh
     auto triangleMesh = std::make_unique<MeshBuffer>();
-    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), caca->vertices, caca->indices))) {
+    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), cube->vertices, cube->indices))) {
         return -1;
     }
 
