@@ -146,14 +146,30 @@ classDiagram
     Engine : UI
     Engine : Input
     Engine: Coeur du Moteur
-    class Render{
-      +Buffer()
-      +FileParser()
-      +Mesh()
-      +MeshBuffer()
-      +Renderer()
-      +ShaderManager()
-Tout eest gérer par DX11
+    class Renderer{
+public:
+      HRESULT Initialize(HWND hwnd, int width, int height)
+      Microsoft::WRL::ComPtr<ID3D11Device> GetDevice()
+      Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetContext()
+      ID3D11ShaderResourceView* GetSceneSRV()
+      HRESULT CreateSceneResources(int width, int height);
+      ID3D11RenderTargetView* const* GetMainRTVAddress()
+   private:
+      HRESULT CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
+      HRESULT CreateMainViews(int width, int height);
+
+
+      Microsoft::WRL::ComPtr<ID3D11Device>           m_device;
+      Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_context;
+      Microsoft::WRL::ComPtr<IDXGISwapChain>         m_swapChain;
+      Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
+      Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthStencilView;
+      Microsoft::WRL::ComPtr<ID3D11RasterizerState>  m_rasterizerState;
+
+
+      Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_sceneRTV;
+      Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_sceneSRV; 
+
       
     }
     class Audio{
@@ -174,7 +190,7 @@ Tout eest gérer par DX11
       +Windows
       +IMGui
       +Input
-      +CatchInput()
+      +CatchInput
     }
     class Logic{
       création des acteur et de la scene ainsi que leur gestion avec leur component
