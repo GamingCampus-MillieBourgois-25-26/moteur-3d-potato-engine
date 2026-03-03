@@ -90,15 +90,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
     FileParser fp;
 
-    SceneManager* sceneManager;
-    sceneManager->Get();
-
-    sceneManager->NewScene();
-    Actor& actor = sceneManager->GetCurrent().CreateActor("Actor1");
-    actor.AddComponent<MeshComponent>();
-    actor.GetComponent<MeshComponent>()->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
-
-
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -166,24 +157,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         return -1;
     }
 
-    // 2. Préparation des données géométriques
-    std::vector<Vertex> triVertices;
-    std::vector<uint32_t> triIndices;
-
-    CreatePyramid(triVertices, triIndices);
-
-    // 3. Création et initialisation du Mesh
-    auto triangleMesh = std::make_unique<MeshBuffer>();
-    //if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), caca->vertices, caca->indices))) {
-    //    return -1;
-    //}
-
-    // 4. Création de l'Input Layout (Liaison entre Vertex.h et le Shader)
-    if (FAILED(triangleMesh->CreateInputLayout(renderer->GetDevice(), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()))) {
-        return -1;
-    }
-
     // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
+
+    SceneManager* sceneManager;
+    sceneManager->Get();
+
+    sceneManager->NewScene();
+
+	// Création d'un acteur avec un MeshComponent - Pour les tests
+    Actor& actor = sceneManager->GetCurrent().CreateActor("Actor1");
+    actor.AddComponent<MeshComponent>();
+    actor.GetComponent<MeshComponent>()->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
 
     std::vector<MeshComponent> sceneItems;
 

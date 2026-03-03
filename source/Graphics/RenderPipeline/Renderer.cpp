@@ -67,8 +67,11 @@ void Renderer::RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponen
         m_context->PSSetShader(item.GetPixelShader(), nullptr, 0);
 
         // C. Liaison du Mesh et Dessin
-        item.GetMesh()->Bind(m_context);
-        m_context->DrawIndexed(item.GetMesh()->GetIndexCount(), 0, 0);
+		MeshBuffer* meshBuffer;
+		meshBuffer->Initialize(m_device, item.GetMesh()->vertices, item.GetMesh()->indices);
+
+        meshBuffer->Bind(m_context);
+        m_context->DrawIndexed(meshBuffer->GetIndexCount(), 0, 0);
     }
 
     // 4. Présentation (V-Sync activé avec le 1)
