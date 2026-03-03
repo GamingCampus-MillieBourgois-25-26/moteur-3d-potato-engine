@@ -11,6 +11,7 @@
 |------------|---------|----------------------------|-------------|
 | 04-02-2026 | 0.1     | Initial document creation  | Kiliann POMMEZ |
 | 09-02-2026 | 0.2     | Architecture update        | Kiliann POMMEZ |
+| 03-03-2026 | 0.3     | Mermaids Update            | Kiliann POMMEZ |
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
@@ -119,19 +120,20 @@ Le moteur utilise une architecture basée sur les composants. Chaque module poss
 #### Architecture
 ```mermaid
 graph TD;
-    A[Class Engine] --> B[Actor Module];
-    A --> C[Audio];
-    A --> D[Physics];
-    A --> E[Render];
-    A --> F[IInput];
-    A --> G[IWindows]
-    G[IWindows]-->H[IEditor]
-    F-->H[IEditor]
-    E-->I[IScene]
-    C-->I[IScene]
-    D-->I[IScene]
-    I-->H
-    B-->I
+    A[Engine] --> B[Actor];
+    B --> C[Audio];
+    B --> D[Physics];
+    B --> K[Mesh]
+    K --> E
+    A --> E[Renderer];
+    A --> G[Window]
+    G[Window]-->H[Editor]
+    F[Input]-->G
+    E-->I[Scene]
+    C-->I
+    D-->I
+    I -->L[IU]
+    L -->G
 ```
 Class Diagramme
 ```mermaid
@@ -139,43 +141,48 @@ classDiagram
     Engine <|-- Render
     Engine <|-- Audio
     Engine <|-- Physics
-    Engine <|-- Windows
-    Render <|-- Actor
-    Engine : +Render
-    Engine : +Audio
-    Engine : +Physics
-    Engine : +Windows
-    Engine: +PhysicsUpdate()
-    Engine: +RenderUpdate()
-    Engine: +AudioUpdate()
-    Engine: +WindowsUpdate()
+    Engine <|-- Window
+    Render <|-- Logic
+    Engine : UI
+    Engine : Input
+    Engine: Coeur du Moteur
     class Render{
-      +Render Data
-      +rendering()
+      +Buffer()
+      +FileParser()
+      +Mesh()
+      +MeshBuffer()
+      +Renderer()
+      +ShaderManager()
+Tout eest gérer par DX11
+      
     }
     class Audio{
-      -Music
-      -Play()
-      -Stop()
+      -s'occupe de la musique avec Mini Audio
+      -AudioComponent()
+      -AudioManager()
     }
     class Physics{
-      +constanteGravitationnel
-      +gravité()
-      +Collision()
+      gérer avec Jolt
+      +physicsBody()
+      +physicsBodyFactory()
+      +physicsBroadPhaseLayerManager()
+      +physicsContactListener()
+      +physicsLayerManager()
+      +physicsSystem()
     }
-    class Windows{
+    class Window{
       +Windows
       +IMGui
       +Input
       +CatchInput()
     }
-    class Actor{
-      +Actor
-      +Component
-      +Scene
-      +CreateActor()
-      +AddComponent()
-      +CreateScene()
+    class Logic{
+      création des acteur et de la scene ainsi que leur gestion avec leur component
+      +Actor()
+      +MeshComponent()
+      +Scene()
+      +SceneManager()
+      +TransformComponent()
     }
 ```
 
