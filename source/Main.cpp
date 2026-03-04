@@ -159,19 +159,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
 
-    SceneManager* sceneManager;
-    sceneManager->Get();
+    SceneManager& sceneManager = SceneManager::Get();
 
-    sceneManager->NewScene();
+    sceneManager.NewScene();
 
 	// Création d'un acteur avec un MeshComponent - Pour les tests
-    Actor& actor = sceneManager->GetCurrent().CreateActor("Actor1");
+    Actor& actor = sceneManager.GetCurrent().CreateActor("Actor1");
     actor.AddComponent<MeshComponent>();
     actor.GetComponent<MeshComponent>()->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
 
     std::vector<MeshComponent> sceneItems;
 
-    for (auto& actor : sceneManager->GetCurrent().GetActors())
+    for (auto& actor : sceneManager.GetCurrent().GetActors())
     {
         if (actor.second.HasComponent<MeshComponent>()) {
             sceneItems.push_back(actor.second.GetComponent<MeshComponent>()[0]);
