@@ -33,16 +33,33 @@ const DirectX::XMMATRIX& TransformComponent::GetWorldMatrix()
 
 void TransformComponent::UpdateMatrices()
 {
-    DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z);
-    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(XMLoadFloat3(&localRotation));
-    DirectX::XMMATRIX S = DirectX::XMMatrixScaling(localScale.x, localScale.y, localScale.z);
+    using namespace DirectX;
 
-    localMatrix = S * R * T;
+    // 1. Calcul de la matrice locale (S * R * T)
+    XMMATRIX scaling = XMMatrixScaling(localScale.x, localScale.y, localScale.z);
 
+    // Correction : Utilisation de RollPitchYaw si localRotation est un float3 (Euler)
+    XMMATRIX rotation = XMMatrixRotationRollPitchYaw(
+        XMConvertToRadians(localRotation.x),
+        XMConvertToRadians(localRotation.y),
+        XMConvertToRadians(localRotation.z)
+    );
+
+    XMMATRIX translation = XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z);
+
+    // Multiplication Row-Major
+    localMatrix = scaling * rotation * translation;
+
+    // 2. Calcul de la matrice Monde
     if (parent)
+    {
+        // On multiplie la matrice locale par celle du parent
         worldMatrix = localMatrix * parent->GetWorldMatrix();
+    }
     else
+    {
         worldMatrix = localMatrix;
+    }
 
     dirty = false;
 }

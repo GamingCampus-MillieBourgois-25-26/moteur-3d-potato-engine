@@ -32,7 +32,7 @@ HRESULT Renderer::Initialize(HWND hwnd, int width, int height) {
     return S_OK;
 }
 
-void Renderer::RenderFrame(const PerFrameCB& frameData, const std::vector<RenderItem>& items) {
+void Renderer::RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponent*>& items) {
     // 1. Nettoyage des buffers (BackBuffer et Z-Buffer)
     float clearColor[] = { 0.1f, 0.1f, 0.1f, 1.0f };
     m_context->ClearRenderTargetView(m_sceneRTV.Get(), clearColor);
@@ -48,15 +48,15 @@ void Renderer::RenderFrame(const PerFrameCB& frameData, const std::vector<Render
 
     m_perFrameCB.Update(m_context, gpuFrameData);
     m_context->VSSetConstantBuffers(0, 1, m_perFrameCB.GetAddressOf());
+    m_context->IASetInputLayout(m_defaultInputLayout.Get());
 
     // 3. Boucle de rendu générique
-    for (const auto& item : items) {
-        if (!item.mesh || !item.vs || !item.ps) continue;
-
+    for (MeshComponent*& item : items) {
+        if (!item->GetMesh() || !item->GetVertexShader() || !item->GetPixelShader()) continue;
         // A. Mise à jour des données de l'objet (Slot b1)
         PerObjectCB objectData;
-        objectData.worldMatrix = DirectX::XMMatrixTranspose(item.worldMatrix);
-        objectData.meshColor = item.color;
+        objectData.worldMatrix = DirectX::XMMatrixTranspose(item->GetWorldMatrix());
+        objectData.meshColor = item->GetColor();
 
         // On réutilise un ConstantBuffer<PerObjectCB> interne au Renderer
         m_perObjectCB.Update(m_context, objectData);
@@ -64,16 +64,16 @@ void Renderer::RenderFrame(const PerFrameCB& frameData, const std::vector<Render
         m_context->PSSetConstantBuffers(1, 1, m_perObjectCB.GetAddressOf());
 
         // B. Liaison des Shaders
-        m_context->VSSetShader(item.vs, nullptr, 0);
-        m_context->PSSetShader(item.ps, nullptr, 0);
+        m_context->VSSetShader(item->GetVertexShader(), nullptr, 0);
+        m_context->PSSetShader(item->GetPixelShader(), nullptr, 0);
 
         // C. Liaison du Mesh et Dessin
-        item.mesh->Bind(m_context);
-        m_context->DrawIndexed(item.mesh->GetIndexCount(), 0, 0);
+        MeshBuffer meshBuffer;
+        meshBuffer.Initialize(m_device, item->GetMesh()->vertices, item->GetMesh()->indices);
+        meshBuffer.Bind(m_context);
+        m_context->DrawIndexed(meshBuffer.GetIndexCount(), 0, 0);
     }
 
-    // 4. Présentation (V-Sync activé avec le 1)
-    //m_swapChain->Present(1, 0);
 }
 
 HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {
@@ -248,4 +248,25 @@ HRESULT Renderer::CreateSceneResources(int width, int height) {
     m_device->CreateShaderResourceView(texture.Get(), nullptr, &m_sceneSRV);
 
     return S_OK;
+}
+
+HRESULT Renderer::CreateDefaultInputLayout(ID3DBlob* vsBlob) {
+    if (!vsBlob) return E_INVALIDARG;
+
+    // Utilisation de offsetof pour la sécurité technique (RAII-friendly)
+    // Cela garantit que si la structure Vertex change, le layout suit automatiquement.
+    D3D11_INPUT_ELEMENT_DESC layoutDesc[] = {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, normal),   D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, offsetof(Vertex, texCoord),       D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Vertex, color), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+    };
+
+    return m_device->CreateInputLayout(
+        layoutDesc,
+        ARRAYSIZE(layoutDesc),
+        vsBlob->GetBufferPointer(),
+        vsBlob->GetBufferSize(),
+        m_defaultInputLayout.GetAddressOf()
+    );
 }
