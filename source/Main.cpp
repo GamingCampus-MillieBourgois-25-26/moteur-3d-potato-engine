@@ -8,6 +8,8 @@
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
 #include "Graphics/FileParser.h"
+#include "Texture/TextureManager.h"
+#include "Texture/Material.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -89,6 +91,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     FileParser fp;
     std::shared_ptr<Mesh> cube = Buffers::Get().GetMesh("Cube.obj");
+
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -129,6 +132,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // --- C. Chargement des Ressources (Simulation d'un gestionnaire de ressources) ---
 
+    TextureManager textMan(renderer->GetDevice().Get());
+    //Material mat;
+    //mat.SetTexture(textMan.Load("image.png"));
 
     // 1. Compilation et création des Shaders
     ComPtr<ID3D11VertexShader> vertexShader;

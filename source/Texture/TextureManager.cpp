@@ -1,3 +1,4 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "Texture/TextureManager.h"
 #include <iostream>
 
@@ -7,22 +8,30 @@ TextureManager::TextureManager(ID3D11Device* device)
     LoadAll();
 }
 
-std::shared_ptr<Texture> TextureManager::Load(const std::string& path)
+std::shared_ptr<Texture> TextureManager::Load(const std::string& name)
 {
-    auto it = m_Textures.find(path);
-    if (it != m_Textures.end())
-    {
-        return it->second;
-    }
-    auto texture = std::make_shared<Texture>();
+    std::filesystem::path fullPath = m_Root / name;
+    fullPath = fullPath.lexically_normal();
 
-    if (!texture->Load(m_Device, path))
+    std::string key = fullPath.string();
+
+    auto it = m_Textures.find(key);
+    if (it != m_Textures.end())
+        return it->second;
+
+    if (!std::filesystem::exists(fullPath))
     {
-        std::cout << "TextureManager: Failed to load " << path << std::endl;
+        std::cerr << "Texture introuvable : " << key << std::endl;
         return nullptr;
     }
 
-    m_Textures[path] = texture;
+    auto texture = std::make_shared<Texture>();
+    if (!texture->Load(m_Device, key))
+    {
+        std::cerr << "Erreur chargement texture : " << key << std::endl;
+        return nullptr;
+    }
+    m_Textures[key] = texture;
 
     return texture;
 }

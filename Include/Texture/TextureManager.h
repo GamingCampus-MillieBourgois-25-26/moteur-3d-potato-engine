@@ -23,6 +23,6 @@ public:
 private:
     void LoadAll();
     ID3D11Device* m_Device = nullptr;
-
+    std::filesystem::path m_Root = "assets/textures/";
     std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
 };
