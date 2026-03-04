@@ -17,9 +17,7 @@ MyGui::Details details;
 MyGui::Render render;
 MyGui::Outliner outliner;
 MyGui::findFile findfile;
-MyGui::Gizmo gizmo;
-DirectX::XMMATRIX viewMatrixGizmo;
-DirectX::XMMATRIX projectionMatrixGizmo;
+
 
 // Fonctions utilitaires
 static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
@@ -172,46 +170,8 @@ void Engine::run() {
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
-
-            menu.barMenu();
-
-            ImGui::SetNextWindowPos(ImVec2(5, 25), ImGuiCond_Once);
-            ImGui::SetNextWindowSize(ImVec2(1200, 700), ImGuiCond_Once);
-            ImGui::Begin("Game Viewport");
-            {
-                render.showRender();
-                ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-                ImGui::Image((void*)renderer->GetSceneSRV(), viewportSize);
-            }
-            ImGui::End();
-
-            /*gizmo.objectMatrix = triItem.worldMatrix;
-            gizmo.viewMatrix = viewMatrixGizmo;
-            gizmo.projectionMatrix = projectionMatrixGizmo;*/
-
-            // ? DEBUG: Affiche si les matrices sont valides
-            if (ImGui::Begin("Debug")) {
-                ImGui::Text("View Matrix valid: %s", gizmo.viewMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
-                ImGui::Text("Proj Matrix valid: %s", gizmo.projectionMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
-                ImGui::End();
-            }
-
-            gizmo.showTransformGizmo();
-
-            details.showDetails();
-            outliner.showOutliner();
-            findfile.showFindFile();
-
-            //// Caméra
-            //PerFrameCB frameData;
-            //XMVECTOR eye = XMVectorSet(1.5f, 1.0f, 5.0f, 0.0f);
-            //XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-            //XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-            //frameData.viewMatrix = XMMatrixLookAtLH(eye, at, up);
-            //frameData.projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-
-            // 1?? Calcule les matrices de caméra UNE SEULE FOIS
+            ImGuizmo::BeginFrame();
+     
             XMVECTOR eye = XMVectorSet(1.5f, 1.0f, 5.0f, 0.0f);
             XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
             XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -219,15 +179,47 @@ void Engine::run() {
             XMMATRIX viewMatrix = XMMatrixLookAtLH(eye, at, up);
             XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-            // 2?? Passe les matrices au gizmo
-            gizmo.objectMatrix = triItem.worldMatrix;
-            gizmo.viewMatrix = viewMatrix;
-            gizmo.projectionMatrix = projectionMatrix;
+            render.gizmo.viewMatrix = viewMatrix;
+            render.gizmo.projectionMatrix = projectionMatrix;
 
-            gizmo.showTransformGizmo();
+            menu.barMenu();
 
-            // 3?? Récupère la matrice modifiée du gizmo
-            triItem.worldMatrix = gizmo.objectMatrix;
+            ImGui::SetNextWindowPos(ImVec2(5, 25), ImGuiCond_Once);
+            ImGui::SetNextWindowSize(ImVec2(1200, 700), ImGuiCond_Once);
+            ImGui::Begin("Game Viewport");
+            {
+                // 1. Affiche la barre d'outils (T, R, S)
+                render.showRender();
+
+                // 2. Récupère la taille restante pour l'image
+                ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+
+                // 3. Affiche l'image
+                ImGui::Image((void*)renderer->GetSceneSRV(), viewportSize);
+
+                // --- C'EST ICI QUE CA SE JOUE ---
+                // On récupère la position exacte où l'image vient d'être dessinée
+                ImVec2 imagePos = ImGui::GetItemRectMin();
+                render.gizmo.drawGizmo(imagePos, viewportSize, viewMatrix, projectionMatrix, triItem.worldMatrix);
+
+                //// DEBUG VISUEL
+                //ImGui::GetWindowDrawList()->AddRect(imagePos, ImVec2(imagePos.x + viewportSize.x, imagePos.y + viewportSize.y), IM_COL32(255, 255, 0, 255));
+                ImGui::Text("Gizmo Pos: %.1f, %.1f", imagePos.x, imagePos.y);
+            }
+            ImGui::End();
+
+            // ? DEBUG: Affiche si les matrices sont valides
+            if (ImGui::Begin("Debug")) {
+                ImGui::Text("View Matrix valid: %s", render.gizmo.viewMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
+                ImGui::Text("Proj Matrix valid: %s", render.gizmo.projectionMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
+                ImGui::End();
+            }
+
+
+            details.showDetails();
+            outliner.showOutliner();
+            findfile.showFindFile();
+            
 
             // 4?? Utilise les MÊMES matrices pour le rendu
             PerFrameCB frameData;
@@ -241,6 +233,8 @@ void Engine::run() {
 
             float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
             renderer->GetContext()->ClearRenderTargetView(*renderer->GetMainRTVAddress(), clearColor);
+            renderer->GetContext()->RSSetState(nullptr); // Reset Rasterizer
+            renderer->GetContext()->OMSetDepthStencilState(nullptr, 0); // Désactive le Depth Test
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

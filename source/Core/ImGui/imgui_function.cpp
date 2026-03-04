@@ -196,7 +196,6 @@ void MyGui::Render::showRender() {
     // Selected Transform
     {
 
-        
         //Radio Transform button
         {
             
@@ -205,16 +204,6 @@ void MyGui::Render::showRender() {
             if (ImGui::BeginPopup("Selection Mode popup")) {
 
                 ImGui::SeparatorText("TANSFRORM TOOLS");
-
-                //if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) {/* Do stuff0 */ }
-
-                //if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) {/* Do stuff1 */ }
-
-                //if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) {/* Do stuff2 */ }
-
-                //if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) {/* Do stuff3 */ }
-
-                // Selection des opérations
 
                 if (ImGui::RadioButton("Translate", (int*)&gizmo.currentOperation, ImGuizmo::TRANSLATE))
                     gizmo.currentOperation = ImGuizmo::TRANSLATE;
@@ -345,48 +334,33 @@ std::string MyGui::findFile::OpenFileDialog() {
 }
 
 
-void MyGui::Gizmo::showTransformGizmo() {
+void MyGui::Gizmo::drawGizmo(ImVec2 pos, ImVec2 size, DirectX::XMMATRIX& view, DirectX::XMMATRIX& proj, DirectX::XMMATRIX& matrix) {
 
-    ImGui::Begin("Transform Gizmo");
+    // 1. On configure l'espace de dessin
+    ImGuizmo::SetOrthographic(false); // On est en Perspective
+    ImGuizmo::SetDrawlist();
+    ImGuizmo::SetRect(pos.x, pos.y, size.x, size.y);
 
-    ImGui::Separator();
+    // 2. Préparation des matrices
+    float view_f[16], proj_f[16], matrix_f[16];
 
-    // ? Configuration ImGuizmo AVANT Manipulate
-    ImGuizmo::SetOrthographic(false);
+    // IMPORTANT : Pour DirectX, on transpose souvent View et Proj pour ImGuizmo
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)view_f, DirectX::XMMatrixTranspose(view));
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)proj_f, DirectX::XMMatrixTranspose(proj));
 
-    // ? IMPORTANT: Obtenir le DrawList AVANT SetDrawlist
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    ImGuizmo::SetDrawlist(drawList);
+    // Pour la matrice de l'objet, on essaie SANS transpose d'abord 
+    // car ImGuizmo et DX11 partagent parfois le même layout mémoire pour le World
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)matrix_f, matrix);
 
-    // ? Obtenir la position et taille de la fenêtre ImGui
-    ImVec2 windowPos = ImGui::GetCursorScreenPos();
-    ImVec2 windowSize = ImGui::GetContentRegionAvail();
-
-    // ? Configurer le rect avec la fenêtre ImGui, pas tout l'écran
-    ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
-
-    // Convertir XMMATRIX en float* pour ImGuizmo
-    float view_f[16];
-    float proj_f[16];
-    float matrix_f[16];
-
-    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)view_f, viewMatrix);
-    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)proj_f, projectionMatrix);
-    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)matrix_f, objectMatrix);
-
-    // ? Appeler Manipulate
+    // 3. Dessin
     ImGuizmo::Manipulate(
-        view_f,
-        proj_f,
-        currentOperation,
-        currentMode,
-        matrix_f,
-        nullptr,
-        nullptr
+        view_f, proj_f,
+        currentOperation, currentMode,
+        matrix_f
     );
 
-    // Reconvertir le résultat en XMMATRIX
-    objectMatrix = DirectX::XMLoadFloat4x4((DirectX::XMFLOAT4X4*)matrix_f);
-
-    ImGui::End();
+    // 4. Si on manipule, on ré-injecte dans la matrice d'origine
+    if (ImGuizmo::IsUsing()) {
+        matrix = DirectX::XMLoadFloat4x4((DirectX::XMFLOAT4X4*)matrix_f);
+    }
 }

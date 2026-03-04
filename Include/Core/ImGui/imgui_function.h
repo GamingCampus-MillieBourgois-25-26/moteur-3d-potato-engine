@@ -67,15 +67,14 @@ namespace MyGui {
 			currentMode(ImGuizmo::LOCAL) {
 		}
 
-		void showTransformGizmo();
+		void drawGizmo(ImVec2 pos, ImVec2 size, DirectX::XMMATRIX& view, DirectX::XMMATRIX& proj, DirectX::XMMATRIX& matrix);
 
 	};
 
 	class Render {
-	private: 
-		Gizmo gizmo;
 	public:
 
+		Gizmo gizmo;
 		//int intTransf = 0;
 
 		void showRender();
