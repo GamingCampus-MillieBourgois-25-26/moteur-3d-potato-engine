@@ -174,6 +174,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     {
         if (actor.second.HasComponent<MeshComponent>()) {
             sceneItems.push_back(actor.second.GetComponent<MeshComponent>()[0]);
+            std::cout << "feur" << std::endl;
         }
     }
     
