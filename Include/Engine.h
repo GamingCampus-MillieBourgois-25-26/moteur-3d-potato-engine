@@ -15,6 +15,8 @@
 #include "Physics/PhysicsSystem.h"
 #include "Physics/physicsBodyFactory.h"
 #include "Physics/physicsBody.h"
+#include "Maths/Vector3.h"
+#include "Maths/Quaternion.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"

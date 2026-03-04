@@ -204,7 +204,7 @@ void PotatoEngine::run() {
 
     PhysicsBodyFactory physicsFactory;
     
-    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(JPH::Vec3(10, 10, 10)), 10, JPH::Vec3(0, 0, 0), JPH::Quat(0, 0, 0, 0)));
+    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(Maths::Vec3(10, 10, 10)), 10, Maths::Vec3(0, 0, 0), Maths::Quat(0, 0, 0, 0)));
 
     // ImGui Init
     IMGUI_CHECKVERSION();
