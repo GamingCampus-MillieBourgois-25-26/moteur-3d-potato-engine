@@ -1,11 +1,14 @@
-#include "physicsBodyFactory.h"
+#include "Physics/physicsBodyFactory.h"
 
-#include "physicsLayers.h"
+#include "Maths/Vector3.h"
+#include "Maths/Quaternion.h"
+
+#include "Physics/physicsLayers.h"
 
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Collision/ObjectLayer.h>
 
-PhysicsBody PhysicsBodyFactory::CreateBody(PhysicsSystem& system, PhysicsBodyType type, const PhysicsShape& shape, float mass, JPH::Vec3 position, JPH::Quat rotation)
+PhysicsBody PhysicsBodyFactory::CreateBody(PhysicsSystem system, PhysicsBodyType type, const PhysicsShape& shape, float mass, Maths::Vec3 position, Maths::Quat rotation)
 {
 	JPH::BodyInterface& bodyInterface = system.GetJoltSystem().GetBodyInterface();
 

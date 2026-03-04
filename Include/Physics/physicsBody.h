@@ -1,4 +1,8 @@
 #pragma once
+
+#include "Maths/Vector3.h"
+#include "Maths/Quaternion.h"
+
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/Body/BodyID.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
@@ -10,14 +14,14 @@ class PhysicsBody
 public:
     PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interface);
 
-    void SetPosition(JPH::Vec3 position);
-    void SetRotation(JPH::Quat rotation);
-    
+	void SetPosition(Maths::Vec3 position);
+	void SetRotation(Maths::Quat rotation);
+	
     void SyncFromPhysics(TransformComponent& transform);
     void SyncToPhysics(TransformComponent& transform);
 
-    void AddForce(JPH::Vec3 force);
-    void AddImpulse(JPH::Vec3 impulse);
+	void AddForce(Maths::Vec3 force);
+	void AddImpulse(Maths::Vec3 impulse);
 
     JPH::BodyID GetID();
 
