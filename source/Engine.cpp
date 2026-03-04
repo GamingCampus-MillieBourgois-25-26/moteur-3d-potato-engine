@@ -17,6 +17,9 @@ MyGui::Details details;
 MyGui::Render render;
 MyGui::Outliner outliner;
 MyGui::findFile findfile;
+MyGui::Gizmo gizmo;
+DirectX::XMMATRIX viewMatrixGizmo;
+DirectX::XMMATRIX projectionMatrixGizmo;
 
 // Fonctions utilitaires
 static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
@@ -182,18 +185,55 @@ void Engine::run() {
             }
             ImGui::End();
 
+            /*gizmo.objectMatrix = triItem.worldMatrix;
+            gizmo.viewMatrix = viewMatrixGizmo;
+            gizmo.projectionMatrix = projectionMatrixGizmo;*/
+
+            // ? DEBUG: Affiche si les matrices sont valides
+            if (ImGui::Begin("Debug")) {
+                ImGui::Text("View Matrix valid: %s", gizmo.viewMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
+                ImGui::Text("Proj Matrix valid: %s", gizmo.projectionMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
+                ImGui::End();
+            }
+
+            gizmo.showTransformGizmo();
+
             details.showDetails();
             outliner.showOutliner();
             findfile.showFindFile();
 
-            // Caméra
-            PerFrameCB frameData;
+            //// Caméra
+            //PerFrameCB frameData;
+            //XMVECTOR eye = XMVectorSet(1.5f, 1.0f, 5.0f, 0.0f);
+            //XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+            //XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+            //frameData.viewMatrix = XMMatrixLookAtLH(eye, at, up);
+            //frameData.projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
+            // 1?? Calcule les matrices de caméra UNE SEULE FOIS
             XMVECTOR eye = XMVectorSet(1.5f, 1.0f, 5.0f, 0.0f);
             XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
             XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-            frameData.viewMatrix = XMMatrixLookAtLH(eye, at, up);
-            frameData.projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+            XMMATRIX viewMatrix = XMMatrixLookAtLH(eye, at, up);
+            XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
+            // 2?? Passe les matrices au gizmo
+            gizmo.objectMatrix = triItem.worldMatrix;
+            gizmo.viewMatrix = viewMatrix;
+            gizmo.projectionMatrix = projectionMatrix;
+
+            gizmo.showTransformGizmo();
+
+            // 3?? Récupère la matrice modifiée du gizmo
+            triItem.worldMatrix = gizmo.objectMatrix;
+
+            // 4?? Utilise les MÊMES matrices pour le rendu
+            PerFrameCB frameData;
+            frameData.viewMatrix = viewMatrix;
+            frameData.projectionMatrix = projectionMatrix;
+
 
             // Rendu
             renderer->RenderFrame(frameData, sceneItems);

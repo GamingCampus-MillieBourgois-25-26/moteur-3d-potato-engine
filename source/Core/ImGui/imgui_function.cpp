@@ -206,31 +206,49 @@ void MyGui::Render::showRender() {
 
                 ImGui::SeparatorText("TANSFRORM TOOLS");
 
-                if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) {/* Do stuff0 */ }
+                //if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) {/* Do stuff0 */ }
 
-                if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) {/* Do stuff1 */ }
+                //if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) {/* Do stuff1 */ }
 
-                if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) {/* Do stuff2 */ }
+                //if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) {/* Do stuff2 */ }
 
-                if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) {/* Do stuff3 */ }
+                //if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) {/* Do stuff3 */ }
+
+                // Selection des opérations
+
+                if (ImGui::RadioButton("Translate", (int*)&gizmo.currentOperation, ImGuizmo::TRANSLATE))
+                    gizmo.currentOperation = ImGuizmo::TRANSLATE;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("Rotate", (int*)&gizmo.currentOperation, ImGuizmo::ROTATE))
+                    gizmo.currentOperation = ImGuizmo::ROTATE;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("Scale", (int*)&gizmo.currentOperation, ImGuizmo::SCALE))
+                    gizmo.currentOperation = ImGuizmo::SCALE;
+
+                // Mode Local/World
+                if (ImGui::RadioButton("Local", (int*)&gizmo.currentMode, ImGuizmo::LOCAL))
+                    gizmo.currentMode = ImGuizmo::LOCAL;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("World", (int*)&gizmo.currentMode, ImGuizmo::WORLD))
+                    gizmo.currentMode = ImGuizmo::WORLD;
 
                 ImGui::EndPopup();
             }
         }
 
         ImGui::NextColumn();
-        ImGui::SetColumnWidth(1, 130);
+        ImGui::SetColumnWidth(1, 70);
 
         //Transform button
         {
 
-            if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
+            //if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
+            //ImGui::SameLine();
+            if (ImGui::Button("T")) { gizmo.currentOperation = ImGuizmo::TRANSLATE; /* Do stuff1 */ }
             ImGui::SameLine();
-            if (ImGui::Button("T")) { intTransf = 1; /* Do stuff1 */ }
+            if (ImGui::Button("R")) { gizmo.currentOperation = ImGuizmo::ROTATE; /* Do stuff2 */ }
             ImGui::SameLine();
-            if (ImGui::Button("R")) { intTransf = 2; /* Do stuff2 */ }
-            ImGui::SameLine();
-            if (ImGui::Button("S")) { intTransf = 3; /* Do stuff3 */ }
+            if (ImGui::Button("S")) { gizmo.currentOperation = ImGuizmo::SCALE; /* Do stuff3 */ }
 
         }
 
@@ -327,57 +345,48 @@ std::string MyGui::findFile::OpenFileDialog() {
 }
 
 
-//void MyGui::Gizmo::showTransformGizmo() {
-//
-//    ImGui::Begin("Transform Gizmo");
-//
-//    // Selection des opérations
-//    if (ImGui::RadioButton("Translate", (int*)&currentOperation, ImGuizmo::TRANSLATE))
-//        currentOperation = ImGuizmo::TRANSLATE;
-//    ImGui::SameLine();
-//    if (ImGui::RadioButton("Rotate", (int*)&currentOperation, ImGuizmo::ROTATE))
-//        currentOperation = ImGuizmo::ROTATE;
-//    ImGui::SameLine();
-//    if (ImGui::RadioButton("Scale", (int*)&currentOperation, ImGuizmo::SCALE))
-//        currentOperation = ImGuizmo::SCALE;
-//
-//    // Mode Local/World
-//    if (ImGui::RadioButton("Local", (int*)&currentMode, ImGuizmo::LOCAL))
-//        currentMode = ImGuizmo::LOCAL;
-//    ImGui::SameLine();
-//    if (ImGui::RadioButton("World", (int*)&currentMode, ImGuizmo::WORLD))
-//        currentMode = ImGuizmo::WORLD;
-//
-//    ImGui::Separator();
-//
-//    // Configuration ImGuizmo
-//    ImGuizmo::SetOrthographic(false);
-//    ImGuizmo::SetDrawlist();
-//    ImGuizmo::SetRect(0, 0, ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
-//
-//    // Convertir XMMATRIX en float* pour ImGuizmo
-//    float view_f[16];
-//    float proj_f[16];
-//    float matrix_f[16];
-//
-//    XMStoreFloat4x4((XMFLOAT4X4*)view_f, viewMatrix);
-//    XMStoreFloat4x4((XMFLOAT4X4*)proj_f, projectionMatrix);
-//    XMStoreFloat4x4((XMFLOAT4X4*)matrix_f, objectMatrix);
-//
-//    // Appeler Manipulate avec les pointeurs float
-//    ImGuizmo::Manipulate(
-//        view_f,              // Matrice view (float*)
-//        proj_f,              // Matrice projection (float*)
-//        currentOperation,
-//        currentMode,
-//        matrix_f,            // Cette matrice sera modifiée par le gizmo
-//        nullptr,
-//        nullptr
-//    );
-//
-//    // Reconvertir le résultat en XMMATRIX
-//    objectMatrix = XMLoadFloat4x4((XMFLOAT4X4*)matrix_f);
-//
-//    ImGui::End();
-//
-//}
+void MyGui::Gizmo::showTransformGizmo() {
+
+    ImGui::Begin("Transform Gizmo");
+
+    ImGui::Separator();
+
+    // ? Configuration ImGuizmo AVANT Manipulate
+    ImGuizmo::SetOrthographic(false);
+
+    // ? IMPORTANT: Obtenir le DrawList AVANT SetDrawlist
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    ImGuizmo::SetDrawlist(drawList);
+
+    // ? Obtenir la position et taille de la fenêtre ImGui
+    ImVec2 windowPos = ImGui::GetCursorScreenPos();
+    ImVec2 windowSize = ImGui::GetContentRegionAvail();
+
+    // ? Configurer le rect avec la fenêtre ImGui, pas tout l'écran
+    ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+
+    // Convertir XMMATRIX en float* pour ImGuizmo
+    float view_f[16];
+    float proj_f[16];
+    float matrix_f[16];
+
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)view_f, viewMatrix);
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)proj_f, projectionMatrix);
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)matrix_f, objectMatrix);
+
+    // ? Appeler Manipulate
+    ImGuizmo::Manipulate(
+        view_f,
+        proj_f,
+        currentOperation,
+        currentMode,
+        matrix_f,
+        nullptr,
+        nullptr
+    );
+
+    // Reconvertir le résultat en XMMATRIX
+    objectMatrix = DirectX::XMLoadFloat4x4((DirectX::XMFLOAT4X4*)matrix_f);
+
+    ImGui::End();
+}

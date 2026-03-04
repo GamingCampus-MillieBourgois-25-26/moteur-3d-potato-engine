@@ -50,16 +50,33 @@ namespace MyGui {
 
 	};
 
-
-	class Render {
+	class Gizmo {
 	public:
 
-		bool TRANSFcheckbox = false;
-		bool Tcheckbox = false;
-		bool Rcheckbox = false;
-		bool Scheckbox = false;
+		// Stocker les données du gizmo comme membres de la classe
+		DirectX::XMMATRIX objectMatrix;
+		DirectX::XMMATRIX viewMatrix;
+		DirectX::XMMATRIX projectionMatrix;
+		ImGuizmo::OPERATION currentOperation;
+		ImGuizmo::MODE currentMode;
 
-		int intTransf = 0;
+		Gizmo() : objectMatrix(DirectX::XMMatrixIdentity()),
+			viewMatrix(DirectX::XMMatrixIdentity()),
+			projectionMatrix(DirectX::XMMatrixIdentity()),
+			currentOperation(ImGuizmo::TRANSLATE),
+			currentMode(ImGuizmo::LOCAL) {
+		}
+
+		void showTransformGizmo();
+
+	};
+
+	class Render {
+	private: 
+		Gizmo gizmo;
+	public:
+
+		//int intTransf = 0;
 
 		void showRender();
 
@@ -88,21 +105,6 @@ namespace MyGui {
 		std::string OpenFileDialog();
 	};
 
-	//class Gizmo {
-	//public:
-
-	//	// Stocker les données du gizmo comme membres de la classe
-	//	XMMATRIX objectMatrix;
-	//	ImGuizmo::OPERATION currentOperation;
-	//	ImGuizmo::MODE currentMode;
-
-	//	Gizmo() : objectMatrix(XMMatrixIdentity()),
-	//		currentOperation(ImGuizmo::TRANSLATE),
-	//		currentMode(ImGuizmo::LOCAL) {
-	//	}
-
-	//	void showTransformGizmo();
-
-	//};
+	
 
 }
