@@ -89,6 +89,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 // 2. Point d'entrée principal
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
     FileParser fp;
+    fp.OpenAllOBJ();
 
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
@@ -168,13 +169,26 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
 
     SceneManager& sceneManager = SceneManager::Get();
-
     sceneManager.NewScene();
 
-	// Création d'un acteur avec un MeshComponent - Pour les tests
-    Actor& actor = sceneManager.GetCurrent().CreateActor("Actor1");
-    actor.AddComponent<MeshComponent>();
-    actor.GetComponent<MeshComponent>()->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    // Cube 1 - Position gauche
+    Actor& actor1 = sceneManager.GetCurrent().CreateActor("Cube1");
+    actor1.AddComponent<MeshComponent>();
+    auto* mc1 = actor1.GetComponent<MeshComponent>();
+    mc1->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    mc1->SetVertexShader(vertexShader.Get());
+    mc1->SetPixelShader(pixelShader.Get());
+    mc1->SetWorldMatrix(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f)); //  gauche
+
+    // Cube 2 - Position droite
+    Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
+    actor2.AddComponent<MeshComponent>();
+    auto* mc2 = actor2.GetComponent<MeshComponent>();
+    mc2->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    mc2->SetVertexShader(vertexShader.Get());
+    mc2->SetPixelShader(pixelShader.Get());
+    mc2->SetWorldMatrix(DirectX::XMMatrixTranslation(1.5f, 0.0f, 0.0f));  //  droite
+
 
     std::vector<MeshComponent*> sceneItems;
 
@@ -202,6 +216,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(renderer->GetDevice().Get(), renderer->GetContext().Get());
+
 
     // --- E. Boucle de Jeu ---
     MSG msg = { 0 };

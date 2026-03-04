@@ -21,3 +21,6 @@ DirectX::XMFLOAT4 MeshComponent::GetColor()
 {
 	return color;
 }
+
+void MeshComponent::SetVertexShader(ID3D11VertexShader* shader) { vs = shader; }
+void MeshComponent::SetPixelShader(ID3D11PixelShader* shader) { ps = shader; }

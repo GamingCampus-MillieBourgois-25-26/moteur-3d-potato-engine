@@ -48,6 +48,7 @@ void Renderer::RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponen
 
     m_perFrameCB.Update(m_context, gpuFrameData);
     m_context->VSSetConstantBuffers(0, 1, m_perFrameCB.GetAddressOf());
+    m_context->IASetInputLayout(m_defaultInputLayout.Get());
 
     // 3. Boucle de rendu générique
     for (MeshComponent*& item : items) {
@@ -67,15 +68,12 @@ void Renderer::RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponen
         m_context->PSSetShader(item->GetPixelShader(), nullptr, 0);
 
         // C. Liaison du Mesh et Dessin
-		MeshBuffer* meshBuffer;
-		meshBuffer->Initialize(m_device, item->GetMesh()->vertices, item->GetMesh()->indices);
-
-        meshBuffer->Bind(m_context);
-        m_context->DrawIndexed(meshBuffer->GetIndexCount(), 0, 0);
+        MeshBuffer meshBuffer;
+        meshBuffer.Initialize(m_device, item->GetMesh()->vertices, item->GetMesh()->indices);
+        meshBuffer.Bind(m_context);
+        m_context->DrawIndexed(meshBuffer.GetIndexCount(), 0, 0);
     }
 
-    // 4. Présentation (V-Sync activé avec le 1)
-    //m_swapChain->Present(1, 0);
 }
 
 HRESULT Renderer::CreateDeviceAndSwapChain(HWND hwnd, int width, int height) {
