@@ -18,6 +18,10 @@ MyGui::Render render;
 MyGui::Outliner outliner;
 MyGui::findFile findfile;
 
+//--camera--
+Camera mainCamera;
+auto tp1 = std::chrono::high_resolution_clock::now();
+
 
 // Fonctions utilitaires
 static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
@@ -166,45 +170,50 @@ void Engine::run() {
             DispatchMessage(&msg);
         }
         else {
-            // ImGui Frame
+
+
+            // --- 1. GESTION DU TEMPS ---
+            auto tp2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<float> elapsedTime = tp2 - tp1;
+            tp1 = tp2;
+            float dt = elapsedTime.count();
+
+            // --- 2. INPUTS ET MISE À JOUR CAMÉRA ---
+            ImGuiIO& io = ImGui::GetIO();
+
+            // On vérifie si la souris est sur la fenêtre du Viewport pour ne pas bouger 
+            // la caméra quand on clique sur l'Outliner ou les Détails
+            bool canMoveCamera = ImGui::IsMouseDown(ImGuiMouseButton_Right) && !ImGuizmo::IsUsing();
+
+            mainCamera.Update(dt, canMoveCamera, io.MouseDelta.x, io.MouseDelta.y);
+
+            // --- 3. RÉCUPÉRATION DES MATRICES ---
+            XMMATRIX viewMatrix = mainCamera.GetViewMatrix();
+            XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 1000.0f);
+
+            // Mise à jour pour le Gizmo
+            render.gizmo.viewMatrix = viewMatrix;
+            render.gizmo.projectionMatrix = projectionMatrix;
+
+            // --- 4. FRAME IMGUI ---
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
             ImGuizmo::BeginFrame();
-     
-            XMVECTOR eye = XMVectorSet(1.5f, 1.0f, 5.0f, 0.0f);
-            XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-            XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-            XMMATRIX viewMatrix = XMMatrixLookAtLH(eye, at, up);
-            XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-
-            render.gizmo.viewMatrix = viewMatrix;
-            render.gizmo.projectionMatrix = projectionMatrix;
 
             menu.barMenu();
 
+            // Viewport
             ImGui::SetNextWindowPos(ImVec2(5, 25), ImGuiCond_Once);
             ImGui::SetNextWindowSize(ImVec2(1200, 700), ImGuiCond_Once);
             ImGui::Begin("Game Viewport");
             {
-                // 1. Affiche la barre d'outils (T, R, S)
                 render.showRender();
-
-                // 2. Récupère la taille restante pour l'image
                 ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-
-                // 3. Affiche l'image
                 ImGui::Image((void*)renderer->GetSceneSRV(), viewportSize);
 
-                // --- C'EST ICI QUE CA SE JOUE ---
-                // On récupère la position exacte où l'image vient d'être dessinée
                 ImVec2 imagePos = ImGui::GetItemRectMin();
                 render.gizmo.drawGizmo(imagePos, viewportSize, viewMatrix, projectionMatrix, triItem.worldMatrix);
-
-                //// DEBUG VISUEL
-                //ImGui::GetWindowDrawList()->AddRect(imagePos, ImVec2(imagePos.x + viewportSize.x, imagePos.y + viewportSize.y), IM_COL32(255, 255, 0, 255));
-                ImGui::Text("Gizmo Pos: %.1f, %.1f", imagePos.x, imagePos.y);
             }
             ImGui::End();
 
@@ -221,13 +230,11 @@ void Engine::run() {
             findfile.showFindFile();
             
 
-            // 4?? Utilise les MÊMES matrices pour le rendu
+            // --- 5. RENDU FINAL ---
             PerFrameCB frameData;
             frameData.viewMatrix = viewMatrix;
             frameData.projectionMatrix = projectionMatrix;
 
-
-            // Rendu
             renderer->RenderFrame(frameData, sceneItems);
             renderer->GetContext()->OMSetRenderTargets(1, renderer->GetMainRTVAddress(), nullptr);
 

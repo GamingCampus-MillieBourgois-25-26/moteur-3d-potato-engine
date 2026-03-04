@@ -16,6 +16,9 @@
 #include "imgui_impl_dx11.h"
 #include "Core/ImGui/imgui_function.h"
 
+#include "Camera.h"
+#include <chrono>
+
 class Engine {
 public:
     void Initialize(HINSTANCE hInstance, int nCmdShow);
