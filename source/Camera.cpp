@@ -3,7 +3,7 @@
 #include <algorithm>
 
 Camera::Camera() :
-    m_position(0.0f, 1.0f, -5.0f),
+    m_position(0.0f, 0.0f, -5.0f),
     m_yaw(0.0f),
     m_pitch(0.0f),
     m_moveSpeed(10.0f),
