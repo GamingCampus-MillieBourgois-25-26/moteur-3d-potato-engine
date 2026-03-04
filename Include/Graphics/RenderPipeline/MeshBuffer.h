@@ -14,10 +14,6 @@ public:
 
     void Bind(Microsoft::WRL::ComPtr<ID3D11DeviceContext> context);
 
-    // Ajout d'un membre pour stocker l'Input Layout
-    HRESULT CreateInputLayout(Microsoft::WRL::ComPtr<ID3D11Device> device,
-        const void* shaderBytecode,
-        size_t bytecodeLength);
 
     UINT GetIndexCount() const { return m_indexCount; }
 

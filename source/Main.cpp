@@ -157,6 +157,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         return -1;
     }
 
+    if (FAILED(renderer->CreateDefaultInputLayout(vsBlob.Get()))) {
+     
+            MessageBox(hwnd, L"Erreur : Impossible de créer l'Input Layout.", L"Renderer Error", MB_ICONERROR);
+            return -1;
+        
+    }
+
+
     // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
 
     SceneManager& sceneManager = SceneManager::Get();
@@ -168,15 +176,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     actor.AddComponent<MeshComponent>();
     actor.GetComponent<MeshComponent>()->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
 
-    std::vector<MeshComponent> sceneItems;
+    std::vector<MeshComponent*> sceneItems;
 
-    for (auto& actor : sceneManager.GetCurrent().GetActors())
+    for (auto& pair : sceneManager.GetCurrent().GetActors())
     {
-        if (actor.second.HasComponent<MeshComponent>()) {
-            sceneItems.push_back(actor.second.GetComponent<MeshComponent>()[0]);
+        if (pair.second.HasComponent<MeshComponent>()) {
+            // On récupère l'adresse du composant réel
+            sceneItems.push_back(pair.second.GetComponent<MeshComponent>());
             std::cout << "feur" << std::endl;
         }
     }
+
+
+
+
     
 
 

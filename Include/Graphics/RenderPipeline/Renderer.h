@@ -19,7 +19,7 @@ public:
     HRESULT Initialize(HWND hwnd, int width, int height);
 
     // Boucle de rendu
-    void RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponent>& items);
+    void RenderFrame(const PerFrameCB& frameData, std::vector<MeshComponent*>& items);
 
     
     Microsoft::WRL::ComPtr<ID3D11Device> GetDevice() const { return m_device; }
@@ -36,6 +36,8 @@ public:
 
     // À appeler lors du redimensionnement de la fenêtre ImGui si nécessaire
     HRESULT CreateSceneResources(int width, int height);
+
+    HRESULT CreateDefaultInputLayout(ID3DBlob* vsBlob);
 
     
     ID3D11RenderTargetView* const* GetMainRTVAddress() const { return m_renderTargetView.GetAddressOf(); }
@@ -55,6 +57,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthStencilView;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>  m_rasterizerState;
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> m_defaultInputLayout;
 
     //la scene dans ImGui
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_sceneRTV;
@@ -63,6 +66,8 @@ private:
     // Pour plus tard (déjà prêt)
     ConstantBuffer<PerFrameCB>         m_perFrameCB;
     ConstantBuffer<PerObjectCB>        m_perObjectCB;
+
+    
 };
 
 
