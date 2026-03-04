@@ -8,7 +8,7 @@ const int SCREEN_WIDTH = 1920;
 const int SCREEN_HEIGHT = 1080;
 
 // Déclaration globale pour accéder à l'engine depuis le WndProc
-extern Engine* g_pEngine;
+extern PotatoEngine* g_pEngine;
 
 // Variables globales (ImGui)
 bool OpenImGui = true;
@@ -23,30 +23,47 @@ Camera mainCamera;
 auto tp1 = std::chrono::high_resolution_clock::now();
 
 
-// Fonctions utilitaires
+//test triangle 
 static void CreateTriangle(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
     vertices = {
-        { { 0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-        { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+        // Position            // Normale            // UV            // Couleur (RGBA)
+        { { 0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Haut (Rouge)
+        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // Bas Droite (Vert)
+        { { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }  // Bas Gauche (Bleu)
     };
     indices = { 0, 1, 2 };
 }
 
+
 static void CreatePyramid(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
+    // 1. Définition des 4 sommets (Position, Normale, UV, Couleur)
     vertices = {
+        // Sommet 0 : Sommet (Haut) - Jaune
         { { 0.0f,  0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.5f, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+        // Sommet 1 : Base Avant Gauche - Rouge
         { { -0.5f, -0.5f, -0.5f }, { -1.0f, -1.0f, -1.0f }, { 0.0f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+        // Sommet 2 : Base Avant Droite - Vert
         { { 0.5f, -0.5f, -0.5f }, { 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+        // Sommet 3 : Base Arrière - Bleu
         { { 0.0f, -0.5f, 0.5f }, { 0.0f, -1.0f, 1.0f }, { 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
     };
-    indices = { 0, 2, 1, 0, 3, 2, 0, 1, 3, 1, 2, 3 };
+
+    // 2. Définition des faces (3 indices par triangle)
+    // On doit définir chaque face dans le sens des aiguilles d'une montre
+    indices = {
+        0, 2, 1, // Face Avant
+        0, 3, 2, // Face Droite
+        0, 1, 3, // Face Gauche
+        1, 2, 3  // Face Inférieure (Base)
+    };
 }
 
 // Procédure de fenêtre
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+// 1. Procédure de fenêtre (Gestion des événements)
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
     if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
         return true;
 
@@ -62,7 +79,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 // Initialisation
-void Engine::Initialize(HINSTANCE hInstance, int nCmdShow) {
+void PotatoEngine::Initialize(HINSTANCE hInstance, int nCmdShow) {
     m_hInstance = hInstance;
 
     // Enregistrement de la classe de fenêtre
@@ -74,14 +91,12 @@ void Engine::Initialize(HINSTANCE hInstance, int nCmdShow) {
     wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wc.lpszClassName = L"DX11EngineClass";
 
-    if (!RegisterClassEx(&wc)) {
-        MessageBox(nullptr, L"Erreur : Enregistrement classe fenêtre échoué", L"Erreur", MB_ICONERROR);
-        return;
-    }
+    if (!RegisterClassEx(&wc)) return ;
 
     // Création de la fenêtre
     RECT wr = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+
 
     m_hwnd = CreateWindowEx(0, L"DX11EngineClass", L"Potato Engine - Render Test",
         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
@@ -97,16 +112,24 @@ void Engine::Initialize(HINSTANCE hInstance, int nCmdShow) {
 }
 
 // Boucle principale
-void Engine::run() {
+void PotatoEngine::run() {
     FileParser fp;
-    std::shared_ptr<Mesh> caca = Buffers::Get().GetMesh("Cube.obj");
+    fp.OpenAllOBJ();
+
 
     // Initialisation Renderer
     auto renderer = std::make_unique<Renderer>();
     HRESULT hrInit = renderer->Initialize(m_hwnd, SCREEN_WIDTH, SCREEN_HEIGHT);
     if (FAILED(hrInit)) {
+        // Si on entre ici, c'est l'init du GPU qui foire
         MessageBox(nullptr, L"Échec Initialisation GPU (Renderer).", L"Erreur DirectX", MB_ICONERROR);
-        return;
+        return ;
+    }
+
+    auto device = renderer->GetDevice();
+    if (!device) {
+        MessageBox(nullptr, L"Le Device DirectX est NUL !", L"Erreur Fatale", MB_ICONERROR);
+        return ;
     }
 
     // Chargement des Shaders
@@ -116,43 +139,63 @@ void Engine::run() {
 
     if (FAILED(ShaderManager::CreateVertexShader(
         renderer->GetDevice(),
-        L"Shaders/VertexShader.hlsl",
+        L"Shaders/VertexShader.hlsl", // Chemin relatif à l'EXE
         vertexShader,
-        vsBlob))) {
+        vsBlob)))
+    {
         MessageBox(m_hwnd, L"Erreur : Dossier 'Shaders' introuvable à côté de l'EXE.", L"Potato Engine", MB_ICONERROR);
-        return;
+        return ;
     }
 
     if (FAILED(ShaderManager::CreatePixelShader(
         renderer->GetDevice(),
-        L"Shaders/PixelShader.hlsl",
-        pixelShader))) {
-        return;
+        L"Shaders/PixelShader.hlsl", // Chemin relatif à l'EXE
+        pixelShader)))
+    {
+        return ;
     }
 
-    // Préparation du mesh
-    std::vector<Vertex> triVertices;
-    std::vector<uint32_t> triIndices;
-    CreatePyramid(triVertices, triIndices);
+    if (FAILED(renderer->CreateDefaultInputLayout(vsBlob.Get()))) {
 
-    auto triangleMesh = std::make_unique<MeshBuffer>();
-    if (FAILED(triangleMesh->Initialize(renderer->GetDevice(), caca->vertices, caca->indices))) {
-        return;
+        MessageBox(m_hwnd, L"Erreur : Impossible de créer l'Input Layout.", L"Renderer Error", MB_ICONERROR);
+        return ;
+
     }
 
-    if (FAILED(triangleMesh->CreateInputLayout(renderer->GetDevice(), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()))) {
-        return;
-    }
+    // --- D. Préparation de la scène (Une seule fois avant la boucle) ---
 
-    // Préparation de la scène
-    std::vector<RenderItem> sceneItems;
-    RenderItem triItem;
-    triItem.mesh = triangleMesh.get();
-    triItem.vs = vertexShader.Get();
-    triItem.ps = pixelShader.Get();
-    triItem.worldMatrix = DirectX::XMMatrixIdentity();
-    triItem.color = { 0.2f, 0.7f, 0.9f, 1.0f };
-    sceneItems.push_back(triItem);
+    SceneManager& sceneManager = SceneManager::Get();
+    sceneManager.NewScene();
+
+    // Cube 1 - Position gauche
+    Actor& actor1 = sceneManager.GetCurrent().CreateActor("Cube1");
+    actor1.AddComponent<MeshComponent>();
+    auto* mc1 = actor1.GetComponent<MeshComponent>();
+    mc1->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    mc1->SetVertexShader(vertexShader.Get());
+    mc1->SetPixelShader(pixelShader.Get());
+    mc1->SetWorldMatrix(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f)); //  gauche
+
+    // Cube 2 - Position droite
+    Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
+    actor2.AddComponent<MeshComponent>();
+    auto* mc2 = actor2.GetComponent<MeshComponent>();
+    mc2->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    mc2->SetVertexShader(vertexShader.Get());
+    mc2->SetPixelShader(pixelShader.Get());
+    mc2->SetWorldMatrix(DirectX::XMMatrixTranslation(1.5f, 0.0f, 0.0f));  //  droite
+
+
+    std::vector<MeshComponent*> sceneItems;
+
+    for (auto& pair : sceneManager.GetCurrent().GetActors())
+    {
+        if (pair.second.HasComponent<MeshComponent>()) {
+            // On récupère l'adresse du composant réel
+            sceneItems.push_back(pair.second.GetComponent<MeshComponent>());
+            std::cout << "feur" << std::endl;
+        }
+    }
 
     // ImGui Init
     IMGUI_CHECKVERSION();
@@ -213,7 +256,7 @@ void Engine::run() {
                 ImGui::Image((void*)renderer->GetSceneSRV(), viewportSize);
 
                 ImVec2 imagePos = ImGui::GetItemRectMin();
-                render.gizmo.drawGizmo(imagePos, viewportSize, viewMatrix, projectionMatrix, triItem.worldMatrix);
+                //render.gizmo.drawGizmo(imagePos, viewportSize, viewMatrix, projectionMatrix, triItem.worldMatrix);
             }
             ImGui::End();
 

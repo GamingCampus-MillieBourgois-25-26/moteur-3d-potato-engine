@@ -10,6 +10,8 @@
 // En-têtes de ton moteur
 #include "Graphics/RenderPipeline/Renderer.h"
 #include "Graphics/FileParser.h"
+#include "Logic/SceneManager.h"
+#include "Logic/MeshComponent.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -19,7 +21,7 @@
 #include "Camera.h"
 #include <chrono>
 
-class Engine {
+class PotatoEngine {
 public:
     void Initialize(HINSTANCE hInstance, int nCmdShow);
     void run();
