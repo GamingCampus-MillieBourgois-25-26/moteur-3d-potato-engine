@@ -3,26 +3,25 @@
 #include <Jolt/Physics/Body/BodyID.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
 
-class Transform;
+#include "Logic/TransformComponent.h"
 
 class PhysicsBody
 {
 public:
-	PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interface) : m_id(bodyID), m_bodyInterface(interface) {};
+    PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interface);
 
-	void SetPosition(JPH::Vec3 position);
-	void SetRotation(JPH::Quat rotation);
-	
-	void SyncFromPhysics(Transform& transform);
-	void SyncToPhysics(Transform& transform);
+    void SetPosition(JPH::Vec3 position);
+    void SetRotation(JPH::Quat rotation);
+    
+    void SyncFromPhysics(TransformComponent& transform);
+    void SyncToPhysics(TransformComponent& transform);
 
-	void AddForce(JPH::Vec3 force);
-	void AddImpulse(JPH::Vec3 impulse);
+    void AddForce(JPH::Vec3 force);
+    void AddImpulse(JPH::Vec3 impulse);
 
-	JPH::BodyID GetID();
+    JPH::BodyID GetID();
 
 private:
-	JPH::BodyID m_id;
-	JPH::BodyInterface* m_bodyInterface;
+    JPH::BodyID m_id;
+    JPH::BodyInterface* m_bodyInterface;
 };
-

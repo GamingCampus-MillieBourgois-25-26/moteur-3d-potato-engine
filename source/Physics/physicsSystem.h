@@ -33,6 +33,6 @@ private:
 	const JPH::uint cMaxBodyPairs = 65536;
 	const JPH::uint cMaxContactConstraints = 10240;
 
-	const float cDeltaTime = 1.0f / 60.0f; // 60 ticks par seconde
+	const float cDeltaTime = 1.0f / 60.0f;
 	const int cCollisionSteps = 1;
 };

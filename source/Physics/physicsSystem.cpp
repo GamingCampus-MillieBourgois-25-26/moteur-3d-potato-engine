@@ -27,7 +27,6 @@ void PhysicsSystem::Init()
 void PhysicsSystem::Update()
 {
 	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
-	printf("PhysicsSystem::Update()\n");
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()

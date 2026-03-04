@@ -197,6 +197,15 @@ void PotatoEngine::run() {
         }
     }
 
+    // Physics Init
+
+	PhysicsSystem physicsSystem;
+	physicsSystem.Init();
+
+    PhysicsBodyFactory physicsFactory;
+    
+    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(JPH::Vec3(10, 10, 10)), 10, JPH::Vec3(0, 0, 0), JPH::Quat(0, 0, 0, 0)));
+
     // ImGui Init
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -214,6 +223,9 @@ void PotatoEngine::run() {
         }
         else {
 
+			// Physics Update
+            
+            physicsSystem.Update();
 
             // --- 1. GESTION DU TEMPS ---
             auto tp2 = std::chrono::high_resolution_clock::now();

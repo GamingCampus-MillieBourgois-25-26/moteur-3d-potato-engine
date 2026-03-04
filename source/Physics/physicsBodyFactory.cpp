@@ -5,7 +5,7 @@
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Collision/ObjectLayer.h>
 
-PhysicsBody PhysicsBodyFactory::CreateBody(PhysicsSystem system, PhysicsBodyType type, const PhysicsShape& shape, float mass, JPH::Vec3 position, JPH::Quat rotation)
+PhysicsBody PhysicsBodyFactory::CreateBody(PhysicsSystem& system, PhysicsBodyType type, const PhysicsShape& shape, float mass, JPH::Vec3 position, JPH::Quat rotation)
 {
 	JPH::BodyInterface& bodyInterface = system.GetJoltSystem().GetBodyInterface();
 
