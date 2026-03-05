@@ -12,6 +12,7 @@
 | 04-02-2026 | 0.1     | Initial document creation  | Kiliann POMMEZ |
 | 09-02-2026 | 0.2     | Architecture update        | Kiliann POMMEZ |
 | 03-03-2026 | 0.3     | Mermaids Update            | Kiliann POMMEZ |
+| 04-03-2026 | 0.4     | class diagram              | Kiliann POMMEZ |
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
@@ -135,72 +136,74 @@ graph TD;
     I -->L[IU]
     L -->G
 ```
-Class Diagramme
+L'interface de Rendu
+
 ```mermaid
 classDiagram
-    Engine <|-- Render
-    Engine <|-- Audio
-    Engine <|-- Physics
-    Engine <|-- Window
-    Render <|-- Logic
-    Engine : UI
-    Engine : Input
-    Engine: Coeur du Moteur
+    Renderer <|-- ShaderManager
+    Renderer <|-- MeshBuffer
     class Renderer{
-public:
-      HRESULT Initialize(HWND hwnd, int width, int height)
-      Microsoft::WRL::ComPtr<ID3D11Device> GetDevice()
-      Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetContext()
-      ID3D11ShaderResourceView* GetSceneSRV()
-      HRESULT CreateSceneResources(int width, int height);
-      ID3D11RenderTargetView* const* GetMainRTVAddress()
-   private:
-      HRESULT CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
-      HRESULT CreateMainViews(int width, int height);
+
+      +Initialize(HWND hwnd, int width, int height)
+      +GetDevice()
+      +GetContext()
+      +GetSceneSRV()
+      +CreateSceneResources(int width, int height);
+      +GetMainRTVAddress()
+
+      -CreateDeviceAndSwapChain(HWND hwnd, int width, int height);
+      -CreateMainViews(int width, int height);
 
 
-      Microsoft::WRL::ComPtr<ID3D11Device>           m_device;
-      Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_context;
-      Microsoft::WRL::ComPtr<IDXGISwapChain>         m_swapChain;
-      Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
-      Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthStencilView;
-      Microsoft::WRL::ComPtr<ID3D11RasterizerState>  m_rasterizerState;
+      -m_device;
+      -m_context;
+      -m_swapChain;
+      -m_renderTargetView;
+      -m_depthStencilView;
+      -m_rasterizerState;
 
 
-      Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_sceneRTV;
-      Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_sceneSRV; 
+      -m_sceneRTV;
+      -m_sceneSRV; 
 
       
     }
-    class Audio{
-      -s'occupe de la musique avec Mini Audio
-      -AudioComponent()
-      -AudioManager()
+    class ShaderManager{
+      -CreateVertexShader(device,filename,VertexShader,haderBlob);
+-CreatePixelShader(device,filename,PixelShader);
+-CompileShader(filename,entryPoint,profile,shaderBlob);
     }
-    class Physics{
-      gérer avec Jolt
-      +physicsBody()
-      +physicsBodyFactory()
-      +physicsBroadPhaseLayerManager()
-      +physicsContactListener()
-      +physicsLayerManager()
-      +physicsSystem()
-    }
-    class Window{
-      +Windows
-      +IMGui
-      +Input
-      +CatchInput
-    }
-    class Logic{
-      création des acteur et de la scene ainsi que leur gestion avec leur component
-      +Actor()
-      +MeshComponent()
-      +Scene()
-      +SceneManager()
-      +TransformComponent()
-    }
+   class MeshBuffer{
+   -Initialize(device,vertices,indices);
+ -Bind(context);
+ -CreateInputLayout(device, shaderBytecode, bytecodeLength);
+
++m_vertexBuffer;
++m_indexBuffer;
++m_inputLayout;
++UINT m_indexCount = 0;
+}
+
 ```
+
+Le noyau Logique
+
+```mermaid
+classDiagram
+
+class Scene{
+   -Initialize(device,vertices,indices);
+ -Bind(context);
+ -CreateInputLayout(device, shaderBytecode, bytecodeLength);
+
++m_vertexBuffer;
++m_indexBuffer;
++m_inputLayout;
++UINT m_indexCount = 0;
+}
+
+```
+
 
 ### 4.4 Design Decisions and Rationale
 - **Language Choice:** C++ pour la haute performance.
