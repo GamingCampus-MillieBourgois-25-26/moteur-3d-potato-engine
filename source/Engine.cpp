@@ -173,10 +173,10 @@ void PotatoEngine::run() {
     sceneManager.NewScene();
 
     // Cube 1 - Position gauche
-    Actor& actor1 = sceneManager.GetCurrent().CreateActor("Cube1");
+    Actor& actor1 = sceneManager.GetCurrent().CreateActor("Patate");
     actor1.AddComponent<MeshComponent>();
     auto* mc1 = actor1.GetComponent<MeshComponent>();
-    mc1->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    mc1->SetMesh(Buffers::Get().GetMesh("Patate.obj"));
     mc1->SetVertexShader(vertexShader.Get());
     mc1->SetPixelShader(pixelShader.Get());
 
