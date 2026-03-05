@@ -9,10 +9,10 @@
 
 #include "Logic/TransformComponent.h"
 
-class PhysicsBody
+class PhysicsBody : public Component
 {
 public:
-    PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interface);
+    PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interfac);
 
 	void SetPosition(Maths::Vec3 position);
 	void SetRotation(Maths::Quat rotation);

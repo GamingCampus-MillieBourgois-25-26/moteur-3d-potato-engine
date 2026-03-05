@@ -3,8 +3,8 @@
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/Body/BodyID.h>
 
-PhysicsBody::PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interface)
-	: m_id(bodyID), m_bodyInterface(interface)
+PhysicsBody::PhysicsBody(JPH::BodyID bodyID, JPH::BodyInterface* interfac)
+	: m_id(bodyID), m_bodyInterface(interfac)
 {
 }
 void PhysicsBody::SetPosition(Maths::Vec3 position)

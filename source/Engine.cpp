@@ -198,6 +198,9 @@ void PotatoEngine::run() {
     }
 
     // Physics Init
+    JPH::RegisterDefaultAllocator();
+    JPH::Factory::sInstance = new JPH::Factory();
+    JPH::RegisterTypes();
 
 	PhysicsSystem physicsSystem;
 	physicsSystem.Init();

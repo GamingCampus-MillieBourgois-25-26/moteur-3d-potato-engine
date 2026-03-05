@@ -3,6 +3,7 @@
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Core/TempAllocator.h>
 #include <Jolt/Core/JobSystemThreadPool.h>
+#include <Jolt/RegisterTypes.h>
 
 #include "physicsLayerManager.h"
 #include "physicsContactListener.h"
