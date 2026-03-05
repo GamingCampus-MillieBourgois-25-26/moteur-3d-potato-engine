@@ -12,6 +12,7 @@
 #include "Graphics/FileParser.h"
 #include "Logic/SceneManager.h"
 #include "Logic/MeshComponent.h"
+#include "Audio/AudioComponent.h"
 #include "Physics/PhysicsSystem.h"
 #include "Physics/physicsBodyFactory.h"
 #include "Physics/physicsBody.h"

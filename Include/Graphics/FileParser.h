@@ -13,8 +13,6 @@ public:
 
 	FileParser()
 	{
-		AllocConsole();
-		freopen("CONOUT$", "w", stdout);
 		OpenAllOBJ();
 	}
 	const void OpenAllOBJ();

@@ -20,7 +20,8 @@ public:
 	AudioManager& operator=(const AudioManager&) = delete;
 
 	std::shared_ptr<SoundAsset> GetSoundPtr(const std::string& soundName);
-	bool PlaySound2D(std::shared_ptr<SoundAsset> asset);
+	bool PlaySound2D(std::shared_ptr<SoundAsset> asset,float volume);
+	void Update();
 	std::vector<std::filesystem::path> GetExtensionsFile(const std::string& extension);
 
 private:
@@ -29,5 +30,5 @@ private:
 	void LoadAllSound();
 	std::unordered_map<std::string,std::shared_ptr<SoundAsset>> loadedSound;
 	std::vector<std::unique_ptr<ma_sound>> m_ActiveInstances;
-	~AudioManager() = default;
+	~AudioManager();
 };
