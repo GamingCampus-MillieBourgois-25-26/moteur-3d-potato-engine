@@ -100,6 +100,11 @@ namespace MyGui {
 	class findFile {
 	public:
 
+		int winPosX = 1460;
+		int winPosY = 500;
+		int winSizeX = 450;
+		int winSizeY = 150;
+
 		void showFindFile();
 		std::string OpenFileDialog();
 	};
