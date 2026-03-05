@@ -30,7 +30,7 @@ void PhysicsSystem::Update(std::unordered_map<Actor::ID, Actor>& actors)
 
 	for (auto& [id, actor] : actors)
 	{
-		if (actor.HasComponent<PhysicsBody>() && actor.HasComponent<TransformComponent>())
+		if (actor.HasComponent<PhysicsBody>())
 		{
 			actor.GetComponent<PhysicsBody>()->SyncFromPhysics(*actor.GetComponent<TransformComponent>());
 		}

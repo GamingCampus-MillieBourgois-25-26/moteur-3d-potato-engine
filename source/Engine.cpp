@@ -194,6 +194,7 @@ void PotatoEngine::run() {
 	actor2.GetComponent<TransformComponent>()->localPosition = { 1.5f, 0.0f, 0.0f };
 
     std::vector<MeshComponent*> sceneItems;
+    std::vector<Actor*> sceneActors;
 
     for (auto& pair : sceneManager.GetCurrent().GetActors())
     {
@@ -301,6 +302,9 @@ void PotatoEngine::run() {
 
                                 Actor& newActor = sceneManager.GetCurrent().CreateActor("New cube");
 								newActor.AddComponent<MeshComponent>();
+								newActor.AddComponent<TransformComponent>();
+
+                                sceneActors.push_back(&newActor);
 
 								auto* mc = newActor.GetComponent<MeshComponent>();
 
@@ -328,8 +332,15 @@ void PotatoEngine::run() {
 
                             if (ImGui::Button("Valider", ImVec2(120, 0))) {
                                 // On applique la position finale au dernier acteur ajouté
-                                if (!sceneItems.empty()) {
-                                    sceneItems.back()->SetWorldMatrix(DirectX::XMMatrixTranslation(tempPos[0], tempPos[1], tempPos[2]));
+                                if (!sceneActors.empty()) {
+									sceneActors.back()->GetComponent<TransformComponent>()->localPosition = { tempPos[0], tempPos[1], tempPos[2] };
+
+                                    TransformComponent* tcomp = sceneActors.back()->GetComponent<TransformComponent>();
+									if (sceneActors.back()->HasComponent<PhysicsBody>()){
+                                        sceneActors.back()->GetComponent<PhysicsBody>()->SyncToPhysics(*tcomp);
+                                    }
+
+                                    //sceneItems.back()->SetWorldMatrix(DirectX::XMMatrixTranslation(tempPos[0], tempPos[1], tempPos[2]));
                                 }
                                 ImGui::CloseCurrentPopup();
                             }
