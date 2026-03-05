@@ -251,7 +251,7 @@ void PotatoEngine::run() {
 
             // Viewport
             ImGui::SetNextWindowPos(ImVec2(5, 25), ImGuiCond_Once);
-            ImGui::SetNextWindowSize(ImVec2(1200, 700), ImGuiCond_Once);
+            ImGui::SetNextWindowSize(ImVec2(1450, 1035), ImGuiCond_Once);
             ImGui::Begin("Game Viewport");
             {
                 render.showRender();
@@ -288,7 +288,7 @@ void PotatoEngine::run() {
                         // 2. Le popup de configuration (en dehors du bloc IF du bouton)
                         if (ImGui::BeginPopupModal("Configure Actor", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-                            ImGui::Text("Définir la position de l'acteur :");
+                            ImGui::Text("Definir la position de l'acteur :");
 
                             // Utilise ImGui::InputFloat au lieu de InputText pour des chiffres, c'est plus simple !
                             static float tempPos[3] = { newActorPosX, newActorPosY, newActorPosZ };
@@ -323,14 +323,6 @@ void PotatoEngine::run() {
                 //render.gizmo.drawGizmo(imagePos, viewportSize, viewMatrix, projectionMatrix, triItem.worldMatrix);
             }
             ImGui::End();
-
-            // ? DEBUG: Affiche si les matrices sont valides
-            if (ImGui::Begin("Debug")) {
-                ImGui::Text("View Matrix valid: %s", render.gizmo.viewMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
-                ImGui::Text("Proj Matrix valid: %s", render.gizmo.projectionMatrix.r[0].m128_f32[0] != 0 ? "Yes" : "No");
-                ImGui::End();
-            }
-
 
             details.showDetails();
             outliner.showOutliner();

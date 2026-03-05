@@ -241,29 +241,7 @@ void MyGui::Render::showRender() {
 
         }
 
-      //  ImGui::NextColumn();
-      //  ImGui::SetColumnWidth(2, 105);
-      //  // add actor button
-      //  {
-      //      
-      //      if (ImGui::Button("Add Actor")) ImGui::OpenPopup("add actor popup");
-      //      
-      //      if (ImGui::BeginPopup("add actor popup")) {
-
-      //          if (ImGui::Button("Cube")) {
-      //              
-      //              for (auto& newActor : sceneItems)
-      //              {
-						//newActor = sceneManager.GetCurrent().CreateActor("Cube");
-						//newActor.AddComponent<MeshComponent>("Cube");
-      //              }
-      //          }
-      //          ImGui::EndPopup();
-      //      }
-      //  }
-
     }
-    /*ImGui::Columns(1);*/
     
 }
 
@@ -300,9 +278,12 @@ void MyGui::Outliner::showOutliner() {
 
 void MyGui::findFile::showFindFile() {
 
+    ImGui::SetNextWindowPos(ImVec2(winPosX, winPosY), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(winSizeX, winSizeY), ImGuiCond_Once);
+
     ImGui::Begin("Find File");
 
-    static char selectedPath[512] = "Aucun fichier sélectionné";
+    static char selectedPath[512] = "Aucun fichier selectionne";
 
     if (ImGui::Button("find")) {
 
