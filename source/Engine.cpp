@@ -174,9 +174,9 @@ void PotatoEngine::run() {
     mc1->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
     mc1->SetVertexShader(vertexShader.Get());
     mc1->SetPixelShader(pixelShader.Get());
-    mc1->SetWorldMatrix(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f)); //  gauche
 
 	actor1.AddComponent<TransformComponent>();
+	actor1.GetComponent<TransformComponent>()->localPosition = { -1.5f, 0.0f, 0.0f };
 
     // Cube 2 - Position droite
     Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
@@ -185,7 +185,9 @@ void PotatoEngine::run() {
     mc2->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
     mc2->SetVertexShader(vertexShader.Get());
     mc2->SetPixelShader(pixelShader.Get());
-    mc2->SetWorldMatrix(DirectX::XMMatrixTranslation(1.5f, 0.0f, 0.0f));  //  droite
+
+    actor2.AddComponent<TransformComponent>();
+	actor2.GetComponent<TransformComponent>()->localPosition = { 1.5f, 0.0f, 0.0f };
 
 
     std::vector<MeshComponent*> sceneItems;
@@ -231,6 +233,19 @@ void PotatoEngine::run() {
 			// Physics Update
             
             physicsSystem.Update(sceneManager.GetCurrent().GetActors());
+
+			// mise a jour pos mesh transform et mesh component
+            for (auto& actor : sceneManager.GetCurrent().GetActors())
+            {
+                if (!actor.second.HasComponent<TransformComponent>())
+                {
+                    throw std::runtime_error("Actor missing Transform component");
+                }
+                Maths::Vec3 pos = actor.second.GetComponent<TransformComponent>()->localPosition;
+                if (actor.second.HasComponent<MeshComponent>()) {
+                    actor.second.GetComponent<MeshComponent>()->SetWorldMatrix(DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
+				}
+            }
 
             // --- 1. GESTION DU TEMPS ---
             auto tp2 = std::chrono::high_resolution_clock::now();
