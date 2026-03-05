@@ -90,7 +90,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
     FileParser fp;
-    std::shared_ptr<Mesh> cube = Buffers::Get().GetMesh("Cube.obj");
+    std::shared_ptr<Mesh> cube = Buffers::Get().GetMesh("Patate.obj");
 
     // --- A. Initialisation de la fenêtre Windows ---
     WNDCLASSEX wc = { 0 };
@@ -133,8 +133,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // --- C. Chargement des Ressources (Simulation d'un gestionnaire de ressources) ---
 
     TextureManager textMan(renderer->GetDevice().Get());
-    //Material mat;
-    //mat.SetTexture(textMan.Load("image.png"));
+    Material mat;
+    mat.SetTexture(textMan.Load("image.png"));
 
     // 1. Compilation et création des Shaders
     ComPtr<ID3D11VertexShader> vertexShader;
