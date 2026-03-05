@@ -176,6 +176,8 @@ void PotatoEngine::run() {
     mc1->SetPixelShader(pixelShader.Get());
     mc1->SetWorldMatrix(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f)); //  gauche
 
+	actor1.AddComponent<TransformComponent>();
+
     // Cube 2 - Position droite
     Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
     actor2.AddComponent<MeshComponent>();
@@ -207,7 +209,7 @@ void PotatoEngine::run() {
 
     PhysicsBodyFactory physicsFactory;
     
-    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(Maths::Vec3(10, 10, 10)), 10, Maths::Vec3(0, 0, 0), Maths::Quat(0, 0, 0, 0)));
+    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(Maths::Vec3(10, 10, 10)), 10, Maths::Vec3(0, 0, 0), Maths::Quat(0, 0, 0, 1)));
 
     // ImGui Init
     IMGUI_CHECKVERSION();
@@ -229,6 +231,11 @@ void PotatoEngine::run() {
 			// Physics Update
             
             physicsSystem.Update();
+			
+            JPH::Vec3 position1 = physicsSystem.GetJoltSystem().GetBodyInterface().GetPosition(actor1.GetComponent<PhysicsBody>()->GetID());
+
+			actor1.GetComponent<PhysicsBody>()->SyncFromPhysics(*actor1.GetComponent<TransformComponent>());
+            DirectX::XMFLOAT3 position = actor1.GetComponent<TransformComponent>()->localPosition;
 
             // --- 1. GESTION DU TEMPS ---
             auto tp2 = std::chrono::high_resolution_clock::now();
