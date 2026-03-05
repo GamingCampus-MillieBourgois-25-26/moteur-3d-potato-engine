@@ -24,9 +24,17 @@ void PhysicsSystem::Init()
 	m_system.SetContactListener(&m_contactListener);
 }
 
-void PhysicsSystem::Update()
+void PhysicsSystem::Update(std::unordered_map<Actor::ID, Actor>& actors)
 {
 	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
+
+	for (auto& [id, actor] : actors)
+	{
+		if (actor.HasComponent<PhysicsBody>() && actor.HasComponent<TransformComponent>())
+		{
+			actor.GetComponent<PhysicsBody>()->SyncFromPhysics(*actor.GetComponent<TransformComponent>());
+		}
+	}
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()

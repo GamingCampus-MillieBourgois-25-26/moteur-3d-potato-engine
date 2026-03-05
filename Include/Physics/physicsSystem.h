@@ -1,13 +1,16 @@
 #pragma once
-#include <Jolt/Jolt.h>
+#include "physicsLayerManager.h"
+#include "physicsContactListener.h"
+#include "physicsBroadPhaseLayerManager.h"
+#include "Logic/Actor.h"
+#include "physicsBody.h"
+
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Core/TempAllocator.h>
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/RegisterTypes.h>
 
-#include "physicsLayerManager.h"
-#include "physicsContactListener.h"
-#include "physicsBroadPhaseLayerManager.h"
+#include "unordered_map"
 
 class PhysicsSystem
 {
@@ -16,7 +19,7 @@ public:
 	PhysicsSystem();
 
 	void Init();
-	void Update();
+	void Update(std::unordered_map<Actor::ID, Actor>& actors);
 	
 	JPH::PhysicsSystem& GetJoltSystem();
 

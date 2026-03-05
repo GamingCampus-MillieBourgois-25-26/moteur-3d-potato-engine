@@ -230,12 +230,7 @@ void PotatoEngine::run() {
 
 			// Physics Update
             
-            physicsSystem.Update();
-			
-            JPH::Vec3 position1 = physicsSystem.GetJoltSystem().GetBodyInterface().GetPosition(actor1.GetComponent<PhysicsBody>()->GetID());
-
-			actor1.GetComponent<PhysicsBody>()->SyncFromPhysics(*actor1.GetComponent<TransformComponent>());
-            DirectX::XMFLOAT3 position = actor1.GetComponent<TransformComponent>()->localPosition;
+            physicsSystem.Update(sceneManager.GetCurrent().GetActors());
 
             // --- 1. GESTION DU TEMPS ---
             auto tp2 = std::chrono::high_resolution_clock::now();
