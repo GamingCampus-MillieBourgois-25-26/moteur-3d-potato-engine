@@ -22,6 +22,10 @@ void AudioManager::LoadAllSound()
     }
 
 }
+AudioManager::~AudioManager()
+{
+    m_ActiveInstances.clear();
+}
 std::shared_ptr<SoundAsset> AudioManager::GetSoundPtr(const std::string& soundName)
 {
     auto it = loadedSound.find(soundName);
@@ -31,7 +35,7 @@ std::shared_ptr<SoundAsset> AudioManager::GetSoundPtr(const std::string& soundNa
     }
     return nullptr;
 }
-bool AudioManager::PlaySound2D(std::shared_ptr<SoundAsset> asset)
+bool AudioManager::PlaySound2D(std::shared_ptr<SoundAsset> asset, float volume)
 {
     if (loadedSound.empty())
         return false;
@@ -50,11 +54,32 @@ bool AudioManager::PlaySound2D(std::shared_ptr<SoundAsset> asset)
     if (result != MA_SUCCESS)
         return false;
 
+    ma_sound_set_volume(instance.get(), volume);
     ma_sound_start(instance.get());
 
     m_ActiveInstances.push_back(std::move(instance));
 
     return true;
+}
+
+void AudioManager::Update()
+{
+    m_ActiveInstances.erase(
+        std::remove_if(
+            m_ActiveInstances.begin(),
+            m_ActiveInstances.end(),
+            [](std::unique_ptr<ma_sound>& sound)
+            {
+                if (ma_sound_at_end(sound.get()))
+                {
+                    ma_sound_uninit(sound.get());
+                    return true;
+                }
+
+                return false;
+            }),
+        m_ActiveInstances.end()
+    );
 }
 
 std::vector<std::filesystem::path> AudioManager::GetExtensionsFile(const std::string& extension)

@@ -118,7 +118,6 @@ void PotatoEngine::Initialize(HINSTANCE hInstance, int nCmdShow) {
 // Boucle principale
 void PotatoEngine::run() {
     FileParser fp;
-    fp.OpenAllOBJ();
 
 
     // Initialisation Renderer
@@ -182,11 +181,15 @@ void PotatoEngine::run() {
 	actor1.AddComponent<TransformComponent>();
 	actor1.GetComponent<TransformComponent>()->localPosition = { -1.5f, 0.0f, 0.0f };
 
+    actor1.AddComponent<AudioComponent>(AudioManager::Get().GetSoundPtr("potatoOpen"));
+    auto* sa1 = actor1.GetComponent<AudioComponent>();
+    sa1->PlaySound2D(1.f);
+
     // Cube 2 - Position droite
     Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
     actor2.AddComponent<MeshComponent>();
     auto* mc2 = actor2.GetComponent<MeshComponent>();
-    mc2->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+    mc2->SetMesh(Buffers::Get().GetMesh("Guitara.obj"));
     mc2->SetVertexShader(vertexShader.Get());
     mc2->SetPixelShader(pixelShader.Get());
 
@@ -388,6 +391,7 @@ void PotatoEngine::run() {
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
+            AudioManager::Get().Update();
             renderer->Present();
         }
     }
