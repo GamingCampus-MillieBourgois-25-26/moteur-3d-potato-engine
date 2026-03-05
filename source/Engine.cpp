@@ -180,7 +180,7 @@ void PotatoEngine::run() {
     mc1->SetPixelShader(pixelShader.Get());
 
 	actor1.AddComponent<TransformComponent>();
-	actor1.GetComponent<TransformComponent>()->localPosition = { -1.5f, 0.0f, 0.0f };
+	actor1.GetComponent<TransformComponent>()->localPosition = { 0.0f, 10.0f, 0.0f };
 
     // Cube 2 - Position droite
     Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
@@ -191,7 +191,7 @@ void PotatoEngine::run() {
     mc2->SetPixelShader(pixelShader.Get());
 
     actor2.AddComponent<TransformComponent>();
-	actor2.GetComponent<TransformComponent>()->localPosition = { 1.5f, 0.0f, 0.0f };
+	actor2.GetComponent<TransformComponent>()->localPosition = { 0.0f, 0.0f, 0.0f };
 
     std::vector<MeshComponent*> sceneItems;
     std::vector<Actor*> sceneActors;
@@ -215,7 +215,10 @@ void PotatoEngine::run() {
 
     PhysicsBodyFactory physicsFactory;
     
-    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(Maths::Vec3(10, 10, 10)), 10, Maths::Vec3(0, 0, 0), Maths::Quat(0, 0, 0, 1)));
+    actor1.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Dynamic, BoxShape(Maths::Vec3(1, 1, 1)), 10, Maths::Vec3(0, 0, 0), Maths::Quat(0, 0, 0, 1)));
+	actor1.GetComponent<PhysicsBody>()->SyncToPhysics(*actor1.GetComponent<TransformComponent>());
+	actor2.AddComponent<PhysicsBody>(physicsFactory.CreateBody(physicsSystem, PhysicsBodyType::Static, BoxShape(Maths::Vec3(1, 1, 1)), 10, Maths::Vec3(0, 0, 0), Maths::Quat(0, 0, 0, 1)));
+	actor2.GetComponent<PhysicsBody>()->SyncToPhysics(*actor2.GetComponent<TransformComponent>());
 
     // ImGui Init
     IMGUI_CHECKVERSION();
