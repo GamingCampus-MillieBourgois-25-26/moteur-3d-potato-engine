@@ -36,3 +36,5 @@ private:
     HINSTANCE m_hInstance;
     HWND m_hwnd;
 };
+
+extern Actor* g_SelectedActor;

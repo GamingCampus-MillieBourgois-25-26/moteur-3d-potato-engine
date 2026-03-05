@@ -63,109 +63,208 @@ void MyGui::Details::showDetails() {
     
     ImGui::Begin("Details");
 
-    if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
+    //if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
 
-    // Transform 
-    {
+    //// Transform 
+    //{
 
-        if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
+    //    if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
 
-            ImGui::Columns(4, "transform_columns", true);
-            ImGui::SetColumnWidth(0, 125);
+    //        ImGui::Columns(4, "transform_columns", true);
+    //        ImGui::SetColumnWidth(0, 125);
 
-            ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 3.0f); // Arrondi léger style Unreal
+    //        ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 3.0f); // Arrondi léger style Unreal
 
-            // first line
-            {
+    //        // first line
+    //        {
 
-                // --- Ligne Translation ---
-                ImGui::AlignTextToFramePadding();
-                ImGui::LabelText("", "Translation");
+    //            // --- Ligne Translation ---
+    //            ImGui::AlignTextToFramePadding();
+    //            ImGui::LabelText("", "Translation");
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##1trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText(" ", Xpos, sizeof(Xpos));
-                }
-                ImGui::EndChild();
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##1trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText(" ", Xpos, sizeof(Xpos));
+    //            }
+    //            ImGui::EndChild();
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##2trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText("  ", Ypos, sizeof(Ypos));
-                }
-                ImGui::EndChild();
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##2trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText("  ", Ypos, sizeof(Ypos));
+    //            }
+    //            ImGui::EndChild();
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##3trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText("   ", Zpos, sizeof(Zpos));
-                }
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##3trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText("   ", Zpos, sizeof(Zpos));
+    //            }
 
-                ImGui::EndChild();
-                ImGui::Separator();
-                ImGui::NextColumn();
-            }
+    //            ImGui::EndChild();
+    //            ImGui::Separator();
+    //            ImGui::NextColumn();
+    //        }
 
-            // second line
-            {
+    //        // second line
+    //        {
 
-                // --- Ligne Rotation ---
-                ImGui::AlignTextToFramePadding();
-                ImGui::LabelText("", "Rotation");
+    //            // --- Ligne Rotation ---
+    //            ImGui::AlignTextToFramePadding();
+    //            ImGui::LabelText("", "Rotation");
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##1rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText(" ", Xaxe, sizeof(Xaxe));
-                }
-                ImGui::EndChild();
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##1rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText(" ", Xaxe, sizeof(Xaxe));
+    //            }
+    //            ImGui::EndChild();
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##2rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText("  ", Yaxe, sizeof(Yaxe));
-                }
-                ImGui::EndChild();
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##2rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText("  ", Yaxe, sizeof(Yaxe));
+    //            }
+    //            ImGui::EndChild();
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##3rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText("   ", Zaxe, sizeof(Zaxe));
-                }
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##3rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText("   ", Zaxe, sizeof(Zaxe));
+    //            }
 
-                ImGui::EndChild();
-                ImGui::Separator();
-                ImGui::NextColumn();
-            }
+    //            ImGui::EndChild();
+    //            ImGui::Separator();
+    //            ImGui::NextColumn();
+    //        }
 
-            // third line
-            {
+    //        // third line
+    //        {
 
-                // --- Ligne Scale ---
-                ImGui::AlignTextToFramePadding();
-                ImGui::LabelText("", "Scale");
+    //            // --- Ligne Scale ---
+    //            ImGui::AlignTextToFramePadding();
+    //            ImGui::LabelText("", "Scale");
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##1scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText(" ", Xscale, sizeof(Xscale));
-                }
-                ImGui::EndChild();
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##1scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText(" ", Xscale, sizeof(Xscale));
+    //            }
+    //            ImGui::EndChild();
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##2scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText("  ", Yscale, sizeof(Yscale));
-                }
-                ImGui::EndChild();
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##2scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText("  ", Yscale, sizeof(Yscale));
+    //            }
+    //            ImGui::EndChild();
 
-                ImGui::NextColumn();
-                if (ImGui::BeginChild("##3scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::InputText("   ", Zscale, sizeof(Zscale));
-                }
+    //            ImGui::NextColumn();
+    //            if (ImGui::BeginChild("##3scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
+    //                ImGui::InputText("   ", Zscale, sizeof(Zscale));
+    //            }
 
-                ImGui::EndChild();
-                ImGui::Separator();
-            }
+    //            ImGui::EndChild();
+    //            ImGui::Separator();
+    //        }
 
-            ImGui::PopStyleVar();
+    //        ImGui::PopStyleVar();
+    //        ImGui::Columns(1);
+    //    }
+
+    //}
+
+
+    
+    //if (g_SelectedActor == nullptr) {
+    //    ImGui::Text("Aucun acteur selectionne");
+    //    ImGui::End();
+    //    return;
+    //}
+
+    //if (g_SelectedActor->HasComponent<TransformComponent>()) {
+    //    auto* transform = g_SelectedActor->GetComponent<TransformComponent>();
+    //    
+    //    if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
+    //        // Utilise DragFloat3 au lieu de InputText pour que ce soit interactif à la souris
+    //        float pos[3] = { transform->localPosition.x, transform->localPosition.y, transform->localPosition.z };
+    //        
+    //        ImGui::Text("Translation");
+    //        if (ImGui::DragFloat3("##pos", pos, 0.1f)) {
+    //            transform->localPosition = { pos[0], pos[1], pos[2] };
+    //            
+    //            // Si l'objet a de la physique, on le téléporte aussi dans le monde physique
+    //            if (g_SelectedActor->HasComponent<PhysicsBody>()) {
+    //                g_SelectedActor->GetComponent<PhysicsBody>()->SyncToPhysics(*transform);
+    //            }
+    //        }
+    //        // ... fais la même chose pour Rotation et Scale ...
+    //    }
+    //}    
+
+
+if (g_SelectedActor == nullptr) {
+    ImGui::Text("Aucun acteur selectionne");
+    ImGui::End();
+    return;
+}
+
+if (g_SelectedActor->HasComponent<TransformComponent>()) {
+    auto* transform = g_SelectedActor->GetComponent<TransformComponent>();
+
+    if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+        // --- LAMBDA MISE À JOUR (Utilise XMFLOAT3 maintenant) ---
+        auto DrawVec3Control = [&](const std::string& label, DirectX::XMFLOAT3& values) {
+            ImGui::PushID(label.c_str());
+
+            ImGui::Columns(2);
+            ImGui::SetColumnWidth(0, 100.0f);
+            ImGui::Text(label.c_str());
+            ImGui::NextColumn();
+
+            float itemWidth = ImGui::GetContentRegionAvail().x / 3.0f - 5.0f;
+
+            // X
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));
+            ImGui::Text("X"); ImGui::SameLine();
+            ImGui::PopStyleColor();
+            ImGui::SetNextItemWidth(itemWidth);
+            bool changedX = ImGui::DragFloat("##X", &values.x, 0.1f);
+
+            // Y
+            ImGui::SameLine();
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 1.0f, 0.4f, 1.0f));
+            ImGui::Text("Y"); ImGui::SameLine();
+            ImGui::PopStyleColor();
+            ImGui::SetNextItemWidth(itemWidth);
+            bool changedY = ImGui::DragFloat("##Y", &values.y, 0.1f);
+
+            // Z
+            ImGui::SameLine();
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.4f, 1.0f, 1.0f));
+            ImGui::Text("Z"); ImGui::SameLine();
+            ImGui::PopStyleColor();
+            ImGui::SetNextItemWidth(itemWidth);
+            bool changedZ = ImGui::DragFloat("##Z", &values.z, 0.1f);
+
             ImGui::Columns(1);
+            ImGui::PopID();
+
+            return changedX || changedY || changedZ;
+            };
+
+        // --- APPELS ---
+
+        // Note: Vérifie bien les noms des variables dans ton TransformComponent
+        // J'ai mis 'localPosition' car c'est ce que tu utilisais dans ton engine.cpp
+        if (DrawVec3Control("Translation", transform->localPosition)) {
+            if (g_SelectedActor->HasComponent<PhysicsBody>()) {
+                g_SelectedActor->GetComponent<PhysicsBody>()->SyncToPhysics(*transform);
+            }
         }
 
+        ImGui::Spacing();
+
+        // Si tes variables de rotation/scale s'appellent différemment, ajuste ici :
+        DrawVec3Control("Rotation", transform->localRotation);
+        ImGui::Spacing();
+        DrawVec3Control("Scale", transform->localScale);
     }
+}
 
     //Physics
     
@@ -246,33 +345,26 @@ void MyGui::Render::showRender() {
 }
 
 void MyGui::Outliner::showOutliner() {
-
     ImGui::SetNextWindowPos(ImVec2(winPosX, winPosY), ImGuiCond_Once);
     ImGui::SetNextWindowSize(ImVec2(winSizeX, winSizeY), ImGuiCond_Once);
     ImGui::Begin("Outliner");
-    
-    if (ImGui::InputText("Search", searchItem, sizeof(searchItem))) /* Do stuff0 */;
 
-	ImGui::Columns(2, "outliner_columns", true);
+    // On récupère la scène via ton SceneManager (Singleton)
+    auto& actors = SceneManager::Get().GetCurrent().GetActors();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::LabelText("", "Show Items");
+    for (auto& pair : actors) {
+        Actor& actor = pair.second;
 
-	if (ImGui::Checkbox(" ", &showActor)) /* Do stuff0 */;
-    if (ImGui::Checkbox("  ", &showActor)) /* Do stuff1 */;
+        // On crée un identifiant unique pour ImGui (nom + ID)
+        std::string label = actor.GetName() + "##" + std::to_string((uintptr_t)&actor);
 
-	ImGui::NextColumn();
-    ImGui::LabelText("", "Items");
-
-    if (ImGui::Button("Item 1")) /* Do stuff0 */;
-    if (ImGui::Button("Item 2")) /* Do stuff1 */;
-    
-
-
-    ImGui::Columns(1);
+        // Si on clique sur l'élément de la liste
+        if (ImGui::Selectable(label.c_str(), g_SelectedActor == &actor)) {
+            g_SelectedActor = &actor; // On met à jour la sélection globale
+        }
+    }
 
     ImGui::End();
-
 }
 
 

@@ -18,6 +18,8 @@ MyGui::Render render;
 MyGui::Outliner outliner;
 MyGui::findFile findfile;
 
+Actor* g_SelectedActor = nullptr;
+
 float newActorPosX;
 float newActorPosY;
 float newActorPosZ;
@@ -191,8 +193,9 @@ void PotatoEngine::run() {
     mc2->SetPixelShader(pixelShader.Get());
 
     actor2.AddComponent<TransformComponent>();
-	actor2.GetComponent<TransformComponent>()->localPosition = { 1.5f, 0.0f, 0.0f };
+	actor2.GetComponent<TransformComponent>()->localPosition = { 3.0f, 0.0f, 0.0f };
 
+    static int cubeCount = 0;
     std::vector<MeshComponent*> sceneItems;
     std::vector<Actor*> sceneActors;
 
@@ -300,24 +303,26 @@ void PotatoEngine::run() {
 
                         if (ImGui::Button("Cube")) {
 
-                                Actor& newActor = sceneManager.GetCurrent().CreateActor("New cube");
-								newActor.AddComponent<MeshComponent>();
-								newActor.AddComponent<TransformComponent>();
+                            
+                            std::string name = "Cube_" + std::to_string(cubeCount++);
+                            Actor& newActor = sceneManager.GetCurrent().CreateActor(name);  
+							newActor.AddComponent<MeshComponent>();
+							newActor.AddComponent<TransformComponent>();
 
-                                sceneActors.push_back(&newActor);
+                            sceneActors.push_back(&newActor);
 
-								auto* mc = newActor.GetComponent<MeshComponent>();
+							auto* mc = newActor.GetComponent<MeshComponent>();
 
-                                if (mc)
-                                {
-                                    mc->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
-                                    mc->SetVertexShader(vertexShader.Get());
-                                    mc->SetPixelShader(pixelShader.Get());
-                                    sceneItems.push_back(mc);
-                                    //mc->SetWorldMatrix(DirectX::XMMatrixTranslation(3.0f, 0.0f, 0.0f));
-                                }
-								
-                                ImGui::OpenPopup("Configure Actor");
+                            if (mc)
+                            {
+                                mc->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+                                mc->SetVertexShader(vertexShader.Get());
+                                mc->SetPixelShader(pixelShader.Get());
+                                sceneItems.push_back(mc);
+                                //mc->SetWorldMatrix(DirectX::XMMatrixTranslation(3.0f, 0.0f, 0.0f));
+                            }
+							
+                            ImGui::OpenPopup("Configure Actor");
                                 
                                 
                         }
@@ -340,7 +345,6 @@ void PotatoEngine::run() {
                                         sceneActors.back()->GetComponent<PhysicsBody>()->SyncToPhysics(*tcomp);
                                     }
 
-                                    //sceneItems.back()->SetWorldMatrix(DirectX::XMMatrixTranslation(tempPos[0], tempPos[1], tempPos[2]));
                                 }
                                 ImGui::CloseCurrentPopup();
                             }

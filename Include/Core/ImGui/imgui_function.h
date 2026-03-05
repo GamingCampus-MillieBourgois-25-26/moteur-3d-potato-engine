@@ -6,7 +6,8 @@
 #include <string>
 #include "ImGuizmo.h"
 #include <DirectXMath.h>
-
+#include "Logic/SceneManager.h"
+#include "Engine.h"
 
 namespace MyGui {
 
@@ -22,9 +23,9 @@ namespace MyGui {
 	public:
 
 		int winPosX = 1460;
-		int winPosY = 710;
+		int winPosY = 635;
 		int winSizeX = 450;
-		int winSizeY = 300;
+		int winSizeY = 430;
 
 		void showDetails();
 
@@ -88,7 +89,7 @@ namespace MyGui {
 		int winPosX = 1460;
 		int winPosY = 25;
 		int winSizeX = 450;
-		int winSizeY = 300;
+		int winSizeY = 400;
 
 		void showOutliner();
 
@@ -101,9 +102,9 @@ namespace MyGui {
 	public:
 
 		int winPosX = 1460;
-		int winPosY = 500;
+		int winPosY = 430;
 		int winSizeX = 450;
-		int winSizeY = 150;
+		int winSizeY = 200;
 
 		void showFindFile();
 		std::string OpenFileDialog();
