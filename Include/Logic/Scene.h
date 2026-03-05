@@ -10,7 +10,7 @@ class Scene
 public:
     Actor& CreateActor(const std::string& name = "Actor")
     {
-        Actor::ID id = UUID::Generate();
+        Actor::ID id = Engine::GenerateUUID();
         auto [it, ok] = m_Actors.emplace(id, Actor(id, name));
         return it->second;
     }

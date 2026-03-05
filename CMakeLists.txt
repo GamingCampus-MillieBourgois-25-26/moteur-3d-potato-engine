@@ -45,17 +45,13 @@ set(IMGUI_SOURCES
     "${IMGUI_SRC_DIR}/imgui_tables.cpp"
     "${IMGUI_SRC_DIR}/imgui_widgets.cpp"
     "${IMGUI_SRC_DIR}/imgui_demo.cpp"
+    "${IMGUI_SRC_DIR}/ImGuizmo.cpp"
     "${IMGUI_SRC_DIR}/backends/imgui_impl_dx11.cpp"
     "${IMGUI_SRC_DIR}/backends/imgui_impl_win32.cpp"
 )
 
-
-
 # Création de l'exécutable
-add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} ${IMGUI_SOURCES})
-
-
-
+add_executable(${PROJECT_NAME} WIN32 ${ENGINE_SOURCES} ${IMGUI_SOURCES} "Include/Maths/Quaternion.h" "source/Maths/Quaternion.cpp")
 
 # Liaison Bibliotheques (DirectX 11 ...)
 target_link_libraries(${PROJECT_NAME}

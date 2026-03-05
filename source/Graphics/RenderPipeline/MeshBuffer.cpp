@@ -35,10 +35,6 @@ void MeshBuffer::Bind(Microsoft::WRL::ComPtr<ID3D11DeviceContext> context) {
     UINT stride = sizeof(Vertex);
     UINT offset = 0;
 
-    // On bind l'Input Layout
-    if (m_inputLayout) {
-        context->IASetInputLayout(m_inputLayout.Get());
-    }
 
     context->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
     context->IASetIndexBuffer(m_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

@@ -1,12 +1,16 @@
 #pragma once
-#include <Jolt/Jolt.h>
-#include <Jolt/Physics/PhysicsSystem.h>
-#include <Jolt/Core/TempAllocator.h>
-#include <Jolt/Core/JobSystemThreadPool.h>
-
 #include "physicsLayerManager.h"
 #include "physicsContactListener.h"
 #include "physicsBroadPhaseLayerManager.h"
+#include "Logic/Actor.h"
+#include "physicsBody.h"
+
+#include <Jolt/Physics/PhysicsSystem.h>
+#include <Jolt/Core/TempAllocator.h>
+#include <Jolt/Core/JobSystemThreadPool.h>
+#include <Jolt/RegisterTypes.h>
+
+#include "unordered_map"
 
 class PhysicsSystem
 {
@@ -15,7 +19,7 @@ public:
 	PhysicsSystem();
 
 	void Init();
-	void Update();
+	void Update(std::unordered_map<Actor::ID, Actor>& actors);
 	
 	JPH::PhysicsSystem& GetJoltSystem();
 
@@ -33,6 +37,6 @@ private:
 	const JPH::uint cMaxBodyPairs = 65536;
 	const JPH::uint cMaxContactConstraints = 10240;
 
-	const float cDeltaTime = 1.0f / 60.0f; // 60 ticks par seconde
+	const float cDeltaTime = 1.0f / 60.0f;
 	const int cCollisionSteps = 1;
 };

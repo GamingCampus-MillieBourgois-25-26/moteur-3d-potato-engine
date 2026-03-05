@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vertex.h"
+#include "RenderPipeline/Vertex.h"
 #include <vector>
 #include <memory>
 #include <string>

@@ -56,11 +56,11 @@ void MyGui::Menu::barMenu() {
 
 }
 
-
 void MyGui::Details::showDetails() {
 
-    ImGui::SetNextWindowPos(ImVec2(1460, 710), ImGuiCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(450, 300));
+    ImGui::SetNextWindowPos(ImVec2(winPosX, winPosY), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(winSizeX, winSizeY), ImGuiCond_Once);
+    
     ImGui::Begin("Details");
 
     if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
@@ -84,19 +84,19 @@ void MyGui::Details::showDetails() {
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##1trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText(" ", Xpos, sizeof(Xpos));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##2trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("  ", Ypos, sizeof(Ypos));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##3trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("   ", Zpos, sizeof(Zpos));
                 }
 
                 ImGui::EndChild();
@@ -113,19 +113,19 @@ void MyGui::Details::showDetails() {
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##1rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText(" ", Xaxe, sizeof(Xaxe));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##2rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("  ", Yaxe, sizeof(Yaxe));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##3rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("   ", Zaxe, sizeof(Zaxe));
                 }
 
                 ImGui::EndChild();
@@ -142,19 +142,19 @@ void MyGui::Details::showDetails() {
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##1scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText(" ", Xscale, sizeof(Xscale));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##2scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("  ", Yscale, sizeof(Yscale));
                 }
                 ImGui::EndChild();
 
                 ImGui::NextColumn();
                 if (ImGui::BeginChild("##3scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-                    ImGui::Text("0000.0");
+                    ImGui::InputText("   ", Zscale, sizeof(Zscale));
                 }
 
                 ImGui::EndChild();
@@ -191,72 +191,64 @@ void MyGui::Details::showDetails() {
 void MyGui::Render::showRender() {
 
     ImGui::Columns(3, "Render_columns", false);
-    ImGui::SetColumnWidth(0, 170);
+    ImGui::SetColumnWidth(0, 110);
 
     // Selected Transform
     {
 
-        //ImGui::BeginGroup();
-        // 1. Le Header raccourci (on utilise TreeNodeEx pour plus de contrôle)
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-        bool open = ImGui::TreeNodeEx("Selection Mode", ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth == false);
-        ImGui::PopStyleVar();
-
         //Radio Transform button
         {
-            if (open) {
+            
+            if (ImGui::Button("Selection Mode")) ImGui::OpenPopup("Selection Mode popup");
+
+            if (ImGui::BeginPopup("Selection Mode popup")) {
+
                 ImGui::SeparatorText("TANSFRORM TOOLS");
 
-                if (ImGui::RadioButton("Selecte Mode", &intTransf, 0)) /* Do stuff0 */;
+                if (ImGui::RadioButton("Translate", (int*)&gizmo.currentOperation, ImGuizmo::TRANSLATE))
+                    gizmo.currentOperation = ImGuizmo::TRANSLATE;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("Rotate", (int*)&gizmo.currentOperation, ImGuizmo::ROTATE))
+                    gizmo.currentOperation = ImGuizmo::ROTATE;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("Scale", (int*)&gizmo.currentOperation, ImGuizmo::SCALE))
+                    gizmo.currentOperation = ImGuizmo::SCALE;
 
-                if (ImGui::RadioButton("Translate Mode", &intTransf, 1)) /* Do stuff1 */;
+                // Mode Local/World
+                if (ImGui::RadioButton("Local", (int*)&gizmo.currentMode, ImGuizmo::LOCAL))
+                    gizmo.currentMode = ImGuizmo::LOCAL;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("World", (int*)&gizmo.currentMode, ImGuizmo::WORLD))
+                    gizmo.currentMode = ImGuizmo::WORLD;
 
-                if (ImGui::RadioButton("Rotate Mode", &intTransf, 2)) /* Do stuff2 */;
-
-                if (ImGui::RadioButton("Scale Mode", &intTransf, 3)) /* Do stuff3 */;
-                ImGui::TreePop();
+                ImGui::EndPopup();
             }
         }
 
         ImGui::NextColumn();
-        ImGui::SetColumnWidth(1, 130);
+        ImGui::SetColumnWidth(1, 70);
 
         //Transform button
         {
 
-            if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
+            //if (ImGui::Button("TRANSF")) { intTransf = 0; /* Do stuff0 */ }
+            //ImGui::SameLine();
+            if (ImGui::Button("T")) { gizmo.currentOperation = ImGuizmo::TRANSLATE; /* Do stuff1 */ }
             ImGui::SameLine();
-            if (ImGui::Button("T")) { intTransf = 1; /* Do stuff1 */ }
+            if (ImGui::Button("R")) { gizmo.currentOperation = ImGuizmo::ROTATE; /* Do stuff2 */ }
             ImGui::SameLine();
-            if (ImGui::Button("R")) { intTransf = 2; /* Do stuff2 */ }
-            ImGui::SameLine();
-            if (ImGui::Button("S")) { intTransf = 3; /* Do stuff3 */ }
+            if (ImGui::Button("S")) { gizmo.currentOperation = ImGuizmo::SCALE; /* Do stuff3 */ }
 
         }
-
-        ImGui::NextColumn();
-        ImGui::SetColumnWidth(2, 105);
-        // add actor button
-        {
-            
-            if (ImGui::CollapsingHeader("Add Actor")) {
-            
-                if (ImGui::Button("Cube")) /* Do stuff0 */;
-
-            }
-        }
-
-        //ImGui::EndGroup();
 
     }
-    ImGui::Columns(1);
     
 }
 
 void MyGui::Outliner::showOutliner() {
 
-    ImGui::SetNextWindowPos(ImVec2(1460, 25), ImGuiCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(450, 300));
+    ImGui::SetNextWindowPos(ImVec2(winPosX, winPosY), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(winSizeX, winSizeY), ImGuiCond_Once);
     ImGui::Begin("Outliner");
     
     if (ImGui::InputText("Search", searchItem, sizeof(searchItem))) /* Do stuff0 */;
@@ -286,9 +278,12 @@ void MyGui::Outliner::showOutliner() {
 
 void MyGui::findFile::showFindFile() {
 
+    ImGui::SetNextWindowPos(ImVec2(winPosX, winPosY), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(winSizeX, winSizeY), ImGuiCond_Once);
+
     ImGui::Begin("Find File");
 
-    static char selectedPath[512] = "Aucun fichier sélectionné";
+    static char selectedPath[512] = "Aucun fichier selectionne";
 
     if (ImGui::Button("find")) {
 
@@ -324,4 +319,36 @@ std::string MyGui::findFile::OpenFileDialog() {
         return std::string(ofn.lpstrFile);
     }
     return "";
+}
+
+
+void MyGui::Gizmo::drawGizmo(ImVec2 pos, ImVec2 size, DirectX::XMMATRIX& view, DirectX::XMMATRIX& proj, DirectX::XMMATRIX& matrix) {
+
+    // 1. On configure l'espace de dessin
+    ImGuizmo::SetOrthographic(false); // On est en Perspective
+    ImGuizmo::SetDrawlist();
+    ImGuizmo::SetRect(pos.x, pos.y, size.x, size.y);
+
+    // 2. Préparation des matrices
+    float view_f[16], proj_f[16], matrix_f[16];
+
+    // IMPORTANT : Pour DirectX, on transpose souvent View et Proj pour ImGuizmo
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)view_f, DirectX::XMMatrixTranspose(view));
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)proj_f, DirectX::XMMatrixTranspose(proj));
+
+    // Pour la matrice de l'objet, on essaie SANS transpose d'abord 
+    // car ImGuizmo et DX11 partagent parfois le même layout mémoire pour le World
+    DirectX::XMStoreFloat4x4((DirectX::XMFLOAT4X4*)matrix_f, matrix);
+
+    // 3. Dessin
+    ImGuizmo::Manipulate(
+        view_f, proj_f,
+        currentOperation, currentMode,
+        matrix_f
+    );
+
+    // 4. Si on manipule, on ré-injecte dans la matrice d'origine
+    if (ImGuizmo::IsUsing()) {
+        matrix = DirectX::XMLoadFloat4x4((DirectX::XMFLOAT4X4*)matrix_f);
+    }
 }

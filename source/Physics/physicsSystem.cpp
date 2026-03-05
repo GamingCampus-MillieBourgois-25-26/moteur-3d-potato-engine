@@ -1,4 +1,4 @@
-#include "physicsSystem.h"
+#include "Physics/physicsSystem.h"
 
 #include <Jolt/Jolt.h>
 #include <Jolt/RegisterTypes.h>
@@ -24,10 +24,17 @@ void PhysicsSystem::Init()
 	m_system.SetContactListener(&m_contactListener);
 }
 
-void PhysicsSystem::Update()
+void PhysicsSystem::Update(std::unordered_map<Actor::ID, Actor>& actors)
 {
 	m_system.Update(cDeltaTime, cCollisionSteps, &temp_allocator, &job_system);
-	printf("PhysicsSystem::Update()\n");
+
+	for (auto& [id, actor] : actors)
+	{
+		if (actor.HasComponent<PhysicsBody>())
+		{
+			actor.GetComponent<PhysicsBody>()->SyncFromPhysics(*actor.GetComponent<TransformComponent>());
+		}
+	}
 }
 
 JPH::PhysicsSystem& PhysicsSystem::GetJoltSystem()
