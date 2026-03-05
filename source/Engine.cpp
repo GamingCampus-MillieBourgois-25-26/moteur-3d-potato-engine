@@ -18,6 +18,10 @@ MyGui::Render render;
 MyGui::Outliner outliner;
 MyGui::findFile findfile;
 
+float newActorPosX;
+float newActorPosY;
+float newActorPosZ;
+
 //--camera--
 Camera mainCamera;
 auto tp1 = std::chrono::high_resolution_clock::now();
@@ -185,7 +189,6 @@ void PotatoEngine::run() {
     mc2->SetPixelShader(pixelShader.Get());
     mc2->SetWorldMatrix(DirectX::XMMatrixTranslation(1.5f, 0.0f, 0.0f));  //  droite
 
-
     std::vector<MeshComponent*> sceneItems;
 
     for (auto& pair : sceneManager.GetCurrent().GetActors())
@@ -252,6 +255,67 @@ void PotatoEngine::run() {
             ImGui::Begin("Game Viewport");
             {
                 render.showRender();
+
+                ImGui::NextColumn();
+                ImGui::SetColumnWidth(2, 105);
+                // add actor button
+                {
+
+                    if (ImGui::Button("Add Actor")) ImGui::OpenPopup("add actor popup");
+
+                    if (ImGui::BeginPopup("add actor popup")) {
+
+                        if (ImGui::Button("Cube")) {
+
+                                Actor& newActor = sceneManager.GetCurrent().CreateActor("New cube");
+								newActor.AddComponent<MeshComponent>();
+
+								auto* mc = newActor.GetComponent<MeshComponent>();
+
+                                if (mc)
+                                {
+                                    mc->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
+                                    mc->SetVertexShader(vertexShader.Get());
+                                    mc->SetPixelShader(pixelShader.Get());
+                                    sceneItems.push_back(mc);
+                                    //mc->SetWorldMatrix(DirectX::XMMatrixTranslation(3.0f, 0.0f, 0.0f));
+                                }
+								
+                                ImGui::OpenPopup("Configure Actor");
+                                
+                                
+                        }
+                        // 2. Le popup de configuration (en dehors du bloc IF du bouton)
+                        if (ImGui::BeginPopupModal("Configure Actor", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+                            ImGui::Text("Définir la position de l'acteur :");
+
+                            // Utilise ImGui::InputFloat au lieu de InputText pour des chiffres, c'est plus simple !
+                            static float tempPos[3] = { newActorPosX, newActorPosY, newActorPosZ };
+                            ImGui::InputFloat3("Position", tempPos);
+
+                            if (ImGui::Button("Valider", ImVec2(120, 0))) {
+                                // On applique la position finale au dernier acteur ajouté
+                                if (!sceneItems.empty()) {
+                                    sceneItems.back()->SetWorldMatrix(DirectX::XMMatrixTranslation(tempPos[0], tempPos[1], tempPos[2]));
+                                }
+                                ImGui::CloseCurrentPopup();
+                            }
+
+                            ImGui::SameLine();
+
+                            if (ImGui::Button("Annuler", ImVec2(120, 0))) {
+                                ImGui::CloseCurrentPopup();
+                            }
+
+                            ImGui::EndPopup();
+                        }
+                        ImGui::EndPopup();
+                    }
+                    
+                    ImGui::Columns(1);
+                }
+
                 ImVec2 viewportSize = ImGui::GetContentRegionAvail();
                 ImGui::Image((void*)renderer->GetSceneSRV(), viewportSize);
 

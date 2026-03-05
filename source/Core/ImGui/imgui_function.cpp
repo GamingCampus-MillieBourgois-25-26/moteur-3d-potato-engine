@@ -241,22 +241,29 @@ void MyGui::Render::showRender() {
 
         }
 
-        ImGui::NextColumn();
-        ImGui::SetColumnWidth(2, 105);
-        // add actor button
-        {
-            
-            if (ImGui::Button("Add Actor")) ImGui::OpenPopup("add actor popup");
-            
-            if (ImGui::BeginPopup("add actor popup")) {
+      //  ImGui::NextColumn();
+      //  ImGui::SetColumnWidth(2, 105);
+      //  // add actor button
+      //  {
+      //      
+      //      if (ImGui::Button("Add Actor")) ImGui::OpenPopup("add actor popup");
+      //      
+      //      if (ImGui::BeginPopup("add actor popup")) {
 
-                if (ImGui::Button("Cube")) {}
-                ImGui::EndPopup();
-            }
-        }
+      //          if (ImGui::Button("Cube")) {
+      //              
+      //              for (auto& newActor : sceneItems)
+      //              {
+						//newActor = sceneManager.GetCurrent().CreateActor("Cube");
+						//newActor.AddComponent<MeshComponent>("Cube");
+      //              }
+      //          }
+      //          ImGui::EndPopup();
+      //      }
+      //  }
 
     }
-    ImGui::Columns(1);
+    /*ImGui::Columns(1);*/
     
 }
 
