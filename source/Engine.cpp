@@ -191,7 +191,7 @@ void PotatoEngine::run() {
     Actor& actor2 = sceneManager.GetCurrent().CreateActor("Cube2");
     actor2.AddComponent<MeshComponent>();
     auto* mc2 = actor2.GetComponent<MeshComponent>();
-    mc2->SetMesh(Buffers::Get().GetMesh("Guitara.obj"));
+    mc2->SetMesh(Buffers::Get().GetMesh("Cube.obj"));
     mc2->SetVertexShader(vertexShader.Get());
     mc2->SetPixelShader(pixelShader.Get());
 
