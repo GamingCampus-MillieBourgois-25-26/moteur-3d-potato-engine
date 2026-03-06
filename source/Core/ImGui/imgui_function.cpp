@@ -63,146 +63,14 @@ void MyGui::Details::showDetails() {
     
     ImGui::Begin("Details");
 
-    //if (ImGui::InputText("Search", searchRubric, sizeof(searchRubric))) /* Do stuff0 */;
 
-    //// Transform 
-    //{
+    if (g_SelectedActor == nullptr) {
+        ImGui::Text("Aucun acteur selectionne");
+        ImGui::End();
+        return;
+    }
 
-    //    if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
-
-    //        ImGui::Columns(4, "transform_columns", true);
-    //        ImGui::SetColumnWidth(0, 125);
-
-    //        ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 3.0f); // Arrondi léger style Unreal
-
-    //        // first line
-    //        {
-
-    //            // --- Ligne Translation ---
-    //            ImGui::AlignTextToFramePadding();
-    //            ImGui::LabelText("", "Translation");
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##1trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText(" ", Xpos, sizeof(Xpos));
-    //            }
-    //            ImGui::EndChild();
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##2trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText("  ", Ypos, sizeof(Ypos));
-    //            }
-    //            ImGui::EndChild();
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##3trans_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText("   ", Zpos, sizeof(Zpos));
-    //            }
-
-    //            ImGui::EndChild();
-    //            ImGui::Separator();
-    //            ImGui::NextColumn();
-    //        }
-
-    //        // second line
-    //        {
-
-    //            // --- Ligne Rotation ---
-    //            ImGui::AlignTextToFramePadding();
-    //            ImGui::LabelText("", "Rotation");
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##1rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText(" ", Xaxe, sizeof(Xaxe));
-    //            }
-    //            ImGui::EndChild();
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##2rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText("  ", Yaxe, sizeof(Yaxe));
-    //            }
-    //            ImGui::EndChild();
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##3rot_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText("   ", Zaxe, sizeof(Zaxe));
-    //            }
-
-    //            ImGui::EndChild();
-    //            ImGui::Separator();
-    //            ImGui::NextColumn();
-    //        }
-
-    //        // third line
-    //        {
-
-    //            // --- Ligne Scale ---
-    //            ImGui::AlignTextToFramePadding();
-    //            ImGui::LabelText("", "Scale");
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##1scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText(" ", Xscale, sizeof(Xscale));
-    //            }
-    //            ImGui::EndChild();
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##2scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText("  ", Yscale, sizeof(Yscale));
-    //            }
-    //            ImGui::EndChild();
-
-    //            ImGui::NextColumn();
-    //            if (ImGui::BeginChild("##3scale_box", ImVec2(-1, 25), true, ImGuiWindowFlags_NoScrollbar)) {
-    //                ImGui::InputText("   ", Zscale, sizeof(Zscale));
-    //            }
-
-    //            ImGui::EndChild();
-    //            ImGui::Separator();
-    //        }
-
-    //        ImGui::PopStyleVar();
-    //        ImGui::Columns(1);
-    //    }
-
-    //}
-
-
-    
-    //if (g_SelectedActor == nullptr) {
-    //    ImGui::Text("Aucun acteur selectionne");
-    //    ImGui::End();
-    //    return;
-    //}
-
-    //if (g_SelectedActor->HasComponent<TransformComponent>()) {
-    //    auto* transform = g_SelectedActor->GetComponent<TransformComponent>();
-    //    
-    //    if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
-    //        // Utilise DragFloat3 au lieu de InputText pour que ce soit interactif à la souris
-    //        float pos[3] = { transform->localPosition.x, transform->localPosition.y, transform->localPosition.z };
-    //        
-    //        ImGui::Text("Translation");
-    //        if (ImGui::DragFloat3("##pos", pos, 0.1f)) {
-    //            transform->localPosition = { pos[0], pos[1], pos[2] };
-    //            
-    //            // Si l'objet a de la physique, on le téléporte aussi dans le monde physique
-    //            if (g_SelectedActor->HasComponent<PhysicsBody>()) {
-    //                g_SelectedActor->GetComponent<PhysicsBody>()->SyncToPhysics(*transform);
-    //            }
-    //        }
-    //        // ... fais la même chose pour Rotation et Scale ...
-    //    }
-    //}    
-
-
-if (g_SelectedActor == nullptr) {
-    ImGui::Text("Aucun acteur selectionne");
-    ImGui::End();
-    return;
-}
-
-if (g_SelectedActor->HasComponent<TransformComponent>()) {
+    if (g_SelectedActor->HasComponent<TransformComponent>()) {
     auto* transform = g_SelectedActor->GetComponent<TransformComponent>();
 
     if (ImGui::CollapsingHeader("Transformers", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -264,7 +132,7 @@ if (g_SelectedActor->HasComponent<TransformComponent>()) {
         ImGui::Spacing();
         DrawVec3Control("Scale", transform->localScale);
     }
-}
+    }
 
     //Physics
     
