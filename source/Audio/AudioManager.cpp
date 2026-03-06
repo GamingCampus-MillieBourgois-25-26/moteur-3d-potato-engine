@@ -24,7 +24,15 @@ void AudioManager::LoadAllSound()
 }
 AudioManager::~AudioManager()
 {
-    m_ActiveInstances.clear();
+        for (auto& sound : m_ActiveInstances)
+        {
+            if (sound)
+            {
+                ma_sound_uninit(sound.get());
+            }
+        }
+
+        m_ActiveInstances.clear();
 }
 std::shared_ptr<SoundAsset> AudioManager::GetSoundPtr(const std::string& soundName)
 {
