@@ -1,4 +1,4 @@
-#include "../include/Logic/MeshComponent.h"
+#include "Logic/MeshComponent.h"
 
 void MeshComponent::SetMesh(std::shared_ptr<Mesh> meshPtr) { mesh = meshPtr; }
 
@@ -24,3 +24,11 @@ DirectX::XMFLOAT4 MeshComponent::GetColor()
 
 void MeshComponent::SetVertexShader(ID3D11VertexShader* shader) { vs = shader; }
 void MeshComponent::SetPixelShader(ID3D11PixelShader* shader) { ps = shader; }
+
+void MeshComponent::SetColor(const DirectX::XMFLOAT4& c)
+{
+	for (auto& v : mesh->vertices)
+	{
+		v.color = c;
+	}
+}

@@ -1,9 +1,18 @@
 #pragma once
 
 #include "Component.h"
-#include "../include/Graphics/Mesh.h"
+#include "Graphics/Mesh.h"
 #include <memory>
 #include <string>
+
+enum class COLOR
+{
+	RED,
+	BLUE,
+	GREEN,
+	YELLOW,
+	ORANGE
+};
 
 class MeshComponent : public Component
 {
@@ -27,7 +36,7 @@ public:
 
 	void SetPixelShader(ID3D11PixelShader* shader);
 	void SetWorldMatrix(const DirectX::XMMATRIX& mat) { worldMatrix = mat; }
-	void SetColor(const DirectX::XMFLOAT4& c) { color = c; }
+	void SetColor(const DirectX::XMFLOAT4& c);
 
 private:
 	std::shared_ptr<Mesh> mesh;

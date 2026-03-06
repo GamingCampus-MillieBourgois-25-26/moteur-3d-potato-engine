@@ -177,6 +177,7 @@ void PotatoEngine::run() {
     actor1.AddComponent<MeshComponent>();
     auto* mc1 = actor1.GetComponent<MeshComponent>();
     mc1->SetMesh(Buffers::Get().GetMesh("Patate.obj"));
+    mc1->SetColor({ 1.0f, 0.647f, 0.0f, 1.0f });
     mc1->SetVertexShader(vertexShader.Get());
     mc1->SetPixelShader(pixelShader.Get());
 
